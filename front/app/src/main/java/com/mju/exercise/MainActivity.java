@@ -7,9 +7,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.mju.exercise.HttpRequest.HttpAsyncTask;
+
 public class MainActivity extends AppCompatActivity {
 
-    Button btnLoginTest;
+    private Button btnLoginTest, btnAPITest;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +32,21 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
 
                 finish();
+            }
+        });
+
+        //api 호출 테스트
+        btnAPITest = (Button) findViewById(R.id.btnAPITest);
+        btnAPITest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                HttpAsyncTask httpAsyncTask = new HttpAsyncTask("https://jsonplaceholder.typicode.com/users", true);    //true 면 GET 방식
+//                httpAsyncTask.execute();
+
+                HttpAsyncTask httpAsyncTask = new HttpAsyncTask("https://jsonplaceholder.typicode.com/posts", false);    //flase 면 post 방식
+                httpAsyncTask.execute();
+
+
             }
         });
     }
