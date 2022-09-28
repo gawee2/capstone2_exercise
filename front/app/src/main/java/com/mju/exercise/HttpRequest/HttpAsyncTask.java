@@ -2,14 +2,25 @@ package com.mju.exercise.HttpRequest;
 
 
 import android.os.AsyncTask;
+import com.mju.exercise.StatusEnum.Status;
 
 public class HttpAsyncTask extends AsyncTask<Void, Void, Boolean> {
     private String mURL;
-    private boolean mIsRequest;
+//    private boolean mIsRequest;
+    private com.mju.exercise.StatusEnum.Status.Request requestType;
+    private String params;
 
-    public HttpAsyncTask(String url, boolean isRequest) {
+
+    //생성자 오버로딩 GET
+    public HttpAsyncTask(String url, com.mju.exercise.StatusEnum.Status.Request requestType) {
         this.mURL = url;
-        this.mIsRequest = isRequest;
+        this.requestType = requestType;
+    }
+    //POST
+    public HttpAsyncTask(String url, com.mju.exercise.StatusEnum.Status.Request requestType, String params) {
+        this.mURL = url;
+        this.requestType = requestType;
+        this.params = params;
     }
 
     @Override
@@ -21,14 +32,14 @@ public class HttpAsyncTask extends AsyncTask<Void, Void, Boolean> {
 
     @Override
     protected Boolean doInBackground(Void... voids) {
-        if (mIsRequest) {
+        if (requestType == com.mju.exercise.StatusEnum.Status.Request.GET) {
             //GET 방식
             HttpGet httpGet = new HttpGet();
             httpGet.GETFunction(this.mURL);
         } else {
             //Post 방식
             HttpPost httpPost = new HttpPost();
-            String POST_result = httpPost.POSTFunction(this.mURL, "Params");
+            String POST_result = httpPost.POSTFunction(this.mURL, this.params);
         }
         return null;
     }

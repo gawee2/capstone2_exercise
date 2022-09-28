@@ -15,23 +15,41 @@ public class HttpGet {
         try {
             URL url = new URL(mUrl);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("GET");
-            conn.setConnectTimeout(15000);
-            conn.setReadTimeout(10000);
-            conn.setDoInput(true);
-            conn.setDoOutput(true);
+            if(conn != null){
+                conn.setRequestMethod("GET");
+                conn.setRequestProperty("Accept-Charset", "UTF-8");
+                conn.setRequestProperty("Context_Type", "application/json");
 
-            InputStream is = conn.getInputStream();
-            StringBuilder sb = new StringBuilder();
-            BufferedReader br = new BufferedReader(new InputStreamReader(is, "UTF-8"));
-            String result;
-            while ((result = br.readLine()) != null) {
-                sb.append(result + '\n');
+                conn.setConnectTimeout(15000);
+                conn.setReadTimeout(10000);
+                conn.setDoInput(true);
+
+                int resCode = conn.getResponseCode();
+                if(resCode == HttpURLConnection.HTTP_CREATED || resCode == HttpURLConnection.HTTP_OK){
+                    InputStream is = conn.getInputStream();
+                    StringBuilder sb = new StringBuilder();
+                    BufferedReader br = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+                    String result = null;
+
+                    while ((result = br.readLine()) != null) {
+                        sb.append(result + '\n');
+                    }
+
+                    conn.disconnect();
+                    br.close();
+                    result = sb.toString();
+                    Log.d("HttpGet_Result", result);
+
+                    return result;
+
+                }else {
+                    Log.d("HttpGet_Result", String.valueOf(resCode));
+                }
+
+            }else{
+                Log.d("HttpGet_Result", "conn null");
             }
 
-            result = sb.toString();
-            Log.d("HttpGet_Result", result);
-            return result;
 
         } catch (Exception e) {
             e.printStackTrace();

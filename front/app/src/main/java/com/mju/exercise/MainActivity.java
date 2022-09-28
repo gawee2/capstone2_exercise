@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.mju.exercise.HttpRequest.HttpAsyncTask;
+import com.mju.exercise.StatusEnum.Status;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -40,11 +41,14 @@ public class MainActivity extends AppCompatActivity {
         btnAPITest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                HttpAsyncTask httpAsyncTask = new HttpAsyncTask("https://jsonplaceholder.typicode.com/users", true);    //true 면 GET 방식
+//                HttpAsyncTask httpAsyncTask = new HttpAsyncTask("https://jsonplaceholder.typicode.com/users", Status.Request.GET);    //true 면 GET 방식
 //                httpAsyncTask.execute();
 
-                HttpAsyncTask httpAsyncTask = new HttpAsyncTask("https://jsonplaceholder.typicode.com/posts", false);    //flase 면 post 방식
+                HttpAsyncTask httpAsyncTask = new HttpAsyncTask("http://192.168.0.3:8080/login/userList", Status.Request.GET);    //true 면 GET 방식
                 httpAsyncTask.execute();
+
+//                HttpAsyncTask httpAsyncTask = new HttpAsyncTask("https://jsonplaceholder.typicode.com/posts", false);    //flase 면 post 방식
+//                httpAsyncTask.execute();
 
 
             }
