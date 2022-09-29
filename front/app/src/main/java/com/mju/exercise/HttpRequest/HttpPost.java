@@ -33,7 +33,8 @@ public class HttpPost {
 
             //Accept-Charset 설정 UTF-8 or ASCII
             httpURLConnection.setRequestProperty("Accept-Charset", "UTF-8");
-            httpURLConnection.setRequestProperty("Context_Type", "application/x-www-form-urlencoded;charset=UTF-8");
+            httpURLConnection.setRequestProperty("Content-Type", "application/json");
+            httpURLConnection.setRequestProperty("Accept", "application/json");
 
             // POST로 넘겨줄 파라미터 생성.
             byte[] outputInBytes = params.getBytes(StandardCharsets.UTF_8);

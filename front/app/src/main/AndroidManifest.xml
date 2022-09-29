@@ -29,7 +29,9 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-        <activity android:name=".LoginActivity" />
+        <activity android:name=".Sign.SignInActivity" />
+        <activity android:name=".Sign.SignUpActivity" />
+        <activity android:name=".Sign.ForgetPwActivity" />
     </application>
 
 </manifest>

@@ -18,7 +18,8 @@ public class HttpGet {
             if(conn != null){
                 conn.setRequestMethod("GET");
                 conn.setRequestProperty("Accept-Charset", "UTF-8");
-                conn.setRequestProperty("Context_Type", "application/json");
+                conn.setRequestProperty("Content-Type", "application/json");
+                conn.setRequestProperty("Accept", "application/json");
 
                 conn.setConnectTimeout(15000);
                 conn.setReadTimeout(10000);

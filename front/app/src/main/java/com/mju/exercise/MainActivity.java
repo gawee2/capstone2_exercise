@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.mju.exercise.HttpRequest.HttpAsyncTask;
+import com.mju.exercise.Sign.SignInActivity;
 import com.mju.exercise.StatusEnum.Status;
 
 public class MainActivity extends AppCompatActivity {
@@ -29,10 +30,9 @@ public class MainActivity extends AppCompatActivity {
         btnLoginTest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                Intent intent = new Intent(getApplicationContext(), SignInActivity.class);
                 startActivity(intent);
 
-                finish();
             }
         });
 

@@ -2,13 +2,10 @@ package com.mju.exercise.HttpRequest;
 
 
 import android.os.AsyncTask;
-import com.mju.exercise.StatusEnum.Status;
 
-public class HttpAsyncTask extends AsyncTask<Void, Void, Boolean> {
-    private String mURL;
-//    private boolean mIsRequest;
+public class HttpAsyncTask extends AsyncTask<Void, Void, String> {
+    private String mURL, params;
     private com.mju.exercise.StatusEnum.Status.Request requestType;
-    private String params;
 
 
     //생성자 오버로딩 GET
@@ -30,24 +27,25 @@ public class HttpAsyncTask extends AsyncTask<Void, Void, Boolean> {
         //Dialog 같은 것을 띄워 놓으면 좋다.
     }
 
+
     @Override
-    protected Boolean doInBackground(Void... voids) {
+    protected String doInBackground(Void... voids) {
+        String htttpResult;
         if (requestType == com.mju.exercise.StatusEnum.Status.Request.GET) {
             //GET 방식
             HttpGet httpGet = new HttpGet();
-            httpGet.GETFunction(this.mURL);
+            htttpResult = httpGet.GETFunction(this.mURL);
         } else {
             //Post 방식
             HttpPost httpPost = new HttpPost();
-            String POST_result = httpPost.POSTFunction(this.mURL, this.params);
+            htttpResult = httpPost.POSTFunction(this.mURL, this.params);
         }
-        return null;
+        return htttpResult;
     }
 
     @Override
-    protected void onPostExecute(Boolean aBoolean) {
-        super.onPostExecute(aBoolean);
-
+    protected void onPostExecute(String s) {
+        super.onPostExecute(s);
     }
 
     @Override
@@ -56,8 +54,8 @@ public class HttpAsyncTask extends AsyncTask<Void, Void, Boolean> {
     }
 
     @Override
-    protected void onCancelled(Boolean aBoolean) {
-        super.onCancelled(aBoolean);
+    protected void onCancelled(String s) {
+        super.onCancelled(s);
     }
 
     @Override

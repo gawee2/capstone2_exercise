@@ -1,8 +1,10 @@
 package com.example.spring;
 
-import com.example.spring.repository.JpaMemberRepository;
-import com.example.spring.repository.MemberRepository;
-import com.example.spring.service.MemberService;
+import com.example.spring.Repository.JpaMemberRepository;
+import com.example.spring.Repository.MemberRepository;
+import com.example.spring.Service.EmailService;
+import com.example.spring.Service.EmailServiceImpl;
+import com.example.spring.Service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,4 +30,7 @@ public class SpringConfig {
     public MemberRepository memberRepository(){
         return new JpaMemberRepository(em);
     }
+
+    @Bean
+    public EmailService emailService(){ return new EmailServiceImpl();}
 }

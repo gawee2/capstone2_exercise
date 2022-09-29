@@ -7,20 +7,31 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="ID"
-        android:id="@+id/edtId"
-        />
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="PW"
-        android:id="@+id/edtPw"
+        android:hint="email"
+        android:id="@+id/edtEmail"
         />
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="enter"
-        android:id="@+id/btnLogin"
+        android:text="인증코드 보내기"
+        android:id="@+id/btnSendAuthCode"
         />
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="인증코드"
+        android:id="@+id/edtPw"
+        />
+
+
+
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="확인"
+        android:id="@+id/btnCheckAuthCode"
+        />
+
 
 </LinearLayout>

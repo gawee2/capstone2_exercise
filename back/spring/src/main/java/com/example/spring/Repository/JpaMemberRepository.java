@@ -1,6 +1,6 @@
-package com.example.spring.repository;
+package com.example.spring.Repository;
 
-import com.example.spring.domain.Member;
+import com.example.spring.VO.Member;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -26,9 +26,9 @@ public class JpaMemberRepository implements MemberRepository {
     }
 
     @Override
-    public Optional<Member> findByName(String name) {
-        List<Member> result = em.createQuery("select m from Member m where m.name = :name", Member.class)
-                .setParameter("name", name)
+    public Optional<Member> findByUserId(String userId) {
+        List<Member> result = em.createQuery("select m from Member m where m.userId = :userId", Member.class)
+                .setParameter("userId", userId)
                 .getResultList();
 
         return result.stream().findAny();
@@ -38,4 +38,5 @@ public class JpaMemberRepository implements MemberRepository {
         return em.createQuery("select m from Member m", Member.class)
                 .getResultList();
     }
+
 }
