@@ -22,7 +22,7 @@ import java.util.Random;
 public class ForgetPwActivity extends AppCompatActivity {
 
     Button btnSendAuthCode, btnCheckAuthCode;
-    EditText edtAuthCode;
+    EditText edtId, edtAuthCode;
     String strAuthCode;
 
     @Override
@@ -33,6 +33,7 @@ public class ForgetPwActivity extends AppCompatActivity {
         btnCheckAuthCode = (Button) findViewById(R.id.btnCheckAuthCode);
         btnSendAuthCode = (Button) findViewById(R.id.btnSendAuthCode);
         edtAuthCode = (EditText) findViewById(R.id.edtAuthCode);
+        edtId = (EditText) findViewById(R.id.edtId);
 
         //인증코드 보내기 버튼
         //서버로 이메일 발송 요청
@@ -45,6 +46,7 @@ public class ForgetPwActivity extends AppCompatActivity {
                 JSONObject jsonObject = new JSONObject();
                 try {
                     jsonObject.accumulate("message", strAuthCode);
+                    jsonObject.accumulate("userId", edtId.getText().toString());
                     json = jsonObject.toString();
 
                     HttpAsyncTask httpAsyncTask = new HttpAsyncTask("http://192.168.0.3:8080/email/send", Status.Request.POST, json);

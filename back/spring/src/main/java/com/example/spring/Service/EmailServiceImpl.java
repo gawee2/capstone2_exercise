@@ -1,6 +1,7 @@
 package com.example.spring.Service;
 
 import com.example.spring.VO.Email;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.mail.Message;
@@ -14,16 +15,27 @@ import java.util.Properties;
 
 @Service
 public class EmailServiceImpl implements EmailService{
+
+    private final MemberService memberService;
+
+    @Autowired
+    public EmailServiceImpl(MemberService memberService) {
+        this.memberService = memberService;
+    }
+
     @Override
     public void sendMail(Email email) {
         System.out.println("메일 발송 시작");
 
+        //고정
         String senderName = "운동매칭 앱";    //발신자 이름
         String senderMail = "infomjucapstone2@gmail.com";    //발신자 이메일 주소
         String mailPw = "dvtzgqxvfaawokzk";
-        String receiveMail = "ysy5593@gmail.com";    //수신자 이메일 주소
         String subject = "운동매칭 앱 비번 초기화 인증코드";            //제목
+
+        //가변
         String msg = email.getMessage();
+        String receiveMail = getUserMail(email.getUserId());    //수신자 이메일 주소
 
         //여기 데이터로 이메일 보내면 될듯
         Properties props = new Properties();
@@ -63,5 +75,10 @@ public class EmailServiceImpl implements EmailService{
             System.out.println(e.getMessage().toString());
 
         }
+    }
+
+    @Override
+    public String getUserMail(String userId) {
+        return memberService.findOne(userId).get().getEmail();
     }
 }

@@ -5,10 +5,16 @@
     android:layout_height="match_parent">
 
 
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="아이디 입력"
+        android:id="@+id/edtId"
+        />
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="등록되어 있는 이메일로 인증코드 보내기"
+        android:text="아이디에 등록된 이메일로 인증코드 발송"
         android:id="@+id/btnSendAuthCode"
         />
     <EditText

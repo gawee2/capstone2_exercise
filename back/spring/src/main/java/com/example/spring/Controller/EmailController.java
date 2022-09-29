@@ -23,7 +23,9 @@ public class EmailController {
 
     @PostMapping("/send")
     public void send(@RequestBody Email email){
-        System.out.println("인증코드: " + email.getMessage());
+        System.out.println("날아온 인증코드: " + email.getMessage());
+        System.out.println("날아온 유저아이디: " + email.getUserId());
+
         emailService.sendMail(email);
     }
 }

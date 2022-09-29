@@ -100,5 +100,6 @@ public class MemberService {
     public Optional<Member> findOne(Long memberId){
         return memberRepository.findById(memberId);
     }
+    public Optional<Member> findOne(String userId){return memberRepository.findByUserId(userId);}
 
 }

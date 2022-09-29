@@ -4,4 +4,5 @@ import com.example.spring.VO.Email;
 
 public interface EmailService {
     public void sendMail(Email email);
+    public String getUserMail(String userId);
 }
