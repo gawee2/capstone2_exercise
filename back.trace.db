@@ -1,0 +1,234 @@
+2022-09-26 18:45:36 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Column count does not match; SQL statement:
+insert into member values('2', 'asdasf') [21002-214]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:502)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:477)
+	at org.h2.message.DbException.get(DbException.java:223)
+	at org.h2.message.DbException.get(DbException.java:199)
+	at org.h2.message.DbException.get(DbException.java:188)
+	at org.h2.command.dml.Insert.doPrepare(Insert.java:295)
+	at org.h2.command.dml.DataChangeStatement.prepare(DataChangeStatement.java:37)
+	at org.h2.command.Parser.prepareCommand(Parser.java:575)
+	at org.h2.engine.SessionLocal.prepareLocal(SessionLocal.java:631)
+	at org.h2.engine.SessionLocal.prepareCommand(SessionLocal.java:554)
+	at org.h2.jdbc.JdbcConnection.prepareCommand(JdbcConnection.java:1116)
+	at org.h2.jdbc.JdbcStatement.executeInternal(JdbcStatement.java:237)
+	at org.h2.jdbc.JdbcStatement.execute(JdbcStatement.java:223)
+	at org.h2.server.web.WebApp.getResult(WebApp.java:1339)
+	at org.h2.server.web.WebApp.query(WebApp.java:1137)
+	at org.h2.server.web.WebApp$1.next(WebApp.java:1103)
+	at org.h2.server.web.WebApp$1.next(WebApp.java:1090)
+	at org.h2.server.web.WebThread.process(WebThread.java:188)
+	at org.h2.server.web.WebThread.run(WebThread.java:101)
+	at java.base/java.lang.Thread.run(Thread.java:833)
+2022-09-26 18:46:05 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Column count does not match; SQL statement:
+insert into member values ('2', 'asdasf') [21002-214]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:502)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:477)
+	at org.h2.message.DbException.get(DbException.java:223)
+	at org.h2.message.DbException.get(DbException.java:199)
+	at org.h2.message.DbException.get(DbException.java:188)
+	at org.h2.command.dml.Insert.doPrepare(Insert.java:295)
+	at org.h2.command.dml.DataChangeStatement.prepare(DataChangeStatement.java:37)
+	at org.h2.command.Parser.prepareCommand(Parser.java:575)
+	at org.h2.engine.SessionLocal.prepareLocal(SessionLocal.java:631)
+	at org.h2.engine.SessionLocal.prepareCommand(SessionLocal.java:554)
+	at org.h2.jdbc.JdbcConnection.prepareCommand(JdbcConnection.java:1116)
+	at org.h2.jdbc.JdbcStatement.executeInternal(JdbcStatement.java:237)
+	at org.h2.jdbc.JdbcStatement.execute(JdbcStatement.java:223)
+	at org.h2.server.web.WebApp.getResult(WebApp.java:1339)
+	at org.h2.server.web.WebApp.query(WebApp.java:1137)
+	at org.h2.server.web.WebApp$1.next(WebApp.java:1103)
+	at org.h2.server.web.WebApp$1.next(WebApp.java:1090)
+	at org.h2.server.web.WebThread.process(WebThread.java:188)
+	at org.h2.server.web.WebThread.run(WebThread.java:101)
+	at java.base/java.lang.Thread.run(Thread.java:833)
+2022-09-28 22:13:23 jdbc[24]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "drop table if exists [*]user CASCADE"; expected "identifier"; SQL statement:
+drop table if exists user CASCADE [42001-214]
+2022-09-28 22:13:23 jdbc[24]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "create table [*]user\000d\000a(\000d\000a    id varchar(255),\000d\000a    password varchar(255),\000d\000a    fav_soccer boolean,\000d\000a    fav_futsal boolean,\000d\000a    fav_basketball boolean,\000d\000a    fav_baseball boolean,\000d\000a    fav_cycle boolean,\000d\000a    fav_badminton boolean\000d\000a\000d\000a    primary key (id)\000d\000a)"; expected "identifier"; SQL statement:
+create table user
+(
+    id varchar(255),
+    password varchar(255),
+    fav_soccer boolean,
+    fav_futsal boolean,
+    fav_basketball boolean,
+    fav_baseball boolean,
+    fav_cycle boolean,
+    fav_badminton boolean
+
+    primary key (id)
+) [42001-214]
+2022-09-28 22:13:46 jdbc[24]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "create table [*]user\000d\000a(\000d\000a    id varchar(255),\000d\000a    password varchar(255),\000d\000a    fav_soccer boolean,\000d\000a    fav_futsal boolean,\000d\000a    fav_basketball boolean,\000d\000a    fav_baseball boolean,\000d\000a    fav_cycle boolean,\000d\000a    fav_badminton boolean\000d\000a\000d\000a    primary key (id)\000d\000a)"; expected "identifier"; SQL statement:
+create table user
+(
+    id varchar(255),
+    password varchar(255),
+    fav_soccer boolean,
+    fav_futsal boolean,
+    fav_basketball boolean,
+    fav_baseball boolean,
+    fav_cycle boolean,
+    fav_badminton boolean
+
+    primary key (id)
+) [42001-214]
+2022-09-28 22:15:16 jdbc[24]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "create table Users\000d\000a(\000d\000a    id varchar(255),\000d\000a    password varchar(255),\000d\000a    fav_soccer boolean,\000d\000a    fav_futsal boolean,\000d\000a    fav_basketball boolean,\000d\000a    fav_baseball boolean,\000d\000a    fav_cycle boolean,\000d\000a    fav_badminton boolean\000d\000a\000d\000a    primary key [*](id)\000d\000a)"; expected "HASH, CONSTRAINT, COMMENT, UNIQUE, NOT NULL, NULL, CHECK, REFERENCES, AUTO_INCREMENT, ,, )"; SQL statement:
+create table Users
+(
+    id varchar(255),
+    password varchar(255),
+    fav_soccer boolean,
+    fav_futsal boolean,
+    fav_basketball boolean,
+    fav_baseball boolean,
+    fav_cycle boolean,
+    fav_badminton boolean
+
+    primary key (id)
+) [42001-214]
+2022-09-28 22:15:35 jdbc[24]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "create table Users\000d\000a(\000d\000a    id varchar(255),\000d\000a    password varchar(255)\000d\000a\000d\000a    primary key [*](id)\000d\000a)"; expected "HASH, CONSTRAINT, COMMENT, UNIQUE, NOT NULL, NULL, CHECK, REFERENCES, AUTO_INCREMENT, ,, )"; SQL statement:
+create table Users
+(
+    id varchar(255),
+    password varchar(255)
+
+    primary key (id)
+) [42001-214]
+2022-09-28 22:15:40 jdbc[24]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "create table Users\000d\000a(\000d\000a    id varchar(255),\000d\000a    password varchar(255)\000d\000a\000d\000a    primary key [*](id)\000d\000a)"; expected "HASH, CONSTRAINT, COMMENT, UNIQUE, NOT NULL, NULL, CHECK, REFERENCES, AUTO_INCREMENT, ,, )"; SQL statement:
+create table Users
+(
+    id varchar(255),
+    password varchar(255)
+
+    primary key (id)
+) [42001-214]
+2022-09-28 22:15:43 jdbc[24]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "create table Users\000d\000a(\000d\000a    id varchar(255),\000d\000a    password varchar(255)\000d\000a\000d\000a    primary key [*](id)\000d\000a)"; expected "HASH, CONSTRAINT, COMMENT, UNIQUE, NOT NULL, NULL, CHECK, REFERENCES, AUTO_INCREMENT, ,, )"; SQL statement:
+create table Users
+(
+    id varchar(255),
+    password varchar(255)
+
+    primary key (id)
+) [42001-214]
+2022-09-28 22:17:32 jdbc[24]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "create table Users\000d\000a(\000d\000a    user_id varchar(255),\000d\000a    user_pw varchar(255),\000d\000a    fav_soccer boolean,\000d\000a    fav_futsal boolean,\000d\000a    fav_basketball boolean,\000d\000a    fav_baseball boolean,\000d\000a    fav_cycle boolean,\000d\000a    fav_badminton boolean\000d\000a\000d\000a    primary key [*](id)\000d\000a)"; expected "HASH, CONSTRAINT, COMMENT, UNIQUE, NOT NULL, NULL, CHECK, REFERENCES, AUTO_INCREMENT, ,, )"; SQL statement:
+create table Users
+(
+    user_id varchar(255),
+    user_pw varchar(255),
+    fav_soccer boolean,
+    fav_futsal boolean,
+    fav_basketball boolean,
+    fav_baseball boolean,
+    fav_cycle boolean,
+    fav_badminton boolean
+
+    primary key (id)
+) [42001-214]
+2022-09-28 22:18:21 jdbc[24]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "create table Users\000d\000a(\000d\000a    user_id varchar(255),\000d\000a    user_pw varchar(255),\000d\000a    fav_soccer boolean,\000d\000a    fav_futsal boolean,\000d\000a    fav_basketball boolean,\000d\000a    fav_baseball boolean,\000d\000a    fav_cycle boolean,\000d\000a    fav_badminton boolean\000d\000a\000d\000a    primary key [*](user_id)\000d\000a)"; expected "HASH, CONSTRAINT, COMMENT, UNIQUE, NOT NULL, NULL, CHECK, REFERENCES, AUTO_INCREMENT, ,, )"; SQL statement:
+create table Users
+(
+    user_id varchar(255),
+    user_pw varchar(255),
+    fav_soccer boolean,
+    fav_futsal boolean,
+    fav_basketball boolean,
+    fav_baseball boolean,
+    fav_cycle boolean,
+    fav_badminton boolean
+
+    primary key (user_id)
+) [42001-214]
+2022-09-28 22:18:33 jdbc[24]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "create table member\000d\000a(\000d\000a    user_id varchar(255),\000d\000a    user_pw varchar(255),\000d\000a    fav_soccer boolean,\000d\000a    fav_futsal boolean,\000d\000a    fav_basketball boolean,\000d\000a    fav_baseball boolean,\000d\000a    fav_cycle boolean,\000d\000a    fav_badminton boolean\000d\000a\000d\000a    primary key [*](user_id)\000d\000a)"; expected "HASH, CONSTRAINT, COMMENT, UNIQUE, NOT NULL, NULL, CHECK, REFERENCES, AUTO_INCREMENT, ,, )"; SQL statement:
+create table member
+(
+    user_id varchar(255),
+    user_pw varchar(255),
+    fav_soccer boolean,
+    fav_futsal boolean,
+    fav_basketball boolean,
+    fav_baseball boolean,
+    fav_cycle boolean,
+    fav_badminton boolean
+
+    primary key (user_id)
+) [42001-214]
+2022-09-28 22:18:41 jdbc[24]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "create table member\000d\000a(\000d\000a    user_id varchar(255),\000d\000a    user_pw varchar(255)\000d\000a\000d\000a    primary key [*](user_id)\000d\000a)"; expected "HASH, CONSTRAINT, COMMENT, UNIQUE, NOT NULL, NULL, CHECK, REFERENCES, AUTO_INCREMENT, ,, )"; SQL statement:
+create table member
+(
+    user_id varchar(255),
+    user_pw varchar(255)
+
+    primary key (user_id)
+) [42001-214]
+2022-09-28 22:18:54 jdbc[24]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "create table member\000d\000a(\000d\000a    user_id varchar(255),\000d\000a    user_pw varchar(255)\000d\000a\000d\000a    primary key [*](user_id)\000d\000a)"; expected "HASH, CONSTRAINT, COMMENT, UNIQUE, NOT NULL, NULL, CHECK, REFERENCES, AUTO_INCREMENT, ,, )"; SQL statement:
+create table member
+(
+    user_id varchar(255),
+    user_pw varchar(255)
+
+    primary key (user_id)
+) [42001-214]
+2022-09-28 22:19:02 jdbc[24]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "create table member\000d\000a(\000d\000a    user_id varchar(255),\000d\000a    user_pw varchar(255)\000d\000a\000d\000a    primary key [*](user_id)\000d\000a)"; expected "HASH, CONSTRAINT, COMMENT, UNIQUE, NOT NULL, NULL, CHECK, REFERENCES, AUTO_INCREMENT, ,, )"; SQL statement:
+create table member
+(
+    user_id varchar(255),
+    user_pw varchar(255)
+
+    primary key (user_id)
+) [42001-214]
+2022-09-28 22:32:38 jdbc[24]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "drop [*]member"; expected "TABLE, INDEX, USER, SEQUENCE, CONSTANT, TRIGGER, VIEW, ROLE, ALIAS, SCHEMA, ALL OBJECTS, DOMAIN, TYPE, DATATYPE, AGGREGATE, SYNONYM"; SQL statement:
+drop member [42001-214]
+2022-09-28 23:58:50 jdbc[155]: null
+org.h2.message.DbException: The connection was not closed by the application and is garbage collected [90018-214]
+	at org.h2.message.DbException.get(DbException.java:223)
+	at org.h2.message.DbException.get(DbException.java:199)
+	at org.h2.message.DbException.get(DbException.java:188)
+	at org.h2.jdbc.JdbcConnection.closeOld(JdbcConnection.java:190)
+	at org.h2.jdbc.JdbcConnection.<init>(JdbcConnection.java:132)
+	at org.h2.util.JdbcUtils.getConnection(JdbcUtils.java:288)
+	at org.h2.server.web.WebServer.getConnection(WebServer.java:808)
+	at org.h2.server.web.WebApp.login(WebApp.java:1033)
+	at org.h2.server.web.WebApp.process(WebApp.java:226)
+	at org.h2.server.web.WebApp.processRequest(WebApp.java:176)
+	at org.h2.server.web.WebThread.process(WebThread.java:152)
+	at org.h2.server.web.WebThread.run(WebThread.java:101)
+	at java.base/java.lang.Thread.run(Thread.java:833)
+Caused by: org.h2.jdbc.JdbcSQLNonTransientConnectionException: The connection was not closed by the application and is garbage collected [90018-214]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:678)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:477)
+	... 13 more
+2022-09-29 22:42:27 jdbc[306]: null
+org.h2.message.DbException: The connection was not closed by the application and is garbage collected [90018-214]
+	at org.h2.message.DbException.get(DbException.java:223)
+	at org.h2.message.DbException.get(DbException.java:199)
+	at org.h2.message.DbException.get(DbException.java:188)
+	at org.h2.jdbc.JdbcConnection.closeOld(JdbcConnection.java:190)
+	at org.h2.jdbc.JdbcConnection.<init>(JdbcConnection.java:132)
+	at org.h2.util.JdbcUtils.getConnection(JdbcUtils.java:288)
+	at org.h2.server.web.WebServer.getConnection(WebServer.java:808)
+	at org.h2.server.web.WebApp.login(WebApp.java:1033)
+	at org.h2.server.web.WebApp.process(WebApp.java:226)
+	at org.h2.server.web.WebApp.processRequest(WebApp.java:176)
+	at org.h2.server.web.WebThread.process(WebThread.java:152)
+	at org.h2.server.web.WebThread.run(WebThread.java:101)
+	at java.base/java.lang.Thread.run(Thread.java:833)
+Caused by: org.h2.jdbc.JdbcSQLNonTransientConnectionException: The connection was not closed by the application and is garbage collected [90018-214]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:678)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:477)
+	... 13 more
