@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
+
 @RestController
 @RequestMapping("/email")
 public class EmailController {
@@ -21,6 +23,7 @@ public class EmailController {
 
     @PostMapping("/send")
     public void send(@RequestBody Email email){
-
+        System.out.println("인증코드: " + email.getMessage());
+        emailService.sendMail(email);
     }
 }
