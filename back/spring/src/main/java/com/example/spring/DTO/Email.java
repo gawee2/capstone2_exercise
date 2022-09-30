@@ -1,7 +1,10 @@
-package com.example.spring.VO;
+package com.example.spring.DTO;
 
 public class Email {
 
+
+
+    private String userId;
     private String senderName;    //발신자 이름
     private String senderMail;    //발신자 이메일 주소
     private String receiveMail;    //수신자 이메일 주소
@@ -46,5 +49,13 @@ public class Email {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

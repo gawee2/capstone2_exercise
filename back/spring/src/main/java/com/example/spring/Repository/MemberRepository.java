@@ -1,6 +1,6 @@
 package com.example.spring.Repository;
 
-import com.example.spring.VO.Member;
+import com.example.spring.DTO.Member;
 
 import java.util.List;
 import java.util.Optional;

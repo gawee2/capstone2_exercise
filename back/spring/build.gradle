@@ -33,6 +33,7 @@ dependencies {
 	implementation group: 'de.svenkubiak', name: 'jBCrypt', version: '0.4.1'
 	//이메일
 	implementation group: 'com.sun.mail', name: 'javax.mail', version: '1.6.2'
+
 }
 
 tasks.named('test') {

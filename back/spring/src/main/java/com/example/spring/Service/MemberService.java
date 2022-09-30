@@ -1,6 +1,6 @@
 package com.example.spring.Service;
 
-import com.example.spring.VO.Member;
+import com.example.spring.DTO.Member;
 import com.example.spring.Repository.MemberRepository;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.transaction.annotation.Transactional;
@@ -100,5 +100,6 @@ public class MemberService {
     public Optional<Member> findOne(Long memberId){
         return memberRepository.findById(memberId);
     }
+    public Optional<Member> findOne(String userId){return memberRepository.findByUserId(userId);}
 
 }

@@ -32,5 +32,5 @@ public class SpringConfig {
     }
 
     @Bean
-    public EmailService emailService(){ return new EmailServiceImpl();}
+    public EmailService emailService(){ return new EmailServiceImpl(memberService());}
 }
