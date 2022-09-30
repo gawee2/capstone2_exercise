@@ -1,4 +1,4 @@
-package com.example.spring.VO;
+package com.example.spring.DTO;
 
 public class Email {
 

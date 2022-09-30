@@ -1,8 +1,7 @@
 package com.example.spring.Controller;
 
-import com.example.spring.VO.Member;
+import com.example.spring.DTO.Member;
 import com.example.spring.Service.MemberService;
-import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

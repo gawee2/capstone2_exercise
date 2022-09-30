@@ -1,6 +1,6 @@
 package com.example.spring.Service;
 
-import com.example.spring.VO.Member;
+import com.example.spring.DTO.Member;
 import com.example.spring.Repository.MemberRepository;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.transaction.annotation.Transactional;

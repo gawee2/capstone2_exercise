@@ -10,7 +10,6 @@ create table member
     nickname varchar(20),
     introduce text,
     region text,
-    cell_phone varchar(20),
 
     fav_soccer boolean,
     fav_futsal boolean,

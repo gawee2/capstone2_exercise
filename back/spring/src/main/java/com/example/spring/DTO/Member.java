@@ -1,4 +1,4 @@
-package com.example.spring.VO;
+package com.example.spring.DTO;
 
 
 import javax.persistence.Entity;
@@ -18,7 +18,6 @@ public class Member {
     private String email;
     private String introduce;
     private String region;
-    private String cellPhone;
     private String nickname;
     private String salt;
 
@@ -83,14 +82,6 @@ public class Member {
 
     public void setRegion(String region) {
         this.region = region;
-    }
-
-    public String getCellPhone() {
-        return cellPhone;
-    }
-
-    public void setCellPhone(String cellPhone) {
-        this.cellPhone = cellPhone;
     }
 
     public String getNickname() {

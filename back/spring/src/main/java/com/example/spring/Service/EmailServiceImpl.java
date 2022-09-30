@@ -1,6 +1,6 @@
 package com.example.spring.Service;
 
-import com.example.spring.VO.Email;
+import com.example.spring.DTO.Email;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

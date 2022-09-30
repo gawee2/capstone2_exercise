@@ -1,6 +1,6 @@
 package com.example.spring.Service;
 
-import com.example.spring.VO.Email;
+import com.example.spring.DTO.Email;
 
 public interface EmailService {
     public void sendMail(Email email);
