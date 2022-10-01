@@ -20,5 +20,11 @@
         android:text="API 테스트"
         android:id="@+id/btnAPITest"
         />
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="마이페이지"
+        android:id="@+id/btnUserInfo"
+        />
 
 </LinearLayout>
