@@ -32,6 +32,7 @@
         <activity android:name=".Sign.SignInActivity" />
         <activity android:name=".Sign.SignUpActivity" />
         <activity android:name=".Sign.ForgetPwActivity" />
+        <activity android:name=".UserInfoActivity" />
     </application>
 
 </manifest>
