@@ -30,4 +30,7 @@ public interface RetrofitAPI {
     //토큰 가지고 api 테스트
     @GET("/api/user/info/test")
     Call<String> test();
+
+    @GET("/api/auth/tokenCheck")
+    Call<Boolean> tokenCheck();
 }

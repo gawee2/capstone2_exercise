@@ -74,34 +74,58 @@ public class SignInActivity extends AppCompatActivity {
         public void onClick(View view) {
             if(view == btnLogin){
 
-                SignInDTO signInDTO = new SignInDTO();
-                signInDTO.setUserId(edtId.getText().toString());
-                signInDTO.setUserPw(edtPw.getText().toString());
-
-                retrofitAPI.login(signInDTO).enqueue(new Callback<ApiResponseDTO>() {
-                    @Override
-                    public void onResponse(Call<ApiResponseDTO> call, Response<ApiResponseDTO> response) {
-                        Log.d("로그인", "응답");
-                        if(response.isSuccessful()){
-                            Log.d("로그인", "성공");
-                            ApiResponseDTO apiResponseDTO = response.body();
-                            Log.d("로그인", String.valueOf(apiResponseDTO.getCode()));
-                            try{
-                                preferenceUtil.setString("refreshIdx", String.valueOf(apiResponseDTO.getResult().getRefreshIdx()));
-                                preferenceUtil.setString("accessToken", apiResponseDTO.getResult().getAccessToken());
-                                Log.d("로그인", String.valueOf(apiResponseDTO.getResult().getRefreshIdx()));
-                                Log.d("로그인", String.valueOf(apiResponseDTO.getResult().getAccessToken()));
-                            }catch (NullPointerException e){
-                                Log.d("로그인", "이미 토큰이 발급된 사용자");
+                //이미 토큰 발행된 사용자일 경우
+                //토큰이 유효한지 체크하고 바로 화면 전환
+                if(!preferenceUtil.getString("accessToken").equals("none")){
+                    Log.d("로그인", preferenceUtil.getString("accessToken"));
+                    retrofitAPI.tokenCheck().enqueue(new Callback<Boolean>() {
+                        @Override
+                        public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                            if(response.isSuccessful()){
+                                if(response.body()){
+                                    finish();
+                                }
                             }
                         }
-                    }
 
-                    @Override
-                    public void onFailure(Call<ApiResponseDTO> call, Throwable t) {
+                        @Override
+                        public void onFailure(Call<Boolean> call, Throwable t) {
 
-                    }
-                });
+                        }
+                    });
+
+
+                }else {
+
+                    SignInDTO signInDTO = new SignInDTO();
+                    signInDTO.setUserId(edtId.getText().toString());
+                    signInDTO.setUserPw(edtPw.getText().toString());
+
+                    retrofitAPI.login(signInDTO).enqueue(new Callback<ApiResponseDTO>() {
+                        @Override
+                        public void onResponse(Call<ApiResponseDTO> call, Response<ApiResponseDTO> response) {
+                            Log.d("로그인", "응답");
+                            if (response.isSuccessful()) {
+                                Log.d("로그인", "성공");
+                                ApiResponseDTO apiResponseDTO = response.body();
+                                Log.d("로그인", String.valueOf(apiResponseDTO.getCode()));
+                                try {
+                                    preferenceUtil.setString("refreshIdx", String.valueOf(apiResponseDTO.getResult().getRefreshIdx()));
+                                    preferenceUtil.setString("accessToken", apiResponseDTO.getResult().getAccessToken());
+                                    Log.d("로그인", String.valueOf(apiResponseDTO.getResult().getRefreshIdx()));
+                                    Log.d("로그인", String.valueOf(apiResponseDTO.getResult().getAccessToken()));
+                                } catch (NullPointerException e) {
+                                    Log.d("로그인", "이미 토큰이 발급된 사용자");
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<ApiResponseDTO> call, Throwable t) {
+
+                        }
+                    });
+                }
 
 
             }else if(view == btnSignUp){
