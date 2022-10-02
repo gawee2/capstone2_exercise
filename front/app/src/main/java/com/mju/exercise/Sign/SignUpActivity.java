@@ -84,6 +84,8 @@ public class SignUpActivity extends AppCompatActivity {
                                 boolean success = response.body();
                                 if(success){
                                     Log.d("http", "회원가입 성공!!!!");
+
+                                    finish();
                                 }else {
                                     Log.d("http", "회원가입 실패");
                                 }

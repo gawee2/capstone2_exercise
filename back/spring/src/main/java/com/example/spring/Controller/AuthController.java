@@ -8,10 +8,7 @@ import com.example.spring.auth.ApiResponse;
 import com.example.spring.auth.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -47,6 +44,13 @@ public class AuthController {
     @PostMapping("/refreshToken")
     public ApiResponse newAccessToken(@RequestBody AuthDTO.GetNewAccessTokenDTO getNewAccessTokenDTO, HttpServletRequest request){
         return authService.newAccessToken(getNewAccessTokenDTO, request);
+    }
+
+    //필터에서 토큰 유효성 검사하는데
+    //여기 체크는 그냥 로그인 유지 시키려고
+    @GetMapping("/tokenCheck")
+    public boolean tokenCheck(){
+        return true;
     }
 
 }
