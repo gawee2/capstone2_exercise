@@ -36,7 +36,7 @@ public class AuthController {
         checkMember.setUserPw(loginDTO.getUserPw());
 
         //로그인 시도시 회원인지 아닌지 판단
-        if(memberService.isMember(checkMember)){
+        if(memberService.isMember(checkMember) && !authService.isExist(checkMember)){
             return authService.login(loginDTO);
         }else{
             ApiResponse apiResponse = new ApiResponse();

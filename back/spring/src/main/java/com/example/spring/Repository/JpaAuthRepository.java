@@ -48,4 +48,20 @@ public class JpaAuthRepository implements AuthRepository{
     public void insertOrUpdateRefreshToken(RefreshToken refreshToken) {
         em.persist(refreshToken);
     }
+
+    @Override
+    public boolean isExist(String userId) {
+
+        List<RefreshToken> result = em.createQuery("select m from RefreshToken m where m.userId = :userId", RefreshToken.class)
+                .setParameter("userId", userId)
+                .getResultList();
+
+        try{
+            result.get(0);
+            //사용자가 없을경우 예외 던져짐
+        }catch (IndexOutOfBoundsException e){
+            return false;
+        }
+        return true;
+    }
 }

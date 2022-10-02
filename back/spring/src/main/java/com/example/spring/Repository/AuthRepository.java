@@ -7,6 +7,9 @@ import org.springframework.security.core.userdetails.User;
 public interface AuthRepository {
 
     UserDetailsImpl findByUserId(String userId);
+
     String findRefreshTokenByIdx(long idx);
     void insertOrUpdateRefreshToken(RefreshToken refreshToken);
+
+    boolean isExist(String userId);
 }

@@ -1,6 +1,7 @@
 package com.example.spring.auth;
 
 import com.example.spring.DTO.AuthDTO;
+import com.example.spring.DTO.Member;
 import com.example.spring.Repository.AuthRepository;
 import com.example.spring.enumcollection.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -50,6 +51,13 @@ public class AuthService {
         }
         System.out.println("auth service 로그인 문제 없음");
         return result;
+    }
+
+    public boolean isExist(Member member){
+        if(authRepository.isExist(member.getUserId())){
+            return true;
+        }
+        return false;
     }
 
     public ApiResponse newAccessToken(AuthDTO.GetNewAccessTokenDTO getNewAccessTokenDTO, HttpServletRequest request){

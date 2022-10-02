@@ -1,8 +1,10 @@
 package com.example.spring.Controller;
 
+import com.example.spring.DTO.AuthDTO;
 import com.example.spring.DTO.Member;
 import com.example.spring.Service.MemberService;
 import com.example.spring.auth.ApiResponse;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,15 +22,25 @@ public class MemberController {
     }
 
     @PostMapping("/signUp")
-    public Member signUp(@RequestBody Member member){
+    public boolean signUp(@RequestBody Member member){
         Member newMember = new Member();
         newMember.setUserId(member.getUserId());
         newMember.setUserPw(member.getUserPw());
         newMember.setEmail(member.getEmail());
 
-        memberService.join(newMember);
+        //체크
+        System.out.println(member.getUserId());
 
-        return newMember;
+        try{
+            long checkDuplicate = memberService.join(newMember);
+            if(checkDuplicate == -1L){
+                return false;
+            }
+            return true;
+        }catch (Exception e){
+            System.out.println("예외발생: " + e.getMessage());
+            return false;
+        }
     }
 
     @PostMapping("/forgetPassword")
@@ -45,5 +57,9 @@ public class MemberController {
         return apiResponse;
     }
 
+    @PostMapping("/info/test")
+    public String test(){
+        return "api에 접근 가능한 사용자";
+    }
 
 }
