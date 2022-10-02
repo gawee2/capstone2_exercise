@@ -12,13 +12,9 @@ public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String userId;
     private String userPw;
     private String email;
-    private String introduce;
-    private String region;
-    private String nickname;
     private String salt;
 
     public String getSalt() {
@@ -29,12 +25,6 @@ public class Member {
         this.salt = salt;
     }
 
-    private boolean fav_soccer = false;
-    private boolean fav_futsal = false;
-    private boolean fav_baseball = false;
-    private boolean fav_basketball = false;
-    private boolean fav_badminton = false;
-    private boolean fav_cycle = false;
 
     public Long getId() {
         return id;
@@ -68,75 +58,4 @@ public class Member {
         this.email = email;
     }
 
-    public String getIntroduce() {
-        return introduce;
-    }
-
-    public void setIntroduce(String introduce) {
-        this.introduce = introduce;
-    }
-
-    public String getRegion() {
-        return region;
-    }
-
-    public void setRegion(String region) {
-        this.region = region;
-    }
-
-    public String getNickname() {
-        return nickname;
-    }
-
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
-
-    public boolean isFav_soccer() {
-        return fav_soccer;
-    }
-
-    public void setFav_soccer(boolean fav_soccer) {
-        this.fav_soccer = fav_soccer;
-    }
-
-    public boolean isFav_futsal() {
-        return fav_futsal;
-    }
-
-    public void setFav_futsal(boolean fav_futsal) {
-        this.fav_futsal = fav_futsal;
-    }
-
-    public boolean isFav_baseball() {
-        return fav_baseball;
-    }
-
-    public void setFav_baseball(boolean fav_baseball) {
-        this.fav_baseball = fav_baseball;
-    }
-
-    public boolean isFav_basketball() {
-        return fav_basketball;
-    }
-
-    public void setFav_basketball(boolean fav_basketball) {
-        this.fav_basketball = fav_basketball;
-    }
-
-    public boolean isFav_badminton() {
-        return fav_badminton;
-    }
-
-    public void setFav_badminton(boolean fav_badminton) {
-        this.fav_badminton = fav_badminton;
-    }
-
-    public boolean isFav_cycle() {
-        return fav_cycle;
-    }
-
-    public void setFav_cycle(boolean fav_cycle) {
-        this.fav_cycle = fav_cycle;
-    }
 }
