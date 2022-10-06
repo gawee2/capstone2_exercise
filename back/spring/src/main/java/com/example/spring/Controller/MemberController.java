@@ -88,7 +88,7 @@ public class MemberController {
     }
 
     @PostMapping("/upload/image")
-    public String uploadsProfileImg(@RequestParam(name="image") MultipartFile image) throws IOException {
+    public boolean uploadsProfileImg(@RequestParam(name="image") MultipartFile image) throws IOException {
 
         String absolutePath = new File("/Users/duskite/downloads/img").getAbsolutePath() + "/";
 
@@ -101,12 +101,12 @@ public class MemberController {
             }
 
             image.transferTo(file);
-            return "성공";
+            return true;
         }
 
         System.out.println("넘어온 이미지가 없음");
 
-        return "실패";
+        return false;
 
 
     }

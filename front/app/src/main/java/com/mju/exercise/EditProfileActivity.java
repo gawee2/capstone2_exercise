@@ -109,9 +109,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
                 //이미지 처리 하고
                 if(imgUri != null){
-                    String strPath = getRealPathFromURI(imgUri);
-                    Log.d("이미지", "실제 경로: " + strPath);
-                    RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), new File(strPath));
+                    RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), getRealFile(imgUri));
                     MultipartBody.Part body = MultipartBody.Part.createFormData("image", "test.jpg", requestFile);
                     retrofit = new Retrofit.Builder()
                             .baseUrl("http://192.168.0.3:8080")
@@ -120,15 +118,18 @@ public class EditProfileActivity extends AppCompatActivity {
 
                     retrofitAPI = retrofit.create(RetrofitAPI.class);
 
-                    retrofitAPI.uploadImg(body).enqueue(new Callback<String>() {
+                    retrofitAPI.uploadImg(body).enqueue(new Callback<Boolean>() {
                         @Override
-                        public void onResponse(Call<String> call, Response<String> response) {
-                            Log.d("이미지", response.body().toString());
+                        public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                            if(response.isSuccessful()){
+                                Log.d("이미지", response.body().toString());
+                            }
+
                         }
 
                         @Override
-                        public void onFailure(Call<String> call, Throwable t) {
-                            Log.d("이미지", "안드로이드단 실패");
+                        public void onFailure(Call<Boolean> call, Throwable t) {
+                            Log.d("이미지", t.getMessage());
                         }
                     });
 
@@ -155,18 +156,27 @@ public class EditProfileActivity extends AppCompatActivity {
         }
     };
 
-    private String getRealPathFromURI(Uri contentURI) {
-        String result;
-        Cursor cursor = getContentResolver().query(contentURI, null, null, null, null);
-        if (cursor == null) { // Source is Dropbox or other similar local file path
-            result = contentURI.getPath();
-        } else {
-            cursor.moveToFirst();
-            int idx = cursor.getColumnIndex(MediaStore.Images.Media.DATA);
-            result = cursor.getString(idx);
-            cursor.close();
+    private File getRealFile(Uri uri) {
+        String[] projection = {MediaStore.Images.Media.DATA};
+        if(uri == null) {
+            uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
         }
-        return result;
+
+        Cursor cursor = getContentResolver().query(uri, projection, null, null, MediaStore.Images.Media.DATE_MODIFIED + " desc");
+        if(cursor == null || cursor.getColumnCount() <1 ) {
+            return null;
+        }
+        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+
+        String path = cursor.getString(column_index);
+
+        if(cursor != null) {
+            cursor.close();
+            cursor = null;
+        }
+
+        return new File(path);
     }
 
 }
