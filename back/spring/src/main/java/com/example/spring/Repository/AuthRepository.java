@@ -12,4 +12,7 @@ public interface AuthRepository {
     void insertOrUpdateRefreshToken(RefreshToken refreshToken);
 
     boolean isExist(String userId);
+
+    //헤더에 포함되어 온 토큰으로 사용자 판단하는 부분
+    String findUserByToken(String token);
 }

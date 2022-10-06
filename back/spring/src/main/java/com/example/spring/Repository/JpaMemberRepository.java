@@ -1,6 +1,7 @@
 package com.example.spring.Repository;
 
 import com.example.spring.DTO.Member;
+import com.example.spring.DTO.Profile;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -18,6 +19,7 @@ public class JpaMemberRepository implements MemberRepository {
         em.persist(member);
         return member;
     }
+
 
     @Override
     public Optional<Member> findById(Long id) {
@@ -37,6 +39,28 @@ public class JpaMemberRepository implements MemberRepository {
     public List<Member> findAll() {
         return em.createQuery("select m from Member m", Member.class)
                 .getResultList();
+    }
+
+    @Override
+    public Profile setProfile(Profile profile) {
+        em.persist(profile);
+        return profile;
+    }
+
+    @Override
+    public Profile updateProfile(Profile profile) {
+        //여기 좀더 고민해봐야할듯
+        return null;
+    }
+
+
+    @Override
+    public Optional<Profile> findProfileByUserId(String userId) {
+
+        List<Profile> result = em.createQuery("select m from Profile m where m.userId = :userId", Profile.class)
+                .setParameter("userId", userId)
+                .getResultList();
+        return result.stream().findAny();
     }
 
 }

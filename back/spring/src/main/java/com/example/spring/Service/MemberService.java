@@ -1,6 +1,7 @@
 package com.example.spring.Service;
 
 import com.example.spring.DTO.Member;
+import com.example.spring.DTO.Profile;
 import com.example.spring.Repository.MemberRepository;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +24,21 @@ public class MemberService {
         hashedPw = BCrypt.hashpw(plainPw, salt);
 
         return hashedPw;
+    }
+
+    //여기 아직 수정중
+    public Profile setProfile(Profile profile){
+
+        try{
+            validateDuplicateProfile(profile);
+            return memberRepository.setProfile(profile);
+        }catch (Exception e){
+            return memberRepository.updateProfile(profile);
+        }
+    }
+
+    public Profile findProfileByUserId(String userId){
+        return memberRepository.findProfileByUserId(userId).get();
     }
 
     /**
@@ -87,6 +103,14 @@ public class MemberService {
         memberRepository.findByUserId(member.getUserId())
                 .ifPresent(m ->{
                     throw new IllegalStateException("이미 존재하는 회원입니다.");
+                });
+    }
+
+    //이미 디비에 생성된 프로필이 있는지 체크
+    private void validateDuplicateProfile(Profile profile) {
+        memberRepository.findProfileByUserId(profile.getUserId())
+                .ifPresent(m ->{
+                    throw new IllegalStateException("이미 프로필이 존재하는 회원, 업데이트로 처리");
                 });
     }
 

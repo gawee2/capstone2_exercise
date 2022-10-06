@@ -32,6 +32,12 @@ public class AuthService {
     }
 
 
+    //토큰을 가지고 userId 찾아서 리턴
+    public String findUserByToken(String token){
+        return authRepository.findUserByToken(token);
+    }
+
+
     public ApiResponse login(AuthDTO.LoginDTO loginDTO) {
         ResponseMap result = new ResponseMap();
 

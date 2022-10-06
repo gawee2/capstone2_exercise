@@ -2,8 +2,6 @@ package com.example.spring.DTO;
 
 public class Email {
 
-
-
     private String userId;
     private String senderName;    //발신자 이름
     private String senderMail;    //발신자 이메일 주소
