@@ -43,7 +43,7 @@ public class SecurityConfig {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/api/auth/**", "/api/user/signUp", "/api/user/forgetPassword", "api/user/test").permitAll()
+                .antMatchers("/api/user/upload/image","/api/auth/**", "/api/user/signUp", "/api/user/forgetPassword", "api/user/test").permitAll()
                 .antMatchers("/api/user/info/**", "/api/user/setMyProfile").authenticated()
 //                .anyRequest().permitAll()
 //                .anyRequest().authenticated()

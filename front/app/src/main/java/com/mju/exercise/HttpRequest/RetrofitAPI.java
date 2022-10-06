@@ -6,13 +6,16 @@ import com.mju.exercise.Domain.ProfileDTO;
 import com.mju.exercise.Domain.SignInDTO;
 import com.mju.exercise.Domain.SignUpDTO;
 
+import okhttp3.MultipartBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.Path;
 
 public interface RetrofitAPI {
@@ -29,6 +32,12 @@ public interface RetrofitAPI {
     Call<ProfileDTO> setMyProfile(@Path(value="userId", encoded = true) String userId, @Body ProfileDTO profileDTO);
 
 
+    //이미지 업로드
+    @Multipart
+    @POST("/api/user/upload/image")
+    Call<String> uploadImg(@Part MultipartBody.Part imgFile);
+
+    
 
     //로그인
     @Headers("Content-Type: application/json")

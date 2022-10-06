@@ -1,9 +1,12 @@
 package com.mju.exercise;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.FileUtils;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -20,6 +23,18 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.mju.exercise.Domain.ProfileDTO;
+import com.mju.exercise.HttpRequest.RetrofitAPI;
+
+import java.io.File;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class EditProfileActivity extends AppCompatActivity {
 
@@ -33,6 +48,9 @@ public class EditProfileActivity extends AppCompatActivity {
     //이미지 업로드 위해서 액티비티 결과값 체크
     ActivityResultLauncher<Intent> activityResultLauncher;
     private Uri imgUri;
+
+    private Retrofit retrofit;
+    private RetrofitAPI retrofitAPI;
 
 
     @Override
@@ -90,6 +108,31 @@ public class EditProfileActivity extends AppCompatActivity {
                 profileDTO.setIntroduce(edtProfileMsg.getText().toString());
 
                 //이미지 처리 하고
+                if(imgUri != null){
+                    String strPath = getRealPathFromURI(imgUri);
+                    Log.d("이미지", "실제 경로: " + strPath);
+                    RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), new File(strPath));
+                    MultipartBody.Part body = MultipartBody.Part.createFormData("image", "test.jpg", requestFile);
+                    retrofit = new Retrofit.Builder()
+                            .baseUrl("http://192.168.0.3:8080")
+                            .addConverterFactory(GsonConverterFactory.create())
+                            .build();
+
+                    retrofitAPI = retrofit.create(RetrofitAPI.class);
+
+                    retrofitAPI.uploadImg(body).enqueue(new Callback<String>() {
+                        @Override
+                        public void onResponse(Call<String> call, Response<String> response) {
+                            Log.d("이미지", response.body().toString());
+                        }
+
+                        @Override
+                        public void onFailure(Call<String> call, Throwable t) {
+                            Log.d("이미지", "안드로이드단 실패");
+                        }
+                    });
+
+                }
 
             //이미지 클릭했을때는 사진첩 열리면서 이미지 선택 가능하도록
             }else if(view == imgProfile){
@@ -111,5 +154,19 @@ public class EditProfileActivity extends AppCompatActivity {
             }
         }
     };
+
+    private String getRealPathFromURI(Uri contentURI) {
+        String result;
+        Cursor cursor = getContentResolver().query(contentURI, null, null, null, null);
+        if (cursor == null) { // Source is Dropbox or other similar local file path
+            result = contentURI.getPath();
+        } else {
+            cursor.moveToFirst();
+            int idx = cursor.getColumnIndex(MediaStore.Images.Media.DATA);
+            result = cursor.getString(idx);
+            cursor.close();
+        }
+        return result;
+    }
 
 }

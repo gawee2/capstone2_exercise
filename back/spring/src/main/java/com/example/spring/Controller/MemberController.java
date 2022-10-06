@@ -10,7 +10,11 @@ import lombok.experimental.PackagePrivate;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.mail.Multipart;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -81,6 +85,30 @@ public class MemberController {
     @GetMapping("/findUserProfile/{userId}")
     public Profile findUserProfile(@PathVariable String userId){
         return memberService.findProfileByUserId(userId);
+    }
+
+    @PostMapping("/upload/image")
+    public String uploadsProfileImg(@RequestParam(name="image") MultipartFile image) throws IOException {
+
+        String absolutePath = new File("/Users/duskite/downloads/img").getAbsolutePath() + "/";
+
+        System.out.println(absolutePath);
+
+        if(!image.isEmpty()){
+            File file = new File(absolutePath);
+            if(!file.exists()){
+                file.mkdir();
+            }
+
+            image.transferTo(file);
+            return "성공";
+        }
+
+        System.out.println("넘어온 이미지가 없음");
+
+        return "실패";
+
+
     }
 
 
