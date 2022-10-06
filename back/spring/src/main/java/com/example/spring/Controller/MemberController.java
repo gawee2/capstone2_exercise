@@ -2,23 +2,33 @@ package com.example.spring.Controller;
 
 import com.example.spring.DTO.AuthDTO;
 import com.example.spring.DTO.Member;
+import com.example.spring.DTO.Profile;
 import com.example.spring.Service.MemberService;
 import com.example.spring.auth.ApiResponse;
+import com.example.spring.auth.AuthService;
+import lombok.experimental.PackagePrivate;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.mail.Multipart;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/user")
 public class MemberController {
 
     private final MemberService memberService;
+    private final AuthService authService;
 
     @Autowired
-    public MemberController(MemberService memberService) {
+    public MemberController(MemberService memberService, AuthService authService) {
         this.memberService = memberService;
+        this.authService = authService;
     }
 
     @PostMapping("/signUp")
@@ -49,6 +59,61 @@ public class MemberController {
         System.out.println(member.getEmail());
         return true;
     }
+
+    @PostMapping("/setMyProfile")
+    public boolean setMyProfile(@RequestBody Profile profile,
+                                @RequestHeader Map<String, String> header){
+
+        System.out.println("RequestBody:" + profile.getUserId());
+        System.out.println("RequestBody:" + profile.getNickname());
+        System.out.println("헤더:" + header.get("token"));
+
+        //현재 프로필 수정으로 요청한 유저
+        String requestUser = authService.findUserByToken(header.get("token"));
+        //프로필 수정을 당하는 유저
+        String willChangeUser = profile.getUserId();
+
+        //자기꺼만 바꿀수 있음
+        if(requestUser.equals(willChangeUser)){
+            memberService.setProfile(profile);
+
+            return true;
+        }
+        return false;
+    }
+
+    @GetMapping("/findUserProfile/{userId}")
+    public Profile findUserProfile(@PathVariable String userId){
+        return memberService.findProfileByUserId(userId);
+    }
+
+    @PostMapping("/upload/image")
+    public boolean uploadsProfileImg(@RequestParam(name="image") MultipartFile image) throws IOException {
+
+        String absolutePath = new File("/Users/duskite/downloads/img").getAbsolutePath() + "/";
+
+        System.out.println(absolutePath);
+
+        if(!image.isEmpty()){
+            File file = new File(absolutePath);
+            if(!file.exists()){
+                file.mkdir();
+            }
+
+            image.transferTo(file);
+            return true;
+        }
+
+        System.out.println("넘어온 이미지가 없음");
+
+        return false;
+
+
+    }
+
+
+
+
 
     @PostMapping("/info")
     public ApiResponse userInfo(@RequestParam String searchUser){

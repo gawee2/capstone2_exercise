@@ -1,6 +1,7 @@
 package com.example.spring.Repository;
 
 import com.example.spring.DTO.Member;
+import com.example.spring.DTO.Profile;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,4 +12,8 @@ public interface MemberRepository {
     Optional<Member> findById(Long id);
     Optional<Member> findByUserId(String userId);
     List<Member> findAll();
+
+    Profile setProfile(Profile profile);
+    Profile updateProfile(Profile profile);
+    Optional<Profile> findProfileByUserId(String userId);
 }

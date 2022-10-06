@@ -11,7 +11,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.mju.exercise.Sign.SignInActivity;
 
 public class UserInfoActivity extends AppCompatActivity {
     private Context mContext;
@@ -61,7 +60,7 @@ public class UserInfoActivity extends AppCompatActivity {
         public void onClick(View v) {
             if (v == mImgViewEditProfile) {
                 Toast.makeText(mContext, "수정", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getApplicationContext(), EditProfileActtivity.class);
+                Intent intent = new Intent(getApplicationContext(), EditProfileActivity.class);
                 startActivity(intent);
 
             }else if (v == mFbtnFeed){

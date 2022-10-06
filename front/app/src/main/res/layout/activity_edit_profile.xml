@@ -41,7 +41,7 @@
                     android:layout_weight="1">
 
                     <EditText
-                        android:id="@+id/txtUserName"
+                        android:id="@+id/txtNickname"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="3"
@@ -53,14 +53,31 @@
 
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/txtAddress"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
                     android:gravity="center|left"
-                    android:text="지역"
-                    android:textColor="@color/black" />
+                    android:orientation="horizontal">
+                    <Spinner
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center|left"
+                        />
+                    <Spinner
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center|left"
+                        />
+                    <Spinner
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center|left"
+                        />
+                </LinearLayout>
             </LinearLayout>
 
         </LinearLayout>
@@ -101,47 +118,54 @@
                     android:gravity="center"
                     android:text="운동 선호 요일"
                     android:textColor="@color/black" />
-                <RadioGroup
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="9"
                     android:orientation="horizontal">
-                    <RadioButton
+                    <CheckBox
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:id="@+id/chkFavMon"
                         android:text="월요일"
                         />
-                    <RadioButton
+                    <CheckBox
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:id="@+id/chkFavTue"
                         android:text="화요일"
                         />
-                    <RadioButton
+                    <CheckBox
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:id="@+id/chkFavWed"
                         android:text="수요일"
                         />
-                    <RadioButton
+                    <CheckBox
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:id="@+id/chkFavThu"
                         android:text="목요일"
                         />
-                    <RadioButton
+                    <CheckBox
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:id="@+id/chkFavFri"
                         android:text="금요일"
                         />
-                    <RadioButton
+                    <CheckBox
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:id="@+id/chkFavSat"
                         android:text="토요일"
                         />
-                    <RadioButton
+                    <CheckBox
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:id="@+id/chkFavSun"
                         android:text="일요일"
                         />
-                </RadioGroup>
+                </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
@@ -157,42 +181,55 @@
                     android:gravity="center"
                     android:text="선호 종목"
                     android:textColor="@color/black" />
-                <RadioGroup
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="9"
                     android:orientation="horizontal">
-                    <RadioButton
+                    <CheckBox
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:id="@+id/chkFavSoccer"
                         android:text="축구"
                         />
-                    <RadioButton
+                    <CheckBox
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:id="@+id/chkFavFutsal"
                         android:text="풋살"
                         />
-                    <RadioButton
+                    <CheckBox
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:id="@+id/chkFavBasketball"
                         android:text="농구"
                         />
-                    <RadioButton
+                    <CheckBox
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:id="@+id/chkFavBaseball"
                         android:text="야구"
                         />
-                    <RadioButton
+                    <CheckBox
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:id="@+id/chkFavBadminton"
                         android:text="배드민턴"
                         />
-                    <RadioButton
+                    <CheckBox
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:id="@+id/chkFavCycle"
                         android:text="사이클"
                         />
-                </RadioGroup>
+                </LinearLayout>
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="완료"
+                    android:id="@+id/btnEnter"
+                    />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

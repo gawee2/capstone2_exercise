@@ -64,4 +64,15 @@ public class JpaAuthRepository implements AuthRepository{
         }
         return true;
     }
+
+    //액세스 토큰을 가지고 사용자 누구인지 찾음
+    @Override
+    public String findUserByToken(String accessToken) {
+
+        List<RefreshToken> result = em.createQuery("select m from RefreshToken m where m.accessToken = :accessToken", RefreshToken.class)
+                .setParameter("accessToken", accessToken)
+                .getResultList();
+
+        return result.get(0).getUserId();
+    }
 }
