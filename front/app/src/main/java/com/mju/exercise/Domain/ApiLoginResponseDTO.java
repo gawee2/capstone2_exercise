@@ -2,7 +2,7 @@ package com.mju.exercise.Domain;
 
 import com.google.gson.annotations.SerializedName;
 
-public class ApiResponseResultDTO {
+public class ApiLoginResponseDTO {
 
     @SerializedName("refreshIdx")
     private int refreshIdx;

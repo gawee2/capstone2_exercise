@@ -27,14 +27,9 @@ public class MemberService {
     }
 
     //여기 아직 수정중
-    public Profile setProfile(Profile profile){
+    public Profile setOrUpdateProfile(Profile profile){
 
-        try{
-            validateDuplicateProfile(profile);
-            return memberRepository.setProfile(profile);
-        }catch (Exception e){
-            return memberRepository.updateProfile(profile);
-        }
+        return memberRepository.setOrUpdateProfile(profile);
     }
 
     public Profile findProfileByUserId(String userId){

@@ -12,24 +12,18 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.mju.exercise.Domain.ApiResponseDTO;
 import com.mju.exercise.Domain.SignInDTO;
-import com.mju.exercise.HttpRequest.HttpAsyncTask;
-import com.mju.exercise.HttpRequest.RetrofitAPI;
 import com.mju.exercise.HttpRequest.RetrofitUtil;
 import com.mju.exercise.Preference.PreferenceUtil;
 import com.mju.exercise.R;
-import com.mju.exercise.StatusEnum.Status;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.ref.PhantomReference;
-import java.util.concurrent.ExecutionException;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class SignInActivity extends AppCompatActivity {
 
@@ -106,24 +100,31 @@ public class SignInActivity extends AppCompatActivity {
                                 Log.d("로그인", "응답");
                                 if (response.isSuccessful()) {
                                     Log.d("로그인", "성공");
-                                    ApiResponseDTO apiResponseDTO = response.body();
+                                    Log.d("로그인", String.valueOf(response.body().getCode()));
 
-                                    if(apiResponseDTO.getCode() == 200){
+                                    if (response.body().getCode() == 200) {
                                         try {
-                                            preferenceUtil.setString("refreshIdx", String.valueOf(apiResponseDTO.getResult().getRefreshIdx()));
-                                            preferenceUtil.setString("accessToken", apiResponseDTO.getResult().getAccessToken());
+
+                                            JSONObject resultBody = new JSONObject((Map) response.body().getResult());
+
+                                            preferenceUtil.setString("refreshIdx", resultBody.getString("refreshIdx"));
+                                            preferenceUtil.setString("accessToken", resultBody.getString("accessToken"));
                                             preferenceUtil.setString("userId", edtId.getText().toString());
 
                                             finish();
                                         } catch (NullPointerException e) {
                                             Log.d("로그인", "이미 토큰이 발급된 사용자");
                                             finish();
+                                        } catch (JSONException e) {
+                                            Log.d("로그인", "json 에러");
+                                            e.printStackTrace();
                                         }
-                                    }else{
+                                    } else {
                                         Toast.makeText(getApplicationContext(), "로그인 실패", Toast.LENGTH_SHORT).show();
                                     }
-
                                 }
+
+
                             }
 
                             @Override

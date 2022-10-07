@@ -14,6 +14,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContract;
@@ -22,11 +23,17 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.mju.exercise.Domain.ApiResponseDTO;
 import com.mju.exercise.Domain.ProfileDTO;
 import com.mju.exercise.HttpRequest.RetrofitAPI;
 import com.mju.exercise.HttpRequest.RetrofitUtil;
+import com.mju.exercise.Preference.PreferenceUtil;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
+import java.util.Map;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -50,9 +57,9 @@ public class EditProfileActivity extends AppCompatActivity {
     ActivityResultLauncher<Intent> activityResultLauncher;
     private Uri imgUri;
 
-//    private Retrofit retrofit;
-//    private RetrofitAPI retrofitAPI;
+    private PreferenceUtil preferenceUtil;
     private RetrofitUtil retrofitUtil;
+    private String serverImgPath;
 
 
     @Override
@@ -64,6 +71,8 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
     public void init(){
+        preferenceUtil = PreferenceUtil.getInstance(getApplicationContext());
+
         btnEnter = (Button) findViewById(R.id.btnEnter);
         btnEnter.setOnClickListener(onClickListener);
 
@@ -106,51 +115,56 @@ public class EditProfileActivity extends AppCompatActivity {
                 //여기서 서버로 요청
                 ProfileDTO profileDTO = new ProfileDTO();
 
+                profileDTO.setUserID(preferenceUtil.getString("userId"));
                 profileDTO.setNickname(edtNickname.getText().toString());
                 profileDTO.setIntroduce(edtProfileMsg.getText().toString());
 
-                //이미지 처리 하고
+                //이미지가 있으면 이미지 전송
                 if(imgUri != null){
                     RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), getRealFile(imgUri));
-                    MultipartBody.Part body = MultipartBody.Part.createFormData("image", "test.jpg", requestFile);
+                    MultipartBody.Part body = MultipartBody.Part.createFormData("image", "image.jpg", requestFile);
 
                     retrofitUtil = RetrofitUtil.getInstance();
-                    retrofitUtil.getRetrofitAPI().uploadImg(body).enqueue(new Callback<Boolean>() {
+                    retrofitUtil.getRetrofitAPI().uploadImg(body).enqueue(new Callback<ApiResponseDTO>() {
                         @Override
-                        public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                        public void onResponse(Call<ApiResponseDTO> call, Response<ApiResponseDTO> response) {
                             if(response.isSuccessful()){
-                                Log.d("이미지", response.body().toString());
+                                JSONObject resultBody = new JSONObject((Map) response.body().getResult());
+                                try {
+                                    Log.d("이미지", resultBody.getString("image"));
+                                    profileDTO.setImage(resultBody.getString("image"));
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
                             }
                         }
 
                         @Override
-                        public void onFailure(Call<Boolean> call, Throwable t) {
-
+                        public void onFailure(Call<ApiResponseDTO> call, Throwable t) {
+                            Log.d("이미지", "onFailure");
+                            Log.d("이미지", t.getMessage());
                         }
                     });
-//                    retrofit = new Retrofit.Builder()
-//                            .baseUrl("http://192.168.0.3:8080")
-//                            .addConverterFactory(GsonConverterFactory.create())
-//                            .build();
-//
-//                    retrofitAPI = retrofit.create(RetrofitAPI.class);
-//
-//                    retrofitAPI.uploadImg(body).enqueue(new Callback<Boolean>() {
-//                        @Override
-//                        public void onResponse(Call<Boolean> call, Response<Boolean> response) {
-//                            if(response.isSuccessful()){
-//                                Log.d("이미지", response.body().toString());
-//                            }
-//
-//                        }
-//
-//                        @Override
-//                        public void onFailure(Call<Boolean> call, Throwable t) {
-//                            Log.d("이미지", t.getMessage());
-//                        }
-//                    });
-
                 }
+
+                //프로필 정보 전송
+                retrofitUtil.getRetrofitAPI().setMyProfile(profileDTO).enqueue(new Callback<Boolean>() {
+                    @Override
+                    public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                        Log.d("프로필", "onResponse");
+                        if(response.isSuccessful()){
+                            Log.d("프로필", "응답 성공");
+                            Toast.makeText(getApplicationContext(), "프로필 업데이트 완료", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Boolean> call, Throwable t) {
+                        Log.d("프로필", "onFailure");
+                        Log.d("프로필", t.getMessage());
+
+                    }
+                });
 
             //이미지 클릭했을때는 사진첩 열리면서 이미지 선택 가능하도록
             }else if(view == imgProfile){

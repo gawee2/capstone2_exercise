@@ -27,15 +27,15 @@ public interface RetrofitAPI {
     @POST("/api/user/signUp")
     Call<Boolean> signUp(@Body SignUpDTO signUpDTO);
 
-    @Headers("Content-Type: application/json")
-    @POST("/api/user/{userId}/setMyProfile")
-    Call<ProfileDTO> setMyProfile(@Path(value="userId", encoded = true) String userId, @Body ProfileDTO profileDTO);
+    @Headers({"Content-Type: application/json", "token: eyJ0eXBlIjoidG9rZW4iLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyIiwiZXhwIjoxNjY1MDMxMzcxLCJ1c2VySWQiOiIxMTExIn0.onPR1Zh__sckyOzJRwxz_GVAKCrt7kj1Bo2qNWpEj1s"})
+    @POST("/api/user/setMyProfile")
+    Call<Boolean> setMyProfile(@Body ProfileDTO profileDTO);
 
 
     //이미지 업로드
     @Multipart
     @POST("/api/user/upload/image")
-    Call<Boolean> uploadImg(@Part MultipartBody.Part imgFile);
+    Call<ApiResponseDTO> uploadImg(@Part MultipartBody.Part imgFile);
 
 
     //로그인

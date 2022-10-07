@@ -13,7 +13,6 @@ public interface MemberRepository {
     Optional<Member> findByUserId(String userId);
     List<Member> findAll();
 
-    Profile setProfile(Profile profile);
-    Profile updateProfile(Profile profile);
+    Profile setOrUpdateProfile(Profile profile);
     Optional<Profile> findProfileByUserId(String userId);
 }

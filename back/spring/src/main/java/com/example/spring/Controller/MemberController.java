@@ -6,9 +6,11 @@ import com.example.spring.DTO.Profile;
 import com.example.spring.Service.MemberService;
 import com.example.spring.auth.ApiResponse;
 import com.example.spring.auth.AuthService;
+import com.example.spring.auth.ResponseMap;
 import lombok.experimental.PackagePrivate;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -45,7 +47,7 @@ public class MemberController {
         try{
             long checkDuplicate = memberService.join(newMember);
             if(checkDuplicate == -1L){
-                System.out.println("중복회원이라 false리턴");
+                System.out.println("중복회원이라 false 리턴");
                 return false;
             }
             return true;
@@ -77,7 +79,7 @@ public class MemberController {
 
         //자기꺼만 바꿀수 있음
         if(requestUser.equals(willChangeUser)){
-            memberService.setProfile(profile);
+            memberService.setOrUpdateProfile(profile);
 
             return true;
         }
@@ -90,13 +92,15 @@ public class MemberController {
     }
 
     @PostMapping("/upload/image")
-    public boolean uploadsProfileImg(@RequestParam(name="image") MultipartFile image) throws IOException {
+    public ApiResponse uploadsProfileImg(@RequestParam(name="image") MultipartFile image) throws IOException {
 
         String fileName = UUID.randomUUID().toString();
         String absolutePath = new File("/Users/duskite/downloads/img").getAbsolutePath()
                 + "/" + fileName + ".jpg";
 
         System.out.println(absolutePath);
+
+        ResponseMap result = new ResponseMap();
 
         if(!image.isEmpty()){
             File file = new File(absolutePath);
@@ -105,14 +109,11 @@ public class MemberController {
             }
 
             image.transferTo(file);
-            return true;
+            result.setResponseData("image", absolutePath);
+
+            System.out.println("이미지 업로드 완료");
         }
-
-        System.out.println("넘어온 이미지가 없음");
-
-        return false;
-
-
+        return result;
     }
 
 
