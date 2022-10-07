@@ -6,38 +6,32 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.mju.exercise.Domain.ApiResponseDTO;
 import com.mju.exercise.Domain.SignInDTO;
-import com.mju.exercise.HttpRequest.HttpAsyncTask;
-import com.mju.exercise.HttpRequest.RetrofitAPI;
+import com.mju.exercise.HttpRequest.RetrofitUtil;
 import com.mju.exercise.Preference.PreferenceUtil;
 import com.mju.exercise.R;
-import com.mju.exercise.StatusEnum.Status;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.ref.PhantomReference;
-import java.util.concurrent.ExecutionException;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class SignInActivity extends AppCompatActivity {
 
     private EditText edtId, edtPw;
     private Button btnLogin, btnSignUp, btnForgetPassword;
 
-    private Retrofit retrofit;
-    private RetrofitAPI retrofitAPI;
-
-    PreferenceUtil preferenceUtil;
+    private RetrofitUtil retrofitUtil;
+    private PreferenceUtil preferenceUtil;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +43,7 @@ public class SignInActivity extends AppCompatActivity {
 
     private void init(){
         preferenceUtil = PreferenceUtil.getInstance(getApplicationContext());
+        retrofitUtil = RetrofitUtil.getInstance();
 
         edtId = (EditText) findViewById(R.id.signInId);
         edtPw = (EditText) findViewById(R.id.signInPw);
@@ -61,29 +56,25 @@ public class SignInActivity extends AppCompatActivity {
         btnSignUp.setOnClickListener(onClickListener);
         btnForgetPassword.setOnClickListener(onClickListener);
 
-        retrofit = new Retrofit.Builder()
-                .baseUrl("http://192.168.0.3:8080")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        retrofitAPI = retrofit.create(RetrofitAPI.class);
     }
 
     private View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             if(view == btnLogin){
-
                 //이미 토큰 발행된 사용자일 경우
                 //토큰이 유효한지 체크하고 바로 화면 전환
-                if(!preferenceUtil.getString("accessToken").equals("none")){
+                if(!preferenceUtil.getString("accessToken").equals("")){
                     Log.d("로그인", preferenceUtil.getString("accessToken"));
-                    retrofitAPI.tokenCheck().enqueue(new Callback<Boolean>() {
+                    retrofitUtil.getRetrofitAPI().tokenCheck().enqueue(new Callback<Boolean>() {
                         @Override
                         public void onResponse(Call<Boolean> call, Response<Boolean> response) {
                             if(response.isSuccessful()){
+                                //로그인 처리 됨
                                 if(response.body()){
                                     finish();
+                                }else{
+                                    Toast.makeText(getApplicationContext(), "로그인 실패", Toast.LENGTH_SHORT);
                                 }
                             }
                         }
@@ -96,35 +87,55 @@ public class SignInActivity extends AppCompatActivity {
 
 
                 }else {
+                    //accessToken이 ""이면 로그인을 해야하는 사용자임
 
                     SignInDTO signInDTO = new SignInDTO();
                     signInDTO.setUserId(edtId.getText().toString());
                     signInDTO.setUserPw(edtPw.getText().toString());
 
-                    retrofitAPI.login(signInDTO).enqueue(new Callback<ApiResponseDTO>() {
-                        @Override
-                        public void onResponse(Call<ApiResponseDTO> call, Response<ApiResponseDTO> response) {
-                            Log.d("로그인", "응답");
-                            if (response.isSuccessful()) {
-                                Log.d("로그인", "성공");
-                                ApiResponseDTO apiResponseDTO = response.body();
-                                Log.d("로그인", String.valueOf(apiResponseDTO.getCode()));
-                                try {
-                                    preferenceUtil.setString("refreshIdx", String.valueOf(apiResponseDTO.getResult().getRefreshIdx()));
-                                    preferenceUtil.setString("accessToken", apiResponseDTO.getResult().getAccessToken());
-                                    Log.d("로그인", String.valueOf(apiResponseDTO.getResult().getRefreshIdx()));
-                                    Log.d("로그인", String.valueOf(apiResponseDTO.getResult().getAccessToken()));
-                                } catch (NullPointerException e) {
-                                    Log.d("로그인", "이미 토큰이 발급된 사용자");
+
+                        retrofitUtil.getRetrofitAPI().login(signInDTO).enqueue(new Callback<ApiResponseDTO>() {
+                            @Override
+                            public void onResponse(Call<ApiResponseDTO> call, Response<ApiResponseDTO> response) {
+                                Log.d("로그인", "응답");
+                                if (response.isSuccessful()) {
+                                    Log.d("로그인", "성공");
+                                    Log.d("로그인", String.valueOf(response.body().getCode()));
+
+                                    if (response.body().getCode() == 200) {
+                                        try {
+
+                                            JSONObject resultBody = new JSONObject((Map) response.body().getResult());
+
+                                            preferenceUtil.setString("refreshIdx", resultBody.getString("refreshIdx"));
+                                            preferenceUtil.setString("accessToken", resultBody.getString("accessToken"));
+                                            preferenceUtil.setString("userId", edtId.getText().toString());
+
+                                            finish();
+                                        } catch (NullPointerException e) {
+                                            Log.d("로그인", "이미 토큰이 발급된 사용자");
+                                            finish();
+                                        } catch (JSONException e) {
+                                            Log.d("로그인", "json 에러");
+                                            e.printStackTrace();
+                                        }
+                                    } else {
+                                        Toast.makeText(getApplicationContext(), "로그인 실패", Toast.LENGTH_SHORT).show();
+                                    }
                                 }
+
+
                             }
-                        }
 
-                        @Override
-                        public void onFailure(Call<ApiResponseDTO> call, Throwable t) {
+                            @Override
+                            public void onFailure(Call<ApiResponseDTO> call, Throwable t) {
 
-                        }
-                    });
+                            }
+                        });
+
+
+
+
                 }
 
 

@@ -42,17 +42,10 @@ public class JpaMemberRepository implements MemberRepository {
     }
 
     @Override
-    public Profile setProfile(Profile profile) {
-        em.persist(profile);
+    public Profile setOrUpdateProfile(Profile profile) {
+        em.flush();
         return profile;
     }
-
-    @Override
-    public Profile updateProfile(Profile profile) {
-        //여기 좀더 고민해봐야할듯
-        return null;
-    }
-
 
     @Override
     public Optional<Profile> findProfileByUserId(String userId) {

@@ -7,19 +7,19 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="ID"
+        android:hint="아이디"
         android:id="@+id/signInId"
         />
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="PW"
+        android:hint="비밀번호"
         android:id="@+id/signInPw"
         />
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="enter"
+        android:text="로그인"
         android:id="@+id/btnSignIn"
         />
 
@@ -28,13 +28,13 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="sign up"
+        android:text="회원가입"
         android:id="@+id/btnSignUp"
         />
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="forget password"
+        android:text="비밀번호 찾기"
         android:id="@+id/btnForgetPassword"
         />
 

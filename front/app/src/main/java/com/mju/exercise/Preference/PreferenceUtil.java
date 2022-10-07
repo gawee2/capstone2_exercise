@@ -7,10 +7,13 @@ public class PreferenceUtil {
 
     private static PreferenceUtil preferenceUtil;
     private SharedPreferences sharedPreferences;
-    private final String defaultValue = "none";
+    private final String defaultValue = "";
 
     private PreferenceUtil(Context context){
         sharedPreferences = context.getSharedPreferences("prefs_name", Context.MODE_PRIVATE);
+        sharedPreferences.edit().putString("accessToken", defaultValue).apply();
+        sharedPreferences.edit().putString("refreshIdx", defaultValue).apply();
+        sharedPreferences.edit().putString("userId", defaultValue).apply();
     }
 
     public static PreferenceUtil getInstance(Context context){
@@ -25,7 +28,12 @@ public class PreferenceUtil {
     }
 
     public String getString(String key){
-        return sharedPreferences.getString(key, defaultValue).toString();
+        try{
+            String str = sharedPreferences.getString(key, defaultValue).toString();
+            return str;
+        }catch (Exception e){
+            return "";
+        }
     }
 
 }

@@ -46,7 +46,9 @@ public class JpaAuthRepository implements AuthRepository{
 
     @Override
     public void insertOrUpdateRefreshToken(RefreshToken refreshToken) {
-        em.persist(refreshToken);
+
+        em.flush();
+//        em.persist(refreshToken);
     }
 
     @Override
