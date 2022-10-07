@@ -59,11 +59,9 @@ public class UserInfoActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             if (v == mImgViewEditProfile) {
-                Toast.makeText(mContext, "수정", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getApplicationContext(), EditProfileActivity.class);
-                startActivity(intent);
-
-            }else if (v == mFbtnFeed){
+                //프로필 수정으로 이동
+                startActivity(new Intent(mContext, EditProfileActivity.class));
+            } else if (v == mFbtnFeed) {
                 Toast.makeText(mContext, "추가", Toast.LENGTH_SHORT).show();
             }
         }
