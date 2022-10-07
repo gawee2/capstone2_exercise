@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -11,12 +12,15 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.mju.exercise.Preference.PreferenceUtil;
 
 public class UserInfoActivity extends AppCompatActivity {
     private Context mContext;
     private ImageView mImgProfile, mImgViewEditProfile;
     private TextView mTxtUserName, mTxtAddress, mTxtFavoriteSport, mTxtProfileMsg;
-    private FloatingActionButton mFbtnFeed;
+    private Button btnLogout;
+
+    private PreferenceUtil preferenceUtil;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,9 +51,12 @@ public class UserInfoActivity extends AppCompatActivity {
         //수정 버튼
         mImgViewEditProfile = (ImageView) findViewById(R.id.imgViewEditProfile);
         mImgViewEditProfile.setOnClickListener(setOnClickListener);
-        //피드 추가 플로팅 버튼
-        mFbtnFeed = (FloatingActionButton) findViewById(R.id.fbtnFeed);
-        mFbtnFeed.setOnClickListener(setOnClickListener);
+
+        //로그아웃버튼
+        btnLogout = (Button) findViewById(R.id.btnLogout);
+        btnLogout.setOnClickListener(setOnClickListener);
+
+        preferenceUtil = PreferenceUtil.getInstance(getApplicationContext());
     }
 
     /**
@@ -63,8 +70,12 @@ public class UserInfoActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), EditProfileActivity.class);
                 startActivity(intent);
 
-            }else if (v == mFbtnFeed){
-                Toast.makeText(mContext, "추가", Toast.LENGTH_SHORT).show();
+            }else if (v == btnLogout){
+                //로그아웃하면 모든 값을 비움
+                preferenceUtil.setString("accessToken", "");
+                preferenceUtil.setString("refreshIdx", "");
+                preferenceUtil.setString("userId", "");
+                finish();
             }
         }
     };

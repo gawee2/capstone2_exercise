@@ -10,6 +10,7 @@ import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.mju.exercise.HttpRequest.RetrofitAPI;
+import com.mju.exercise.HttpRequest.RetrofitUtil;
 import com.mju.exercise.Preference.PreferenceUtil;
 import com.mju.exercise.Sign.SignInActivity;
 
@@ -19,11 +20,13 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MainActivity extends AppCompatActivity {
 
     private Context mContext;
-    private Button btnLoginTest, btnAPITest, btnUserInfo;
-    public static PreferenceUtil preferenceUtil;
+    private Button btnLoginOrUserInfo;
 
-    private Retrofit retrofit;
-    private RetrofitAPI retrofitAPI;
+    private PreferenceUtil preferenceUtil;
+    private RetrofitUtil retrofitUtil;
+
+    private static boolean isLogined = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,27 +40,34 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.d("로그인", "onRestart");
+        Log.d("로그인", preferenceUtil.getString("accessToken"));
+        loginCheck();
+    }
+
+    public void loginCheck(){
+        Log.d("로그인", preferenceUtil.getString("accessToken"));
+        if(preferenceUtil.getString("accessToken").equals("")){
+            Log.d("로그인", "엑세스 토큰이 비어있음");
+            btnLoginOrUserInfo.setText("로그인");
+            isLogined = false;
+            return;
+        }
+        Log.d("로그인", "엑세스 토큰이 들었음");
+        btnLoginOrUserInfo.setText("프로필");
+        isLogined = true;
+        return;
+    }
+
     public void initLoginTest() {
         preferenceUtil = PreferenceUtil.getInstance(getApplicationContext());
-
-        btnLoginTest = (Button) findViewById(R.id.btnLoginTest);
-        btnLoginTest.setOnClickListener(setOnClickListener);
-
-        //api 호출 테스트
-        btnAPITest = (Button) findViewById(R.id.btnAPITest);
-        btnAPITest.setOnClickListener(setOnClickListener);
-
-        //마이페이지
-        btnUserInfo = (Button) findViewById(R.id.btnUserInfo);
-        btnUserInfo.setOnClickListener(setOnClickListener);
-
-        retrofit = new Retrofit.Builder()
-                .baseUrl("http://192.168.0.3:8080")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        retrofitAPI = retrofit.create(RetrofitAPI.class);
-
+        retrofitUtil = RetrofitUtil.getInstance();
+        btnLoginOrUserInfo = (Button) findViewById(R.id.btnLoginOrUserInfo);
+        btnLoginOrUserInfo.setOnClickListener(setOnClickListener);
+        loginCheck();
     }
 
     /**
@@ -66,19 +76,16 @@ public class MainActivity extends AppCompatActivity {
     private View.OnClickListener setOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            if (v == btnLoginTest) {
-                //로그인
-                Intent intent = new Intent(getApplicationContext(), SignInActivity.class);
-                startActivity(intent);
-            } else if (v == btnAPITest) {
+            if (v == btnLoginOrUserInfo) {
 
-                //로그인하고 토큰으로 api요청 되는지 체크중
-                String str = preferenceUtil.getString("accessToken");
-                Log.d("로그인", "토큰 디바이스에 저장됨: " + str);
-
-            } else if (v == btnUserInfo) {
-                //마이페이지 이동
-                startActivity(new Intent(mContext, UserInfoActivity.class));
+                if (isLogined) {
+                    //마이페이지 이동
+                    startActivity(new Intent(mContext, UserInfoActivity.class));
+                } else {
+                    //로그인창으로 이동
+                    Intent intent = new Intent(getApplicationContext(), SignInActivity.class);
+                    startActivity(intent);
+                }
             }
         }
     };

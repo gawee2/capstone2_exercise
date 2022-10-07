@@ -24,6 +24,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.bumptech.glide.Glide;
 import com.mju.exercise.Domain.ProfileDTO;
 import com.mju.exercise.HttpRequest.RetrofitAPI;
+import com.mju.exercise.HttpRequest.RetrofitUtil;
 
 import java.io.File;
 
@@ -49,8 +50,9 @@ public class EditProfileActivity extends AppCompatActivity {
     ActivityResultLauncher<Intent> activityResultLauncher;
     private Uri imgUri;
 
-    private Retrofit retrofit;
-    private RetrofitAPI retrofitAPI;
+//    private Retrofit retrofit;
+//    private RetrofitAPI retrofitAPI;
+    private RetrofitUtil retrofitUtil;
 
 
     @Override
@@ -111,27 +113,42 @@ public class EditProfileActivity extends AppCompatActivity {
                 if(imgUri != null){
                     RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), getRealFile(imgUri));
                     MultipartBody.Part body = MultipartBody.Part.createFormData("image", "test.jpg", requestFile);
-                    retrofit = new Retrofit.Builder()
-                            .baseUrl("http://192.168.0.3:8080")
-                            .addConverterFactory(GsonConverterFactory.create())
-                            .build();
 
-                    retrofitAPI = retrofit.create(RetrofitAPI.class);
-
-                    retrofitAPI.uploadImg(body).enqueue(new Callback<Boolean>() {
+                    retrofitUtil = RetrofitUtil.getInstance();
+                    retrofitUtil.getRetrofitAPI().uploadImg(body).enqueue(new Callback<Boolean>() {
                         @Override
                         public void onResponse(Call<Boolean> call, Response<Boolean> response) {
                             if(response.isSuccessful()){
                                 Log.d("이미지", response.body().toString());
                             }
-
                         }
 
                         @Override
                         public void onFailure(Call<Boolean> call, Throwable t) {
-                            Log.d("이미지", t.getMessage());
+
                         }
                     });
+//                    retrofit = new Retrofit.Builder()
+//                            .baseUrl("http://192.168.0.3:8080")
+//                            .addConverterFactory(GsonConverterFactory.create())
+//                            .build();
+//
+//                    retrofitAPI = retrofit.create(RetrofitAPI.class);
+//
+//                    retrofitAPI.uploadImg(body).enqueue(new Callback<Boolean>() {
+//                        @Override
+//                        public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+//                            if(response.isSuccessful()){
+//                                Log.d("이미지", response.body().toString());
+//                            }
+//
+//                        }
+//
+//                        @Override
+//                        public void onFailure(Call<Boolean> call, Throwable t) {
+//                            Log.d("이미지", t.getMessage());
+//                        }
+//                    });
 
                 }
 

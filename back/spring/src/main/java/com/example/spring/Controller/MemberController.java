@@ -17,6 +17,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/user")
@@ -44,6 +45,7 @@ public class MemberController {
         try{
             long checkDuplicate = memberService.join(newMember);
             if(checkDuplicate == -1L){
+                System.out.println("중복회원이라 false리턴");
                 return false;
             }
             return true;
@@ -90,14 +92,16 @@ public class MemberController {
     @PostMapping("/upload/image")
     public boolean uploadsProfileImg(@RequestParam(name="image") MultipartFile image) throws IOException {
 
-        String absolutePath = new File("/Users/duskite/downloads/img").getAbsolutePath() + "/";
+        String fileName = UUID.randomUUID().toString();
+        String absolutePath = new File("/Users/duskite/downloads/img").getAbsolutePath()
+                + "/" + fileName + ".jpg";
 
         System.out.println(absolutePath);
 
         if(!image.isEmpty()){
             File file = new File(absolutePath);
             if(!file.exists()){
-                file.mkdir();
+                file.mkdirs();
             }
 
             image.transferTo(file);

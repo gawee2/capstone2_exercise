@@ -38,7 +38,6 @@ public interface RetrofitAPI {
     Call<Boolean> uploadImg(@Part MultipartBody.Part imgFile);
 
 
-
     //로그인
     @Headers("Content-Type: application/json")
     @POST("/api/auth/login")

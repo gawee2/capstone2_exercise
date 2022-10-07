@@ -5,12 +5,14 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.mju.exercise.Domain.SignUpDTO;
 import com.mju.exercise.HttpRequest.RetrofitAPI;
+import com.mju.exercise.HttpRequest.RetrofitUtil;
 import com.mju.exercise.R;
 
 import retrofit2.Call;
@@ -23,8 +25,7 @@ public class SignUpActivity extends AppCompatActivity {
 
     EditText edtId, edtPw, edtCheckPw, edtEmail;
     Button btnSignUp;
-    private Retrofit retrofit;
-    private RetrofitAPI retrofitAPI;
+    private RetrofitUtil retrofitUtil;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -42,12 +43,7 @@ public class SignUpActivity extends AppCompatActivity {
         edtEmail = (EditText) findViewById(R.id.signUpEmail);
         btnSignUp = (Button) findViewById(R.id.btnSignUp);
 
-        retrofit = new Retrofit.Builder()
-                .baseUrl("http://192.168.0.3:8080")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        retrofitAPI = retrofit.create(RetrofitAPI.class);
+        retrofitUtil = RetrofitUtil.getInstance();
 
         btnSignUp.setOnClickListener(setOnClickListener);
     }
@@ -76,7 +72,7 @@ public class SignUpActivity extends AppCompatActivity {
                     param.setUserPw(strPw);
                     param.setEmail(strEmail);
 
-                    retrofitAPI.signUp(param).enqueue(new Callback<Boolean>() {
+                    retrofitUtil.getRetrofitAPI().signUp(param).enqueue(new Callback<Boolean>() {
                         @Override
                         public void onResponse(Call<Boolean> call, Response<Boolean> response) {
                             if(response.isSuccessful()){
@@ -87,6 +83,7 @@ public class SignUpActivity extends AppCompatActivity {
 
                                     finish();
                                 }else {
+                                    Toast.makeText(getApplicationContext(), "이미 존재하는 아이디", Toast.LENGTH_SHORT).show();
                                     Log.d("http", "회원가입 실패");
                                 }
                             }else {

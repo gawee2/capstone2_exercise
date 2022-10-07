@@ -37,7 +37,6 @@ public class AuthService {
         return authRepository.findUserByToken(token);
     }
 
-
     public ApiResponse login(AuthDTO.LoginDTO loginDTO) {
         ResponseMap result = new ResponseMap();
 
