@@ -66,6 +66,7 @@ public class UserInfoActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             if (v == mImgViewEditProfile) {
+
                 Toast.makeText(mContext, "수정", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getApplicationContext(), EditProfileActivity.class);
                 startActivity(intent);
