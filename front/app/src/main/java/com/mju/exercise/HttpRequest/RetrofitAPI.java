@@ -31,8 +31,9 @@ public interface RetrofitAPI {
     @POST("/api/user/setMyProfile")
     Call<Boolean> setMyProfile(@Body ProfileDTO profileDTO);
 
-    @GET("/api/user/getUserProfile/{nickname}")
-    Call<ProfileDTO> getUserProfile(@Path(value="nickname", encoded = true) String nickname);
+    @Headers({"Content-Type: application/json"})
+    @GET("/api/user/getUserProfile/{userId}")
+    Call<ProfileDTO> getUserProfile(@Path(value="userId", encoded = true) String userId);
 
     //이미지 업로드
     @Multipart

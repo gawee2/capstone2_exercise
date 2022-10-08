@@ -84,8 +84,8 @@ public class MemberController {
         System.out.println("요청 유저: " + requestUser + ", 수정 유저: " + willChangeUser);
         //자기꺼만 바꿀수 있음
         if(requestUser.equals(willChangeUser)){
-            System.out.println("프로필 업데이트 됨");
             memberService.setOrUpdateProfile(profile);
+            System.out.println("프로필 업데이트 됨");
 
             return true;
         }
@@ -93,9 +93,10 @@ public class MemberController {
         return false;
     }
 
-    @GetMapping("/getUserProfile/{nickname}")
-    public Profile getUserProfile(@PathVariable String nickname){
-        return memberService.findProfileByNickname(nickname);
+    @GetMapping("/getUserProfile/{userId}")
+    public Profile getUserProfile(@PathVariable String userId){
+        System.out.println("프로필 로드: " + userId);
+        return memberService.findProfileByUserId(userId);
     }
 
     @GetMapping("/getProfileImg/{imgPath}")
