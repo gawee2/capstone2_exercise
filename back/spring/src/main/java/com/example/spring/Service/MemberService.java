@@ -26,13 +26,22 @@ public class MemberService {
         return hashedPw;
     }
 
-    //여기 아직 수정중
     public Profile setOrUpdateProfile(Profile profile){
 
-        Optional<Profile> tmpProfile = memberRepository.findProfileByUserId(profile.getUserId());
-        profile.setIdx(tmpProfile.get().getIdx());
+        try{
+            Optional<Profile> tmpProfile = memberRepository.findProfileByUserId(profile.getUserId());
+            profile.setIdx(tmpProfile.get().getIdx());
+        }catch (Exception e){
+            //조회가 안되면 프로필을 새로 생성하는 유저
+            System.out.println("오류: " + e.getMessage());
+            return memberRepository.setOrUpdateProfile(profile, false);
+        }
+        //기존 프로필을 업데이트 하는 유저
+        return memberRepository.setOrUpdateProfile(profile, true);
+    }
 
-        return memberRepository.setOrUpdateProfile(profile);
+    public Profile findProfileByNickname(String nickname){
+        return memberRepository.findProfileByNickname(nickname).get();
     }
 
     public Profile findProfileByUserId(String userId){

@@ -73,15 +73,15 @@ public class MemberController {
         System.out.println("헤더:" + header.get("token"));
 
         // 내부적으로 검색 위해서 토큰 날아오는거 앞에 bearer 뗌
-        String[] result = header.get("token").toString().split(" ");
+//        String[] result = header.get("token").toString().split(" ");
+//        System.out.println("검색하려는 토큰: " + result[1]);
 
         //현재 프로필 수정으로 요청한 유저
-        String requestUser = authService.findUserByToken(result[1]);
+        String requestUser = authService.findUserByToken(header.get("token"));
         //프로필 수정을 당하는 유저
         String willChangeUser = profile.getUserId();
 
         System.out.println("요청 유저: " + requestUser + ", 수정 유저: " + willChangeUser);
-
         //자기꺼만 바꿀수 있음
         if(requestUser.equals(willChangeUser)){
             System.out.println("프로필 업데이트 됨");
@@ -93,9 +93,9 @@ public class MemberController {
         return false;
     }
 
-    @GetMapping("/getUserProfile/{userId}")
-    public Profile getUserProfile(@PathVariable String userId){
-        return memberService.findProfileByUserId(userId);
+    @GetMapping("/getUserProfile/{nickname}")
+    public Profile getUserProfile(@PathVariable String nickname){
+        return memberService.findProfileByNickname(nickname);
     }
 
     @GetMapping("/getProfileImg/{imgPath}")

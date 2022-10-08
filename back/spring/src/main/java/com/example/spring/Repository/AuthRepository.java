@@ -17,6 +17,6 @@ public interface AuthRepository {
     String findUserByToken(String token);
 
     //디비에 있는 엑세스 토큰으로 토큰인덱스 리턴
-    Long findTokenIdxByAccessToken(String accessToken);
+    Long findTokenIdxByUserId(String accessToken);
 
 }

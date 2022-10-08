@@ -42,16 +42,15 @@ public class JpaMemberRepository implements MemberRepository {
     }
 
     @Override
-    public Profile setOrUpdateProfile(Profile profile) {
+    public Profile setOrUpdateProfile(Profile profile, boolean exist) {
 
-        //조회로 영속성 컨텍스트 상태 만들고 변경해서 플러시
-        try{
+        if(exist){
             Profile updateProfile = em.find(Profile.class, profile.getIdx());
             updateProfile.setNickname(profile.getNickname());
+            updateProfile.setIntroduce(profile.getIntroduce());
+            updateProfile.setImage(profile.getImage());
             em.flush();
-
-            //조회 안되면 새로 영속성 컨텍스트 만들고 트랜잭션 종료 시점에 커밋됨
-        }catch (Exception e){
+        }else {
             em.persist(profile);
         }
         return profile;
@@ -59,9 +58,17 @@ public class JpaMemberRepository implements MemberRepository {
 
     @Override
     public Optional<Profile> findProfileByUserId(String userId) {
-
         List<Profile> result = em.createQuery("select m from Profile m where m.userId = :userId", Profile.class)
                 .setParameter("userId", userId)
+                .getResultList();
+        return result.stream().findAny();
+    }
+
+    @Override
+    public Optional<Profile> findProfileByNickname(String nickname) {
+
+        List<Profile> result = em.createQuery("select m from Profile m where m.nickname = :nickname", Profile.class)
+                .setParameter("nickname", nickname)
                 .getResultList();
         return result.stream().findAny();
     }

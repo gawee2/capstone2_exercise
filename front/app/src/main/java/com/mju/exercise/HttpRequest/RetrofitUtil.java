@@ -22,7 +22,8 @@ public class RetrofitUtil {
     private Retrofit retrofit;
     private RetrofitAPI retrofitAPI;
 
-    private static String token;
+    private static String token = "";
+    final String BASE_URL = "http://192.168.0.3:8080/";
 
     public Retrofit getRetrofit() {
         return retrofit;
@@ -44,7 +45,7 @@ public class RetrofitUtil {
                 Request original = chain.request();
 
                 Request request = original.newBuilder()
-                        .header("token", "Bearer " + token)
+                        .header("token", token)
                         .method(original.method(), original.body())
                         .build();
 
@@ -54,7 +55,7 @@ public class RetrofitUtil {
         this.client = httpClient.build();
 
         this.retrofit = new Retrofit.Builder()
-                .baseUrl("http://192.168.0.3:8080")
+                .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(this.client)
                 .build();

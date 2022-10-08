@@ -43,8 +43,8 @@ public class SecurityConfig {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/api/auth/**", "/api/user/signUp", "/api/user/forgetPassword", "/api/user/setMyProfile").permitAll()
-                .antMatchers("/api/user/**" ).authenticated()
+                .antMatchers("/api/auth/**", "/api/user/signUp", "/api/user/forgetPassword").permitAll()
+                .antMatchers("/api/user/**").authenticated()
                 .and()
                 .exceptionHandling()
                 .authenticationEntryPoint(authenticationEntryPoint())
@@ -85,8 +85,10 @@ public class SecurityConfig {
 
            JSONObject json = new JSONObject();
            json.put("실패", "인증되지 않은 사용자");
-            System.out.println("실패 인증되지 않은 사용자");
+           System.out.println("실패 인증되지 않은 사용자");
            response.getWriter().print(json);
+
+           System.out.println("예외: " + authException.getMessage());
 
            response.getWriter().flush();
            response.getWriter().close();

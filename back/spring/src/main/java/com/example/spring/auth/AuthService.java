@@ -54,7 +54,6 @@ public class AuthService {
             e.printStackTrace();
 //            throw new AuthenticationException(ErrorCode.UsernameOrPasswordNotFoundException);
         }
-        System.out.println("auth service 로그인 문제 없음");
         return result;
     }
 
@@ -97,11 +96,7 @@ public class AuthService {
         String refreshToken = jwtProvider.createRefreshToken(loginDTO).get("refreshToken");
         String refreshTokenExpirationAt = jwtProvider.createRefreshToken(loginDTO).get("refreshTokenExpirationAt");
 
-
         System.out.println(accessToken);
-        System.out.println(refreshToken);
-        System.out.println(refreshTokenExpirationAt);
-
 
         RefreshToken insertRefreshToken = RefreshToken.builder()
                 .userId(loginDTO.getUserId())
@@ -111,7 +106,7 @@ public class AuthService {
                 .build();
 
         try{
-            Long tmpIdx = authRepository.findTokenIdxByAccessToken(accessToken);
+            Long tmpIdx = authRepository.findTokenIdxByUserId(loginDTO.getUserId());
             insertRefreshToken.setIdx(tmpIdx);
         }catch (Exception e){
             //토큰 디비에 없을때

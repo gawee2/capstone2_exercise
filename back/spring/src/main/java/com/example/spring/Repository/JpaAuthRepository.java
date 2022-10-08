@@ -49,6 +49,9 @@ public class JpaAuthRepository implements AuthRepository{
 
         try{
             RefreshToken tmpRefreshToken = em.find(RefreshToken.class, refreshToken.getIdx());
+            tmpRefreshToken.setRefreshToken(refreshToken.getRefreshToken());
+            tmpRefreshToken.setRefreshTokenExpirationAt(refreshToken.getRefreshTokenExpirationAt());
+            tmpRefreshToken.setAccessToken(refreshToken.getAccessToken());
             em.flush();
         }catch (Exception e){
             em.persist(refreshToken);
@@ -84,9 +87,9 @@ public class JpaAuthRepository implements AuthRepository{
     }
 
     @Override
-    public Long findTokenIdxByAccessToken(String accessToken) {
-        List<RefreshToken> result = em.createQuery("select m from RefreshToken m where m.accessToken = :accessToken", RefreshToken.class)
-                .setParameter("accessToken", accessToken)
+    public Long findTokenIdxByUserId(String userId) {
+        List<RefreshToken> result = em.createQuery("select m from RefreshToken m where m.userId = :userId", RefreshToken.class)
+                .setParameter("userId", userId)
                 .getResultList();
 
         return result.get(0).getIdx();

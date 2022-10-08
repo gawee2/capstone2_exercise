@@ -31,8 +31,8 @@ public interface RetrofitAPI {
     @POST("/api/user/setMyProfile")
     Call<Boolean> setMyProfile(@Body ProfileDTO profileDTO);
 
-    @GET("/api/user/getUserProfile/{userId}")
-    Call<ProfileDTO> getUserProfile(@Path(value="userId", encoded = true) String userId);
+    @GET("/api/user/getUserProfile/{nickname}")
+    Call<ProfileDTO> getUserProfile(@Path(value="nickname", encoded = true) String nickname);
 
     //이미지 업로드
     @Multipart
@@ -49,11 +49,6 @@ public interface RetrofitAPI {
     @POST("/api/auth/login")
     Call<ApiResponseDTO> login(@Body SignInDTO signInDTO);
 
-
-
-    //토큰 가지고 api 테스트
-    @GET("/api/user/info/test")
-    Call<String> test();
 
     @GET("/api/auth/tokenCheck")
     Call<Boolean> tokenCheck();
