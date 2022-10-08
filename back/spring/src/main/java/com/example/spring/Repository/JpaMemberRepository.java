@@ -42,16 +42,33 @@ public class JpaMemberRepository implements MemberRepository {
     }
 
     @Override
-    public Profile setOrUpdateProfile(Profile profile) {
-        em.flush();
+    public Profile setOrUpdateProfile(Profile profile, boolean exist) {
+
+        if(exist){
+            Profile updateProfile = em.find(Profile.class, profile.getIdx());
+            updateProfile.setNickname(profile.getNickname());
+            updateProfile.setIntroduce(profile.getIntroduce());
+            updateProfile.setImage(profile.getImage());
+            em.flush();
+        }else {
+            em.persist(profile);
+        }
         return profile;
     }
 
     @Override
     public Optional<Profile> findProfileByUserId(String userId) {
-
         List<Profile> result = em.createQuery("select m from Profile m where m.userId = :userId", Profile.class)
                 .setParameter("userId", userId)
+                .getResultList();
+        return result.stream().findAny();
+    }
+
+    @Override
+    public Optional<Profile> findProfileByNickname(String nickname) {
+
+        List<Profile> result = em.createQuery("select m from Profile m where m.nickname = :nickname", Profile.class)
+                .setParameter("nickname", nickname)
                 .getResultList();
         return result.stream().findAny();
     }

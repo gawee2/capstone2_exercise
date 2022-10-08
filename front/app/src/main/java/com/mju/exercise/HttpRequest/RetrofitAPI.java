@@ -20,22 +20,29 @@ import retrofit2.http.Path;
 
 public interface RetrofitAPI {
 
-    final String BASE_URL = "http://192.168.0.3:8080";
+    final String BASE_URL = "http://192.168.0.3:8080/";
 
     //회원가입
     @Headers("Content-Type: application/json")
     @POST("/api/user/signUp")
     Call<Boolean> signUp(@Body SignUpDTO signUpDTO);
 
-    @Headers({"Content-Type: application/json", "token: eyJ0eXBlIjoidG9rZW4iLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyIiwiZXhwIjoxNjY1MDMxMzcxLCJ1c2VySWQiOiIxMTExIn0.onPR1Zh__sckyOzJRwxz_GVAKCrt7kj1Bo2qNWpEj1s"})
+    @Headers({"Content-Type: application/json"})
     @POST("/api/user/setMyProfile")
     Call<Boolean> setMyProfile(@Body ProfileDTO profileDTO);
 
+    @Headers({"Content-Type: application/json"})
+    @GET("/api/user/getUserProfile/{userId}")
+    Call<ProfileDTO> getUserProfile(@Path(value="userId", encoded = true) String userId);
 
     //이미지 업로드
     @Multipart
     @POST("/api/user/upload/image")
     Call<ApiResponseDTO> uploadImg(@Part MultipartBody.Part imgFile);
+    //이미지 다운로드
+    @Multipart
+    @GET("/api/user/getProfileImg/{imgPath}")
+    Call<MultipartBody.Part> getProfileImg(@Path(value="imgPath",encoded = true) String imgPath);
 
 
     //로그인
@@ -43,11 +50,6 @@ public interface RetrofitAPI {
     @POST("/api/auth/login")
     Call<ApiResponseDTO> login(@Body SignInDTO signInDTO);
 
-
-
-    //토큰 가지고 api 테스트
-    @GET("/api/user/info/test")
-    Call<String> test();
 
     @GET("/api/auth/tokenCheck")
     Call<Boolean> tokenCheck();

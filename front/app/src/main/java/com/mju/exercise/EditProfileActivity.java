@@ -72,6 +72,8 @@ public class EditProfileActivity extends AppCompatActivity {
 
     public void init(){
         preferenceUtil = PreferenceUtil.getInstance(getApplicationContext());
+        retrofitUtil = RetrofitUtil.getInstance();
+        retrofitUtil.setToken(preferenceUtil.getString("accessToken"));
 
         btnEnter = (Button) findViewById(R.id.btnEnter);
         btnEnter.setOnClickListener(onClickListener);
@@ -108,10 +110,40 @@ public class EditProfileActivity extends AppCompatActivity {
 
     }
 
+    private void sendProfileData(ProfileDTO profileDTO){
+        //프로필 정보 전송
+        retrofitUtil.getRetrofitAPI().setMyProfile(profileDTO).enqueue(new Callback<Boolean>() {
+            @Override
+            public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                Log.d("프로필", "onResponse");
+                if(response.isSuccessful()){
+                    if(response.body()){
+                        Log.d("프로필", "응답 true");
+                        Toast.makeText(getApplicationContext(), "프로필 업데이트 완료", Toast.LENGTH_SHORT).show();
+                        finish();
+
+                    }else {
+                        Log.d("프로필", "응답 false");
+                        Toast.makeText(getApplicationContext(), "프로필 업데이트 실패!!!!", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Boolean> call, Throwable t) {
+                Log.d("프로필", "onFailure");
+                Log.d("프로필", t.getMessage());
+
+            }
+        });
+    }
+
     private View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             if(view == btnEnter) {
+                retrofitUtil.setToken(preferenceUtil.getString("accessToken"));
+                Log.d("프로필", preferenceUtil.getString("accessToken"));
                 //여기서 서버로 요청
                 ProfileDTO profileDTO = new ProfileDTO();
 
@@ -119,12 +151,12 @@ public class EditProfileActivity extends AppCompatActivity {
                 profileDTO.setNickname(edtNickname.getText().toString());
                 profileDTO.setIntroduce(edtProfileMsg.getText().toString());
 
+
                 //이미지가 있으면 이미지 전송
                 if(imgUri != null){
                     RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), getRealFile(imgUri));
                     MultipartBody.Part body = MultipartBody.Part.createFormData("image", "image.jpg", requestFile);
 
-                    retrofitUtil = RetrofitUtil.getInstance();
                     retrofitUtil.getRetrofitAPI().uploadImg(body).enqueue(new Callback<ApiResponseDTO>() {
                         @Override
                         public void onResponse(Call<ApiResponseDTO> call, Response<ApiResponseDTO> response) {
@@ -133,6 +165,7 @@ public class EditProfileActivity extends AppCompatActivity {
                                 try {
                                     Log.d("이미지", resultBody.getString("image"));
                                     profileDTO.setImage(resultBody.getString("image"));
+                                    sendProfileData(profileDTO);
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
@@ -145,26 +178,37 @@ public class EditProfileActivity extends AppCompatActivity {
                             Log.d("이미지", t.getMessage());
                         }
                     });
+
+                    //이미지 없을때
+                }else{
+                    sendProfileData(profileDTO);
                 }
 
-                //프로필 정보 전송
-                retrofitUtil.getRetrofitAPI().setMyProfile(profileDTO).enqueue(new Callback<Boolean>() {
-                    @Override
-                    public void onResponse(Call<Boolean> call, Response<Boolean> response) {
-                        Log.d("프로필", "onResponse");
-                        if(response.isSuccessful()){
-                            Log.d("프로필", "응답 성공");
-                            Toast.makeText(getApplicationContext(), "프로필 업데이트 완료", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<Boolean> call, Throwable t) {
-                        Log.d("프로필", "onFailure");
-                        Log.d("프로필", t.getMessage());
-
-                    }
-                });
+//                //프로필 정보 전송
+//                retrofitUtil.getRetrofitAPI().setMyProfile(profileDTO).enqueue(new Callback<Boolean>() {
+//                    @Override
+//                    public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+//                        Log.d("프로필", "onResponse");
+//                        if(response.isSuccessful()){
+//                            if(response.body()){
+//                                Log.d("프로필", "응답 true");
+//                                Toast.makeText(getApplicationContext(), "프로필 업데이트 완료", Toast.LENGTH_SHORT).show();
+//                                finish();
+//
+//                            }else {
+//                                Log.d("프로필", "응답 false");
+//                                Toast.makeText(getApplicationContext(), "프로필 업데이트 실패!!!!", Toast.LENGTH_SHORT).show();
+//                            }
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onFailure(Call<Boolean> call, Throwable t) {
+//                        Log.d("프로필", "onFailure");
+//                        Log.d("프로필", t.getMessage());
+//
+//                    }
+//                });
 
             //이미지 클릭했을때는 사진첩 열리면서 이미지 선택 가능하도록
             }else if(view == imgProfile){

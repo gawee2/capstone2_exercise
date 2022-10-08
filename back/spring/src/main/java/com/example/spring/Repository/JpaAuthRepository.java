@@ -1,6 +1,7 @@
 package com.example.spring.Repository;
 
 import com.example.spring.DTO.Member;
+import com.example.spring.DTO.Profile;
 import com.example.spring.auth.RefreshToken;
 import com.example.spring.auth.UserDetailsImpl;
 import com.example.spring.auth.UserDetailsServiceImpl;
@@ -21,7 +22,6 @@ public class JpaAuthRepository implements AuthRepository{
 
     @Override
     public UserDetailsImpl findByUserId(String userId) {
-//        UserDetailsImpl userDetails = em.find(UserDetailsImpl.class, userId);
 
         List<Member> result = em.createQuery("select m from Member m where m.userId = :userId", Member.class)
                 .setParameter("userId", userId)
@@ -47,8 +47,16 @@ public class JpaAuthRepository implements AuthRepository{
     @Override
     public void insertOrUpdateRefreshToken(RefreshToken refreshToken) {
 
-        em.flush();
-//        em.persist(refreshToken);
+        try{
+            RefreshToken tmpRefreshToken = em.find(RefreshToken.class, refreshToken.getIdx());
+            tmpRefreshToken.setRefreshToken(refreshToken.getRefreshToken());
+            tmpRefreshToken.setRefreshTokenExpirationAt(refreshToken.getRefreshTokenExpirationAt());
+            tmpRefreshToken.setAccessToken(refreshToken.getAccessToken());
+            em.flush();
+        }catch (Exception e){
+            em.persist(refreshToken);
+        }
+
     }
 
     @Override
@@ -76,5 +84,14 @@ public class JpaAuthRepository implements AuthRepository{
                 .getResultList();
 
         return result.get(0).getUserId();
+    }
+
+    @Override
+    public Long findTokenIdxByUserId(String userId) {
+        List<RefreshToken> result = em.createQuery("select m from RefreshToken m where m.userId = :userId", RefreshToken.class)
+                .setParameter("userId", userId)
+                .getResultList();
+
+        return result.get(0).getIdx();
     }
 }

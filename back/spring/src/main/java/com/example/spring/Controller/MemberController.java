@@ -72,23 +72,36 @@ public class MemberController {
         System.out.println("RequestBody:" + profile.getNickname());
         System.out.println("헤더:" + header.get("token"));
 
+        // 내부적으로 검색 위해서 토큰 날아오는거 앞에 bearer 뗌
+//        String[] result = header.get("token").toString().split(" ");
+//        System.out.println("검색하려는 토큰: " + result[1]);
+
         //현재 프로필 수정으로 요청한 유저
         String requestUser = authService.findUserByToken(header.get("token"));
         //프로필 수정을 당하는 유저
         String willChangeUser = profile.getUserId();
 
+        System.out.println("요청 유저: " + requestUser + ", 수정 유저: " + willChangeUser);
         //자기꺼만 바꿀수 있음
         if(requestUser.equals(willChangeUser)){
             memberService.setOrUpdateProfile(profile);
+            System.out.println("프로필 업데이트 됨");
 
             return true;
         }
+        System.out.println("프로필 업데이트 실패");
         return false;
     }
 
-    @GetMapping("/findUserProfile/{userId}")
-    public Profile findUserProfile(@PathVariable String userId){
+    @GetMapping("/getUserProfile/{userId}")
+    public Profile getUserProfile(@PathVariable String userId){
+        System.out.println("프로필 로드: " + userId);
         return memberService.findProfileByUserId(userId);
+    }
+
+    @GetMapping("/getProfileImg/{imgPath}")
+    public MultipartFile getProfileImg(@PathVariable String imgPath){
+        return null;
     }
 
     @PostMapping("/upload/image")
@@ -114,22 +127,6 @@ public class MemberController {
             System.out.println("이미지 업로드 완료");
         }
         return result;
-    }
-
-
-
-
-
-    @PostMapping("/info")
-    public ApiResponse userInfo(@RequestParam String searchUser){
-        ApiResponse apiResponse = new ApiResponse();
-
-        return apiResponse;
-    }
-
-    @PostMapping("/info/test")
-    public String test(){
-        return "api에 접근 가능한 사용자";
     }
 
 }
