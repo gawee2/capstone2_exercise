@@ -61,6 +61,9 @@ public class EditProfileActivity extends AppCompatActivity {
     private RetrofitUtil retrofitUtil;
     private String serverImgPath;
 
+    //선호하는 요일과 운동 체크용, 디비에 전송하기 전에 잠시 담아둠
+    private boolean[] favDays = new boolean[7];
+    private boolean[] favSports = new boolean[6];
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -99,6 +102,22 @@ public class EditProfileActivity extends AppCompatActivity {
         chkFavBadminton = (CheckBox) findViewById(R.id.chkFavBadminton);
         chkFavCycle = (CheckBox) findViewById(R.id.chkFavCycle);
 
+
+        chkFavMon.setOnCheckedChangeListener(onCheckedChangeListener);
+        chkFavTue.setOnCheckedChangeListener(onCheckedChangeListener);
+        chkFavWed.setOnCheckedChangeListener(onCheckedChangeListener);
+        chkFavThu.setOnCheckedChangeListener(onCheckedChangeListener);
+        chkFavFri.setOnCheckedChangeListener(onCheckedChangeListener);
+        chkFavSat.setOnCheckedChangeListener(onCheckedChangeListener);
+        chkFavSun.setOnCheckedChangeListener(onCheckedChangeListener);
+
+        chkFavSoccer.setOnCheckedChangeListener(onCheckedChangeListener);
+        chkFavFutsal.setOnCheckedChangeListener(onCheckedChangeListener);
+        chkFavBaseball.setOnCheckedChangeListener(onCheckedChangeListener);
+        chkFavBasketball.setOnCheckedChangeListener(onCheckedChangeListener);
+        chkFavBadminton.setOnCheckedChangeListener(onCheckedChangeListener);
+        chkFavCycle.setOnCheckedChangeListener(onCheckedChangeListener);
+
         activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
             if(result.getResultCode() == RESULT_OK && result.getData().getData() != null){
                 imgUri = result.getData().getData();
@@ -110,7 +129,24 @@ public class EditProfileActivity extends AppCompatActivity {
 
     }
 
+    //프로필 내용 전송
     private void sendProfileData(ProfileDTO profileDTO){
+        //선호 요일, 종목 값 체크한대로 반영해서 전송
+        profileDTO.setFavMon(favDays[0]);
+        profileDTO.setFavTue(favDays[1]);
+        profileDTO.setFavWed(favDays[2]);
+        profileDTO.setFavThu(favDays[3]);
+        profileDTO.setFavFri(favDays[4]);
+        profileDTO.setFavSat(favDays[5]);
+        profileDTO.setFavSun(favDays[6]);
+
+        profileDTO.setFavSoccer(favSports[0]);
+        profileDTO.setFavFutsal(favSports[1]);
+        profileDTO.setFavBaseball(favSports[2]);
+        profileDTO.setFavBasketball(favSports[3]);
+        profileDTO.setFavBadminton(favSports[4]);
+        profileDTO.setFavCycle(favSports[5]);
+
         //프로필 정보 전송
         retrofitUtil.getRetrofitAPI().setMyProfile(profileDTO).enqueue(new Callback<Boolean>() {
             @Override
@@ -120,6 +156,8 @@ public class EditProfileActivity extends AppCompatActivity {
                     if(response.body()){
                         Log.d("프로필", "응답 true");
                         Toast.makeText(getApplicationContext(), "프로필 업데이트 완료", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(getApplicationContext(), UserInfoActivity.class);
+                        startActivity(intent);
                         finish();
 
                     }else {
@@ -184,31 +222,6 @@ public class EditProfileActivity extends AppCompatActivity {
                     sendProfileData(profileDTO);
                 }
 
-//                //프로필 정보 전송
-//                retrofitUtil.getRetrofitAPI().setMyProfile(profileDTO).enqueue(new Callback<Boolean>() {
-//                    @Override
-//                    public void onResponse(Call<Boolean> call, Response<Boolean> response) {
-//                        Log.d("프로필", "onResponse");
-//                        if(response.isSuccessful()){
-//                            if(response.body()){
-//                                Log.d("프로필", "응답 true");
-//                                Toast.makeText(getApplicationContext(), "프로필 업데이트 완료", Toast.LENGTH_SHORT).show();
-//                                finish();
-//
-//                            }else {
-//                                Log.d("프로필", "응답 false");
-//                                Toast.makeText(getApplicationContext(), "프로필 업데이트 실패!!!!", Toast.LENGTH_SHORT).show();
-//                            }
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onFailure(Call<Boolean> call, Throwable t) {
-//                        Log.d("프로필", "onFailure");
-//                        Log.d("프로필", t.getMessage());
-//
-//                    }
-//                });
 
             //이미지 클릭했을때는 사진첩 열리면서 이미지 선택 가능하도록
             }else if(view == imgProfile){
@@ -226,11 +239,52 @@ public class EditProfileActivity extends AppCompatActivity {
         public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
             switch (compoundButton.getId()){
                 case R.id.chkFavMon:
+                    favDays[0] = !favDays[0];
+                    break;
+                case R.id.chkFavTue:
+                    favDays[1] = !favDays[1];
+                    break;
+                case R.id.chkFavWed:
+                    favDays[2] = !favDays[2];
+                    break;
+                case R.id.chkFavThu:
+                    favDays[3] = !favDays[3];
+                    break;
+                case R.id.chkFavFri:
+                    favDays[4] = !favDays[4];
+                    break;
+                case R.id.chkFavSat:
+                    favDays[5] = !favDays[5];
+                    break;
+                case R.id.chkFavSun:
+                    favDays[6] = !favDays[6];
+                    break;
+
+
+
+                case R.id.chkFavSoccer:
+                    favSports[0] = !favSports[0];
+                    break;
+                case R.id.chkFavFutsal:
+                    favSports[1] = !favSports[1];
+                    break;
+                case R.id.chkFavBaseball:
+                    favSports[2] = !favSports[2];
+                    break;
+                case R.id.chkFavBasketball:
+                    favSports[3] = !favSports[3];
+                    break;
+                case R.id.chkFavBadminton:
+                    favSports[4] = !favSports[4];
+                    break;
+                case R.id.chkFavCycle:
+                    favSports[5] = !favSports[5];
                     break;
             }
         }
     };
 
+    //이미지 업로드전 경로 가져옴
     private File getRealFile(Uri uri) {
         String[] projection = {MediaStore.Images.Media.DATA};
         if(uri == null) {

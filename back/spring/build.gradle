@@ -49,6 +49,10 @@ dependencies {
 
 	// JSONParser, JSONObject설정
 	implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1'
+
+	//mysql
+	runtimeOnly 'mysql:mysql-connector-java'
+	implementation 'mysql:mysql-connector-java'
 }
 
 tasks.named('test') {

@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.textfield.TextInputEditText;
 import com.mju.exercise.Domain.ApiResponseDTO;
 import com.mju.exercise.Domain.SignInDTO;
 import com.mju.exercise.HttpRequest.RetrofitUtil;
@@ -27,7 +28,7 @@ import retrofit2.Response;
 
 public class SignInActivity extends AppCompatActivity {
 
-    private EditText edtId, edtPw;
+    private TextInputEditText edtId, edtPw;
     private Button btnLogin, btnSignUp, btnForgetPassword;
 
     private RetrofitUtil retrofitUtil;
@@ -45,8 +46,8 @@ public class SignInActivity extends AppCompatActivity {
         preferenceUtil = PreferenceUtil.getInstance(getApplicationContext());
         retrofitUtil = RetrofitUtil.getInstance();
 
-        edtId = (EditText) findViewById(R.id.signInId);
-        edtPw = (EditText) findViewById(R.id.signInPw);
+        edtId = (TextInputEditText) findViewById(R.id.signInId);
+        edtPw = (TextInputEditText) findViewById(R.id.signInPw);
 
         btnLogin = (Button) findViewById(R.id.btnSignIn);
         btnSignUp = (Button) findViewById(R.id.btnSignUp);

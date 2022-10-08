@@ -1,34 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="비밀번호 찾기"
+            android:textSize="30dp"
+            android:layout_margin="10dp"
+            android:gravity="center"
+            />
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:boxBackgroundColor="@color/white"
+            android:hint="가입시 입력한 ID 또는 e-mail을 입력해주세요.">
 
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edtId"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="아이디 입력"
-        android:id="@+id/edtId"
-        />
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="아이디에 등록된 이메일로 인증코드 발송"
-        android:id="@+id/btnSendAuthCode"
-        />
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="인증코드"
-        android:id="@+id/edtAuthCode"
-        />
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="확인"
-        android:id="@+id/btnCheckAuthCode"
-        />
+        </com.google.android.material.textfield.TextInputLayout>
+        <Button
+            android:id="@+id/btnSendAuthCode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="등록된 이메일로 인증코드 발송"
+            android:background="#F6D73C"
+            android:layout_margin="10dp"
+            />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:boxBackgroundColor="@color/white"
+            android:hint="인증코드 입력란">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edtAuthCode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
+
+        </com.google.android.material.textfield.TextInputLayout>
+        <Button
+            android:id="@+id/btnCheckAuthCode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="확인"
+            android:background="#F6D73C"
+            android:layout_margin="10dp"
+            />
+    </LinearLayout>
 
 
 </LinearLayout>
