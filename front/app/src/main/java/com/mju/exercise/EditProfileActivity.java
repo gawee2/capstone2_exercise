@@ -72,6 +72,8 @@ public class EditProfileActivity extends AppCompatActivity {
 
     public void init(){
         preferenceUtil = PreferenceUtil.getInstance(getApplicationContext());
+        retrofitUtil = RetrofitUtil.getInstance();
+        retrofitUtil.setToken(preferenceUtil.getString("accessToken"));
 
         btnEnter = (Button) findViewById(R.id.btnEnter);
         btnEnter.setOnClickListener(onClickListener);
@@ -119,12 +121,12 @@ public class EditProfileActivity extends AppCompatActivity {
                 profileDTO.setNickname(edtNickname.getText().toString());
                 profileDTO.setIntroduce(edtProfileMsg.getText().toString());
 
+
                 //이미지가 있으면 이미지 전송
                 if(imgUri != null){
                     RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), getRealFile(imgUri));
                     MultipartBody.Part body = MultipartBody.Part.createFormData("image", "image.jpg", requestFile);
 
-                    retrofitUtil = RetrofitUtil.getInstance();
                     retrofitUtil.getRetrofitAPI().uploadImg(body).enqueue(new Callback<ApiResponseDTO>() {
                         @Override
                         public void onResponse(Call<ApiResponseDTO> call, Response<ApiResponseDTO> response) {
@@ -153,8 +155,15 @@ public class EditProfileActivity extends AppCompatActivity {
                     public void onResponse(Call<Boolean> call, Response<Boolean> response) {
                         Log.d("프로필", "onResponse");
                         if(response.isSuccessful()){
-                            Log.d("프로필", "응답 성공");
-                            Toast.makeText(getApplicationContext(), "프로필 업데이트 완료", Toast.LENGTH_SHORT).show();
+                            if(response.body()){
+                                Log.d("프로필", "응답 true");
+                                Toast.makeText(getApplicationContext(), "프로필 업데이트 완료", Toast.LENGTH_SHORT).show();
+                                finish();
+
+                            }else {
+                                Log.d("프로필", "응답 false");
+                                Toast.makeText(getApplicationContext(), "프로필 업데이트 실패!!!!", Toast.LENGTH_SHORT).show();
+                            }
                         }
                     }
 

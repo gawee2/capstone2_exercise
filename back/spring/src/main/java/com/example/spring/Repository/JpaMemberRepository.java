@@ -43,7 +43,17 @@ public class JpaMemberRepository implements MemberRepository {
 
     @Override
     public Profile setOrUpdateProfile(Profile profile) {
-        em.flush();
+
+        //조회로 영속성 컨텍스트 상태 만들고 변경해서 플러시
+        try{
+            Profile updateProfile = em.find(Profile.class, profile.getIdx());
+            updateProfile.setNickname(profile.getNickname());
+            em.flush();
+
+            //조회 안되면 새로 영속성 컨텍스트 만들고 트랜잭션 종료 시점에 커밋됨
+        }catch (Exception e){
+            em.persist(profile);
+        }
         return profile;
     }
 

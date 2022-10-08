@@ -110,6 +110,12 @@ public class AuthService {
                 .refreshTokenExpirationAt(refreshTokenExpirationAt)
                 .build();
 
+        try{
+            Long tmpIdx = authRepository.findTokenIdxByAccessToken(accessToken);
+            insertRefreshToken.setIdx(tmpIdx);
+        }catch (Exception e){
+            //토큰 디비에 없을때
+        }
         authRepository.insertOrUpdateRefreshToken(insertRefreshToken);
 
         result.put("accessToken", accessToken);

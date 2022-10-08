@@ -29,6 +29,9 @@ public class MemberService {
     //여기 아직 수정중
     public Profile setOrUpdateProfile(Profile profile){
 
+        Optional<Profile> tmpProfile = memberRepository.findProfileByUserId(profile.getUserId());
+        profile.setIdx(tmpProfile.get().getIdx());
+
         return memberRepository.setOrUpdateProfile(profile);
     }
 

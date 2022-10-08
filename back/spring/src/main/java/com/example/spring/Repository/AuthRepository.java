@@ -16,4 +16,7 @@ public interface AuthRepository {
     //헤더에 포함되어 온 토큰으로 사용자 판단하는 부분
     String findUserByToken(String token);
 
+    //디비에 있는 엑세스 토큰으로 토큰인덱스 리턴
+    Long findTokenIdxByAccessToken(String accessToken);
+
 }
