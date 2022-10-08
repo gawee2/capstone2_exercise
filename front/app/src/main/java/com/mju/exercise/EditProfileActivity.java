@@ -184,31 +184,6 @@ public class EditProfileActivity extends AppCompatActivity {
                     sendProfileData(profileDTO);
                 }
 
-//                //프로필 정보 전송
-//                retrofitUtil.getRetrofitAPI().setMyProfile(profileDTO).enqueue(new Callback<Boolean>() {
-//                    @Override
-//                    public void onResponse(Call<Boolean> call, Response<Boolean> response) {
-//                        Log.d("프로필", "onResponse");
-//                        if(response.isSuccessful()){
-//                            if(response.body()){
-//                                Log.d("프로필", "응답 true");
-//                                Toast.makeText(getApplicationContext(), "프로필 업데이트 완료", Toast.LENGTH_SHORT).show();
-//                                finish();
-//
-//                            }else {
-//                                Log.d("프로필", "응답 false");
-//                                Toast.makeText(getApplicationContext(), "프로필 업데이트 실패!!!!", Toast.LENGTH_SHORT).show();
-//                            }
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onFailure(Call<Boolean> call, Throwable t) {
-//                        Log.d("프로필", "onFailure");
-//                        Log.d("프로필", t.getMessage());
-//
-//                    }
-//                });
 
             //이미지 클릭했을때는 사진첩 열리면서 이미지 선택 가능하도록
             }else if(view == imgProfile){

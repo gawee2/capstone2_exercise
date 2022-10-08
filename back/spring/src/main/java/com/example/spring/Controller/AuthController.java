@@ -37,6 +37,7 @@ public class AuthController {
             return authService.login(loginDTO);
         }else{
             ApiResponse apiResponse = new ApiResponse();
+            apiResponse.setCode(404);
             return apiResponse;
         }
     }

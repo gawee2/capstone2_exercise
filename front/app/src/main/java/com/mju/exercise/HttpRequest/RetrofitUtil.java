@@ -24,6 +24,7 @@ public class RetrofitUtil {
 
     private static String token = "";
     final String BASE_URL = "http://192.168.0.3:8080/";
+//    final String BASE_URL = "http://3.34.253.207:8080/";
 
     public Retrofit getRetrofit() {
         return retrofit;
@@ -68,6 +69,16 @@ public class RetrofitUtil {
             retrofitUtil = new RetrofitUtil();
         }
         return retrofitUtil;
+    }
+
+    public String getBASE_URL(){
+        return this.BASE_URL;
+    }
+
+    //마지막 슬래시 지우고 리턴
+    public String getBASE_URL_NONE_SLASH(){
+        String str = this.BASE_URL;
+        return str.substring(0, str.length() - 1);
     }
 
 

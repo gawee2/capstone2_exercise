@@ -122,7 +122,8 @@ public class MemberController {
             }
 
             image.transferTo(file);
-            result.setResponseData("image", absolutePath);
+            //디비에는 이지미가 저장된 로컬 경로로 포워딩 해주는 경로로 저장
+            result.setResponseData("image", "/imagePath/" + fileName + ".jpg");
 
             System.out.println("이미지 업로드 완료");
         }

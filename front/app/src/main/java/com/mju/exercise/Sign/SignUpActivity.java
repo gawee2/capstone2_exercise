@@ -10,6 +10,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.textfield.TextInputEditText;
 import com.mju.exercise.Domain.SignUpDTO;
 import com.mju.exercise.HttpRequest.RetrofitAPI;
 import com.mju.exercise.HttpRequest.RetrofitUtil;
@@ -23,7 +24,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class SignUpActivity extends AppCompatActivity {
 
-    EditText edtId, edtPw, edtCheckPw, edtEmail;
+    TextInputEditText edtId, edtPw, edtCheckPw, edtEmail;
     Button btnSignUp;
     private RetrofitUtil retrofitUtil;
 
@@ -37,10 +38,10 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void init(){
-        edtId = (EditText) findViewById(R.id.signUpId);
-        edtPw = (EditText) findViewById(R.id.signUpPw);
-        edtCheckPw = (EditText) findViewById(R.id.signUpCheckPw);
-        edtEmail = (EditText) findViewById(R.id.signUpEmail);
+        edtId = (TextInputEditText) findViewById(R.id.signUpId);
+        edtPw = (TextInputEditText) findViewById(R.id.signUpPw);
+        edtCheckPw = (TextInputEditText) findViewById(R.id.signUpCheckPw);
+        edtEmail = (TextInputEditText) findViewById(R.id.signUpEmail);
         btnSignUp = (Button) findViewById(R.id.btnSignUp);
 
         retrofitUtil = RetrofitUtil.getInstance();

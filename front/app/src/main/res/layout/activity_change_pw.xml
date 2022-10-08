@@ -14,7 +14,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="운동매칭"
+            android:text="비밀번호 변경"
             android:textSize="30dp"
             android:layout_margin="10dp"
             android:gravity="center"
@@ -29,71 +29,59 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:boxBackgroundColor="@color/white"
-                android:hint="아이디">
-
+                android:hint="아이디를 입력해주세요.">
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/signInId"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:enabled="false"
                     />
-
             </com.google.android.material.textfield.TextInputLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                />
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:boxBackgroundColor="@color/white"
-                android:hint="비밀번호">
+                android:hint="새로운 비밀번호를 입력해주세요.">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/signInPw"
+                    android:id="@+id/signUpPw"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     />
-
             </com.google.android.material.textfield.TextInputLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                />
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:boxBackgroundColor="@color/white"
+                android:hint="비밀번호를 다시 한번 입력해주세요.">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/signUpCheckPw"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    />
+            </com.google.android.material.textfield.TextInputLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                />
         </LinearLayout>
         <Button
-            android:id="@+id/btnSignIn"
+            android:id="@+id/btnSignUp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="로그인"
+            android:text="변경 하기"
             android:background="#F6D73C"
             android:layout_margin="10dp"
             />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginRight="10dp"
-            android:layout_marginLeft="10dp"
-            >
-            <Button
-                android:layout_width="80dp"
-                android:layout_height="wrap_content"
-                android:gravity="left"
-                android:text="회원가입"
-                android:id="@+id/btnSignUp"
-                android:textSize="10dp"
-                android:background="#00ff0000"
-                android:textColor="@color/black"
-                />
-            <View
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                />
-            <Button
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:gravity="right"
-                android:text="비밀번호 찾기"
-                android:id="@+id/btnForgetPassword"
-                android:textSize="10dp"
-                android:background="#00ff0000"
-                android:textColor="@color/black"
-                />
-        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>

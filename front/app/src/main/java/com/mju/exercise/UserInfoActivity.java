@@ -2,6 +2,7 @@ package com.mju.exercise;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,7 +13,9 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.gson.annotations.SerializedName;
 import com.mju.exercise.Domain.ProfileDTO;
 import com.mju.exercise.HttpRequest.RetrofitUtil;
 import com.mju.exercise.Preference.PreferenceUtil;
@@ -81,11 +84,14 @@ public class UserInfoActivity extends AppCompatActivity {
                 Log.d("프로필로드", "onResponse");
                 if(response.isSuccessful()){
                     Log.d("프로필로드", "isSuccessful");
+                    //통째로 넘겨서 가져온 데이터로 프로필 변경
+                    reflectImg(response.body().getImage());
+//                    reflectProfile(response.body());
                     mTxtUserName.setText(response.body().getNickname());
                     mTxtProfileMsg.setText(response.body().getIntroduce());
+
                     Log.d("프로필로드", response.body().getNickname());
                     Log.d("프로필로드", response.body().getIntroduce());
-                    response.body().getImage();
                 }
             }
 
@@ -94,6 +100,33 @@ public class UserInfoActivity extends AppCompatActivity {
                     Log.d("프로필로드", "onFailure");
             }
         });
+    }
+
+    private void reflectImg(String path){
+        String url = retrofitUtil.getBASE_URL_NONE_SLASH() + path;
+        Log.d("이미지로드", url);
+        if(path != null && !path.equals("")){
+            Glide.with(this).load(url).into(mImgProfile);
+        }
+    }
+
+    private void reflectProfile(ProfileDTO profileDTO){
+        mTxtUserName.setText(profileDTO.getNickname());
+        mTxtProfileMsg.setText(profileDTO.getIntroduce());
+        mTxtAddress.setText(profileDTO.getRegion());
+
+        boolean[] favDay = new boolean[]{profileDTO.isFavMon(),
+                profileDTO.isFavTue(), profileDTO.isFavWed(),
+                profileDTO.isFavThu(), profileDTO.isFavFri(),
+                profileDTO.isFavSat(), profileDTO.isFavSun()
+        };
+
+        boolean[] favExercise = new boolean[]{
+                profileDTO.isFavSoccer(), profileDTO.isFavFutsal(),
+                profileDTO.isFavBaseball(), profileDTO.isFavBasketball(),
+                profileDTO.isFavBadminton(), profileDTO.isFavCycle()
+        };
+
     }
 
     /**
