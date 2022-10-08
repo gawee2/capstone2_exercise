@@ -27,7 +27,7 @@ import retrofit2.Response;
 public class UserInfoActivity extends AppCompatActivity {
     private Context mContext;
     private ImageView mImgProfile, mImgViewEditProfile;
-    private TextView mTxtUserName, mTxtAddress, mTxtFavoriteSport, mTxtProfileMsg;
+    private TextView mTxtUserName, mTxtAddress, mTxtFavoriteSport, mTxtProfileMsg, mTxtFavoriteDay;
     private Button btnLogout;
 
     private PreferenceUtil preferenceUtil;
@@ -57,6 +57,8 @@ public class UserInfoActivity extends AppCompatActivity {
         mTxtAddress = (TextView) findViewById(R.id.txtAddress);
         //선호종목
         mTxtFavoriteSport = (TextView) findViewById(R.id.txtFavoriteSport);
+        //선호요일
+        mTxtFavoriteDay = (TextView) findViewById(R.id.txtFavoriteDay);
         //상태 메시지
         mTxtProfileMsg = (TextView) findViewById(R.id.txtProfileMsg);
         //수정 버튼
@@ -84,11 +86,12 @@ public class UserInfoActivity extends AppCompatActivity {
                 Log.d("프로필로드", "onResponse");
                 if(response.isSuccessful()){
                     Log.d("프로필로드", "isSuccessful");
-                    //통째로 넘겨서 가져온 데이터로 프로필 변경
+                    //프로필 이미지 변경
                     reflectImg(response.body().getImage());
-//                    reflectProfile(response.body());
-                    mTxtUserName.setText(response.body().getNickname());
-                    mTxtProfileMsg.setText(response.body().getIntroduce());
+                    //통째로 넘겨서 가져온 데이터로 프로필 변경
+                    reflectProfile(response.body());
+//                    mTxtUserName.setText(response.body().getNickname());
+//                    mTxtProfileMsg.setText(response.body().getIntroduce());
 
                     Log.d("프로필로드", response.body().getNickname());
                     Log.d("프로필로드", response.body().getIntroduce());
@@ -113,7 +116,7 @@ public class UserInfoActivity extends AppCompatActivity {
     private void reflectProfile(ProfileDTO profileDTO){
         mTxtUserName.setText(profileDTO.getNickname());
         mTxtProfileMsg.setText(profileDTO.getIntroduce());
-        mTxtAddress.setText(profileDTO.getRegion());
+//        mTxtAddress.setText(profileDTO.getRegion());
 
         boolean[] favDay = new boolean[]{profileDTO.isFavMon(),
                 profileDTO.isFavTue(), profileDTO.isFavWed(),
@@ -121,12 +124,42 @@ public class UserInfoActivity extends AppCompatActivity {
                 profileDTO.isFavSat(), profileDTO.isFavSun()
         };
 
-        boolean[] favExercise = new boolean[]{
+        mTxtFavoriteDay.setText("선호 요일: " + makeFavDayString(favDay));
+
+        boolean[] favSport = new boolean[]{
                 profileDTO.isFavSoccer(), profileDTO.isFavFutsal(),
                 profileDTO.isFavBaseball(), profileDTO.isFavBasketball(),
                 profileDTO.isFavBadminton(), profileDTO.isFavCycle()
         };
 
+        mTxtFavoriteSport.setText("선호 종목: " + makeFavSportString(favSport));
+    }
+
+    //선호 날짜 담겨있는 불린 배열 받아서 좋아하는 종목을 한 줄짜리 문자열로 변환
+    private String makeFavDayString(boolean[] favDayArray){
+        String[] sports = {
+                "축구", "풋살", "야구", "농구", "배드민턴", "사이클"
+        };
+        StringBuilder result = new StringBuilder();
+        for(int i=0; i<favDayArray.length; i++){
+            if(favDayArray[i]){
+                result.append(sports[i] + " ");
+            }
+        }
+        return result.toString();
+    }
+    //선호 종목 담겨있는 불린 배열 받아서 좋아하는 종목을 한 줄짜리 문자열로 변환
+    private String makeFavSportString(boolean[] favSportArray){
+        String[] days = {
+                "월", "화", "수","목","금","토","일"
+        };
+        StringBuilder result = new StringBuilder();
+        for(int i=0; i<favSportArray.length; i++){
+            if(favSportArray[i]){
+                result.append(days[i] + " ");
+            }
+        }
+        return result.toString();
     }
 
     /**
@@ -140,6 +173,7 @@ public class UserInfoActivity extends AppCompatActivity {
                 Toast.makeText(mContext, "수정", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getApplicationContext(), EditProfileActivity.class);
                 startActivity(intent);
+                finish();
 
             }else if (v == btnLogout){
                 //로그아웃하면 모든 값을 비움

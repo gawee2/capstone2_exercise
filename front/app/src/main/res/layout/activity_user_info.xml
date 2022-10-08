@@ -46,7 +46,7 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="3"
-                        android:gravity="center|left"
+                        android:gravity="center"
                         android:text="닉네임"
                         android:textColor="@color/black"
                         android:textSize="20dp"
@@ -61,14 +61,35 @@
 
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/txtAddress"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:gravity="center|left"
-                    android:text="지역"
-                    android:textColor="@color/black" />
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:id="@+id/txtFavoriteDay"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="선호 요일"
+                        android:textColor="@color/black" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:id="@+id/txtFavoriteSport"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="선호 종목"
+                        android:textColor="@color/black" />
+                </LinearLayout>
+
+
             </LinearLayout>
 
         </LinearLayout>
@@ -78,25 +99,24 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:orientation="vertical">
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1">
-
                 <TextView
-                    android:id="@+id/txtFavoriteSport"
+                    android:id="@+id/txtAddress"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_weight="1"
                     android:gravity="center"
-                    android:text="선호 종목"
-                    android:textColor="@color/black" />
+                    android:text="지역"
+                    android:textColor="@color/black"  />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1">
+                android:layout_weight="3">
 
                 <TextView
                     android:id="@+id/txtProfileMsg"

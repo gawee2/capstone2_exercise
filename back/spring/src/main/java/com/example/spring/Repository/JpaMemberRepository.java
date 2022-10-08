@@ -49,6 +49,21 @@ public class JpaMemberRepository implements MemberRepository {
             updateProfile.setNickname(profile.getNickname());
             updateProfile.setIntroduce(profile.getIntroduce());
             updateProfile.setImage(profile.getImage());
+
+            updateProfile.setFavMon(profile.isFavMon());
+            updateProfile.setFavTue(profile.isFavTue());
+            updateProfile.setFavWed(profile.isFavWed());
+            updateProfile.setFavThu(profile.isFavThu());
+            updateProfile.setFavFri(profile.isFavFri());
+            updateProfile.setFavSat(profile.isFavSat());
+            updateProfile.setFavSun(profile.isFavSun());
+
+            updateProfile.setFavSoccer(profile.isFavSoccer());
+            updateProfile.setFavFutsal(profile.isFavFutsal());
+            updateProfile.setFavBaseball(profile.isFavBaseball());
+            updateProfile.setFavBasketball(profile.isFavBasketball());
+            updateProfile.setFavBadminton(profile.isFavBadminton());
+            updateProfile.setFavCycle(profile.isFavCycle());
             em.flush();
         }else {
             em.persist(profile);
