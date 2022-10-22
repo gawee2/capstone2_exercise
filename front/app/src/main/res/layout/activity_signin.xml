@@ -84,10 +84,10 @@
                 android:layout_weight="1"
                 />
             <Button
-                android:layout_width="100dp"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:gravity="right"
-                android:text="비밀번호 찾기"
+                android:text="비밀번호 재설정"
                 android:id="@+id/btnForgetPassword"
                 android:textSize="10dp"
                 android:background="#00ff0000"

@@ -136,26 +136,26 @@ public class UserInfoActivity extends AppCompatActivity {
     }
 
     //선호 날짜 담겨있는 불린 배열 받아서 좋아하는 종목을 한 줄짜리 문자열로 변환
-    private String makeFavDayString(boolean[] favDayArray){
+    private String makeFavSportString(boolean[] favSportArray){
         String[] sports = {
                 "축구", "풋살", "야구", "농구", "배드민턴", "사이클"
         };
         StringBuilder result = new StringBuilder();
-        for(int i=0; i<favDayArray.length; i++){
-            if(favDayArray[i]){
+        for(int i=0; i<favSportArray.length; i++){
+            if(favSportArray[i]){
                 result.append(sports[i] + " ");
             }
         }
         return result.toString();
     }
     //선호 종목 담겨있는 불린 배열 받아서 좋아하는 종목을 한 줄짜리 문자열로 변환
-    private String makeFavSportString(boolean[] favSportArray){
+    private String makeFavDayString(boolean[] favDayArray){
         String[] days = {
                 "월", "화", "수","목","금","토","일"
         };
         StringBuilder result = new StringBuilder();
-        for(int i=0; i<favSportArray.length; i++){
-            if(favSportArray[i]){
+        for(int i=0; i<favDayArray.length; i++){
+            if(favDayArray[i]){
                 result.append(days[i] + " ");
             }
         }

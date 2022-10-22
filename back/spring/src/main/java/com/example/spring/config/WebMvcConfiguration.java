@@ -9,6 +9,8 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 
     private String connectPath = "/imagePath/**";
     private String resourcePath = "file:///Users/duskite/downloads/img/";
+//    private String resourcePath = "file:///home/ec2-user/downloads/img/";
+
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {

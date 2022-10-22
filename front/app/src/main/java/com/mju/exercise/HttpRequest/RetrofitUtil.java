@@ -26,6 +26,7 @@ public class RetrofitUtil {
     final String BASE_URL = "http://192.168.0.3:8080/";
 //    final String BASE_URL = "http://3.34.253.207:8080/";
 
+
     public Retrofit getRetrofit() {
         return retrofit;
     }
