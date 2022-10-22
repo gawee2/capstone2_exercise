@@ -20,8 +20,6 @@ import retrofit2.http.Path;
 
 public interface RetrofitAPI {
 
-    final String BASE_URL = "http://192.168.0.3:8080/";
-
     //회원가입
     @Headers("Content-Type: application/json")
     @POST("/api/user/signUp")
