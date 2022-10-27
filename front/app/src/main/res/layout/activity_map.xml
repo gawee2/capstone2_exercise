@@ -4,21 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
+    tools:context=".MapActivity"
     android:orientation="vertical">
 
-    <Button
+    <com.naver.maps.map.MapView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="가변"
-        android:id="@+id/btnLoginOrUserInfo"
-        />
-
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="지도"
-        android:id="@+id/btnMap"
-        />
+        android:layout_height="match_parent"
+        android:id="@+id/map"/>
 
 </LinearLayout>

@@ -38,6 +38,15 @@ public class MainActivity extends AppCompatActivity {
         //육성연 : 로그인, db관련 테스트중
         initLoginTest();
 
+        Button button = (Button)findViewById(R.id.btnMap);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, MapActivity.class);
+                startActivity(intent);
+            }
+        });
+
     }
 
     @Override
