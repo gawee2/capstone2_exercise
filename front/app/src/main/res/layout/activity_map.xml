@@ -7,6 +7,41 @@
     tools:context=".MapActivity"
     android:orientation="vertical">
 
+    <LinearLayout
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_marginLeft="15dp"
+            android:background="@drawable/football"
+            android:id="@+id/football"
+            android:layout_width="20dp"
+            android:layout_height="20dp" />
+
+        <TextView
+            android:layout_marginLeft="15dp"
+            android:background="@drawable/baseball"
+            android:id="@+id/baseball"
+            android:layout_width="20dp"
+            android:layout_height="20dp" />
+
+        <TextView
+            android:layout_marginLeft="15dp"
+            android:background="@drawable/basketball"
+            android:id="@+id/basketball"
+            android:layout_width="20dp"
+            android:layout_height="20dp" />
+
+        <TextView
+            android:layout_marginLeft="15dp"
+            android:background="@drawable/badminton"
+            android:id="@+id/badminton"
+            android:layout_width="20dp"
+            android:layout_height="20dp" />
+    </LinearLayout>
     <com.naver.maps.map.MapView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
