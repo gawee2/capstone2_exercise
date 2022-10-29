@@ -88,4 +88,16 @@ public class JpaMemberRepository implements MemberRepository {
         return result.stream().findAny();
     }
 
+    @Override
+    public boolean delete(Member member) {
+
+        try{
+            em.remove(member);
+            return true;
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 }

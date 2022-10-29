@@ -1,11 +1,9 @@
 package com.example.spring;
 
-import com.example.spring.Repository.AuthRepository;
-import com.example.spring.Repository.JpaAuthRepository;
-import com.example.spring.Repository.JpaMemberRepository;
-import com.example.spring.Repository.MemberRepository;
+import com.example.spring.Repository.*;
 import com.example.spring.Service.EmailService;
 import com.example.spring.Service.EmailServiceImpl;
+import com.example.spring.Service.MatchService;
 import com.example.spring.Service.MemberService;
 import com.example.spring.auth.AuthService;
 import com.example.spring.auth.JwtProvider;
@@ -38,6 +36,12 @@ public class SpringConfig {
     public MemberRepository memberRepository(){
         return new JpaMemberRepository(em);
     }
+
+    @Bean
+    public MatchService matchService(){ return new MatchService(matchRepository());}
+    @Bean
+    public MatchRepository matchRepository() { return new JpaMatchRepository(em);}
+
 
     @Bean
     public EmailService emailService(){ return new EmailServiceImpl(memberService());}
