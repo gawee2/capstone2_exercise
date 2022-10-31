@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.PointF;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -31,6 +32,7 @@ import com.naver.maps.map.overlay.InfoWindow;
 import com.naver.maps.map.overlay.Marker;
 import com.naver.maps.map.overlay.Overlay;
 import com.naver.maps.map.util.FusedLocationSource;
+import com.naver.maps.map.util.MarkerIcons;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -54,6 +56,7 @@ public class MapActivity extends AppCompatActivity implements NaverMap.OnMapClic
     TextView football,baseball,basketball,badminton;
     ProgressDialog dialog;
     private String URL = "http://www.kspo.or.kr/openapi/service/sportsNewFacilInfoService/getNewFacilInfoList?serviceKey=Y3X5lPIRYsK%2FLOfcybbffuDtQrSrECzV0hRpUfjiV4YOcmEuCvUBKN6%2BGH4DV2Jy2NWTr3v7X3doCnS4xs3jSQ%3D%3D&pageNo=1&numOfRows=300&ftypeNm="+ TypeDTO.type+"";
+                                                                                                                         //rdz8ehRJ8X8J8QyMoSfmEppmgj%2FqnvSuKTR3PrFoE4RFIUqCCwxBIqv10Qi%2Fs4f13U4bOZEaTevkEwxhrdmB5Q%3D%3D
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -95,7 +98,7 @@ public class MapActivity extends AppCompatActivity implements NaverMap.OnMapClic
         basketball.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TypeDTO.type = "농구";
+                TypeDTO.type = "농구"; // 구기운동장
                 finish();
                 Intent intent = new Intent(MapActivity.this,MapActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
@@ -355,11 +358,16 @@ public class MapActivity extends AppCompatActivity implements NaverMap.OnMapClic
                 public void handleMessage(Message msg) {
                     for(int i = 1; i < list.size(); i++) {
                         Marker marker = new Marker();
-                        LatLng SOOWAN = new LatLng(Double.valueOf(list.get(i).getFaciPointY()), Double.valueOf(list.get(i).getFaciPointX()));
+                        LatLng LtLg = new LatLng(Double.valueOf(list.get(i).getFaciPointY()), Double.valueOf(list.get(i).getFaciPointX()));
                         marker.setTag(i+"."+list.get(i).getFaciNm());
-                        marker.setPosition(SOOWAN);
+                        marker.setPosition(LtLg);
                         marker.setAnchor(new PointF(0.5f, 1.0f));
                         marker.setMap(naverMap);
+                        //마커 크기, 색상 설정
+                        marker.setWidth(75);
+                        marker.setHeight(100);
+                        marker.setIcon(MarkerIcons.BLACK);
+                        marker.setIconTintColor(Color.RED);
                         marker.setOnClickListener(MapActivity.this);
                     }
                     dialog.dismiss();
