@@ -14,4 +14,11 @@
         android:id="@+id/btnLoginOrUserInfo"
         />
 
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="지도"
+        android:id="@+id/btnMap"
+        />
+
 </LinearLayout>
