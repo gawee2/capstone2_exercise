@@ -38,7 +38,7 @@ public class SpringConfig {
     }
 
     @Bean
-    public MatchService matchService(){ return new MatchService(matchRepository());}
+    public MatchService matchService(){ return new MatchService(matchRepository(), memberRepository());}
     @Bean
     public MatchRepository matchRepository() { return new JpaMatchRepository(em);}
 

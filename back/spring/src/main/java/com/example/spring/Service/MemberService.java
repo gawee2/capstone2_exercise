@@ -44,6 +44,7 @@ public class MemberService {
         return memberRepository.findProfileByNickname(nickname).get();
     }
 
+
     public Profile findProfileByUserId(String userId){
         return memberRepository.findProfileByUserId(userId).get();
     }

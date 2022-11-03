@@ -17,20 +17,41 @@ public class JpaMatchRepository implements MatchRepository{
         this.em = em;
     }
 
-    //매칭 생성
+    //오픈매치 생성
     @Override
     public OpenMatchDTO save(OpenMatchDTO openMatchDTO){
         em.persist(openMatchDTO);
         return openMatchDTO;
     }
 
-    //매칭 참가
+    //오픈매치 수정
+    @Override
+    public OpenMatchDTO update(OpenMatchDTO openMatchDTO){
+        OpenMatchDTO tmp = em.find(OpenMatchDTO.class, openMatchDTO.getId());
+        tmp.setId(openMatchDTO.getId());
+        tmp.setSubject(openMatchDTO.getSubject());
+        tmp.setArticle(openMatchDTO.getArticle());
+        tmp.setLat(openMatchDTO.getLat());
+        tmp.setLng(openMatchDTO.getLng());
+        tmp.setOpenTime(openMatchDTO.getOpenTime());
+        tmp.setOpenUserId(openMatchDTO.getOpenUserId());
+        tmp.setSportType(openMatchDTO.getSportType());
+        tmp.setPlayTime(openMatchDTO.getPlayDateTime());
+        tmp.setPersonnel(openMatchDTO.getPersonnel());
+
+        em.flush();
+
+        return openMatchDTO;
+    }
+
+    //오픈매치 참가
     @Override
     public Long saveMatchingInfo(MatchingDTO matchingDTO) {
         em.persist(matchingDTO);
         return matchingDTO.getId();
     }
 
+    //오픈매치 모두 불러오기
     @Override
     public List<OpenMatchDTO> findAll() {
 
@@ -44,13 +65,6 @@ public class JpaMatchRepository implements MatchRepository{
                 .setParameter("type", type)
                 .getResultList();
     }
-
-//    @Override
-//    public List<OpenMatchDTO> findAllOpenMatchById(Long matchId){
-//        return em.createQuery("select m from OpenMatchDTO m where m.=:type ", OpenMatchDTO.class)
-//                .setParameter("type", type)
-//                .getResultList();
-//    }
 
     @Override
     public Optional<OpenMatchDTO> findById(Long id) {
@@ -66,19 +80,21 @@ public class JpaMatchRepository implements MatchRepository{
 
     //유저 아이디로 매칭 목록 가져옴
     @Override
-    public List<MatchingDTO> findAllMatchingByUserId(Long userId) {
-        return em.createQuery("select m from MatchingDTO m where m.userId=:userId ", MatchingDTO.class)
-                .setParameter("userId", userId)
+    public List<MatchingDTO> findAllMatchingByUserId(Long userIndex) {
+        return em.createQuery("select m from MatchingDTO m where m.userIndex=:userIndex ", MatchingDTO.class)
+                .setParameter("userIndex", userIndex)
                 .getResultList();
     }
 
     //오픈 매치 아이디로 매칭 목록 가져옴
+    //openMatchId와 연관된 모든 matching정보 가져옴
     @Override
     public List<MatchingDTO> findAllMatchingByOpenMatchId(Long openMatchId) {
         return em.createQuery("select m from MatchingDTO m where m.openMatchId=:openMatchId ", MatchingDTO.class)
                 .setParameter("openMatchId", openMatchId)
                 .getResultList();
     }
+
 
     @Override
     public boolean delete(OpenMatchDTO openMatchDTO) {

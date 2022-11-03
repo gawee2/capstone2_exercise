@@ -14,9 +14,7 @@ public class MatchingDTO {
 
     private Long openMatchId;
 
-    //이 부분 member에서는 String으로 했는데 여기서는 idx로 하려니까 헷갈림 통일해야할듯
-    //전부 인덱스값으로 처리하고 클라이언트에서 인덱스 값을 가지고 있는게 좋을듯
-    private Long userId;
+    private Long userIndex;
 
 
     public Long getId() {
@@ -35,11 +33,11 @@ public class MatchingDTO {
         this.openMatchId = openMatchId;
     }
 
-    public Long getUserId() {
-        return userId;
+    public Long getUserIndex() {
+        return userIndex;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setUserIndex(Long userIndex) {
+        this.userIndex = userIndex;
     }
 }

@@ -54,11 +54,10 @@ public class MemberController {
     }
 
     //유저 삭제
-    @DeleteMapping("/delete/{id}")
-    public boolean delete(@PathVariable String id){
-        return memberService.delete(Long.valueOf(id));
+    @DeleteMapping("/delete/{userIdx}")
+    public boolean delete(@PathVariable Long userIdx){
+        return memberService.delete(userIdx);
     }
-
 
     //프로필 설정
     @PostMapping("/setMyProfile")

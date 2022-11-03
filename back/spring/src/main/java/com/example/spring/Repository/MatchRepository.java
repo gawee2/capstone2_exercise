@@ -10,10 +10,10 @@ import java.util.Optional;
 public interface MatchRepository {
 
     OpenMatchDTO save(OpenMatchDTO openMatchDTO);
+    OpenMatchDTO update(OpenMatchDTO openMatchDTO);
     Long saveMatchingInfo(MatchingDTO matchingDTO);
     List<OpenMatchDTO> findAll();
     List<OpenMatchDTO> findAll(String sportType);
-//    List<OpenMatchDTO> findAllOpenMatchById(Long matchId);
     Optional<OpenMatchDTO> findById(Long matchId);
 
     Optional<MatchingDTO> findMatchingById(Long matchingId);

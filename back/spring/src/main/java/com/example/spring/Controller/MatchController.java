@@ -4,6 +4,7 @@ package com.example.spring.Controller;
 import com.example.spring.DTO.MatchingDTO;
 import com.example.spring.DTO.Member;
 import com.example.spring.DTO.OpenMatchDTO;
+import com.example.spring.DTO.Profile;
 import com.example.spring.Service.MatchService;
 import com.example.spring.Service.MemberService;
 import com.example.spring.auth.AuthService;
@@ -33,11 +34,19 @@ public class MatchController {
         return matchService.create(openMatchDTO);
     }
 
-    //매칭 삭제
-    @DeleteMapping("/delete/{id}")
-    public boolean delete(@PathVariable String id){
-        return matchService.delete(Long.valueOf(id));
+    //매칭 수정
+    @PostMapping("/update")
+    public OpenMatchDTO updateOpenMatch(@RequestBody OpenMatchDTO openMatchDTO){
+        return matchService.update(openMatchDTO);
     }
+
+    //매칭 삭제
+    @DeleteMapping("/delete/{openMatchIdx}")
+    public boolean delete(@PathVariable Long openMatchIdx){
+        return matchService.delete(openMatchIdx);
+    }
+
+
 
     //매칭 참가, 사용자id와 오픈매치id를 가져와서 매칭db에 생성함
     @PostMapping("/joinMatch")
@@ -45,9 +54,9 @@ public class MatchController {
         return matchService.joinMatch(matchingDTO);
     }
     //매칭 탈퇴, 매칭 떠나기
-    @DeleteMapping("/leaveMatch/{id}")
-    public boolean leaveMatch(@PathVariable String id){
-        return matchService.leaveMatch(Long.valueOf(id));
+    @DeleteMapping("/leaveMatch/{matchingIdx}")
+    public boolean leaveMatch(@PathVariable Long matchingIdx){
+        return matchService.leaveMatch(matchingIdx);
     }
 
 
@@ -56,18 +65,30 @@ public class MatchController {
     public List<OpenMatchDTO> matchList(){
         return matchService.findAll();
     }
-    //오픈 매치 리스트 필터
+    //오픈 매치 리스트 필터(종목으로)
     @GetMapping("/openMatchList/{sportType}")
     public List<OpenMatchDTO> matchList(@PathVariable String sportType){
         return matchService.findAll(sportType);
     }
 
 
-    //유저가 참여중인 매칭 리스트
-    //여기서는 사실 참여중인 오픈 매칭 리스트를 리턴하면 될 듯
-    @GetMapping("/joinedOpenMatch/{userId}")
-    public List<OpenMatchDTO> matchingList(@PathVariable String userId){
-        return matchService.findAllOpenMatchListByUserId(Long.valueOf(userId));
+    //유저가 참여중인 오픈매치 리스트
+    //여기서는 실제 참여중인 오픈매치 리스트를 리턴하면 될 듯
+    @GetMapping("/joinedOpenMatch/{userIdx}")
+    public List<OpenMatchDTO> matchingList(@PathVariable Long userIdx){
+        return matchService.findAllOpenMatchListByUserId(userIdx);
+    }
+
+    //내가 개설한 오픈매치 리스트 가져오기
+    @GetMapping("/openMatchByMe/{userIdx}")
+    public List<OpenMatchDTO> openMatchByMe(@PathVariable Long userIdx){
+        return matchService.findAllOpenMatchListByMe(userIdx);
+    }
+
+    //현재 오픈매치에 참여중인 모든 유저 프로필 정보 가져오기
+    @GetMapping("/joinedUserProfiles/{openMatchIdx}")
+    public List<Profile> getJoinedUserProfiles(@PathVariable Long openMatchIdx){
+        return matchService.getJoinedUserProfiles(openMatchIdx);
     }
 
 

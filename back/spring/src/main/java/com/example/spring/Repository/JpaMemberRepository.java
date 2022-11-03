@@ -79,6 +79,11 @@ public class JpaMemberRepository implements MemberRepository {
         return result.stream().findAny();
     }
 
+    public Optional<Profile> findProfileById(Long id){
+        Profile profile = em.find(Profile.class, id);
+        return Optional.ofNullable(profile);
+    }
+
     @Override
     public Optional<Profile> findProfileByNickname(String nickname) {
 
