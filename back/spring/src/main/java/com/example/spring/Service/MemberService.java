@@ -1,6 +1,7 @@
 package com.example.spring.Service;
 
 import com.example.spring.DTO.Member;
+import com.example.spring.DTO.OpenMatchDTO;
 import com.example.spring.DTO.Profile;
 import com.example.spring.Repository.MemberRepository;
 import org.mindrot.jbcrypt.BCrypt;
@@ -13,7 +14,6 @@ import java.util.Optional;
 @Transactional
 public class MemberService {
     private final MemberRepository memberRepository;
-
 
     public MemberService(MemberRepository memberRepository) {
         this.memberRepository = memberRepository;
@@ -43,6 +43,7 @@ public class MemberService {
     public Profile findProfileByNickname(String nickname){
         return memberRepository.findProfileByNickname(nickname).get();
     }
+
 
     public Profile findProfileByUserId(String userId){
         return memberRepository.findProfileByUserId(userId).get();
@@ -133,5 +134,13 @@ public class MemberService {
         return memberRepository.findById(memberId);
     }
     public Optional<Member> findOne(String userId){return memberRepository.findByUserId(userId);}
+
+    public boolean delete(Long id){
+        Optional<Member> optionalMember = memberRepository.findById(id);
+        if(optionalMember.isPresent()) {
+            return memberRepository.delete(optionalMember.get());
+        }
+        return false;
+    }
 
 }

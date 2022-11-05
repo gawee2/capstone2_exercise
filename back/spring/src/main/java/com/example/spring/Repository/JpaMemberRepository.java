@@ -79,6 +79,11 @@ public class JpaMemberRepository implements MemberRepository {
         return result.stream().findAny();
     }
 
+    public Optional<Profile> findProfileById(Long id){
+        Profile profile = em.find(Profile.class, id);
+        return Optional.ofNullable(profile);
+    }
+
     @Override
     public Optional<Profile> findProfileByNickname(String nickname) {
 
@@ -86,6 +91,18 @@ public class JpaMemberRepository implements MemberRepository {
                 .setParameter("nickname", nickname)
                 .getResultList();
         return result.stream().findAny();
+    }
+
+    @Override
+    public boolean delete(Member member) {
+
+        try{
+            em.remove(member);
+            return true;
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
     }
 
 }

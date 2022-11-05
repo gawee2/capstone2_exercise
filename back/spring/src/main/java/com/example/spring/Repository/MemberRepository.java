@@ -16,4 +16,8 @@ public interface MemberRepository {
     Profile setOrUpdateProfile(Profile profile, boolean exist);
     Optional<Profile> findProfileByUserId(String userId);
     Optional<Profile> findProfileByNickname(String nickname);
+
+    Optional<Profile> findProfileById(Long id);
+
+    boolean delete(Member member);
 }

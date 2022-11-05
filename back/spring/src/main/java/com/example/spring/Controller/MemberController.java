@@ -34,6 +34,7 @@ public class MemberController {
         this.authService = authService;
     }
 
+    //회원 가입
     @PostMapping("/signUp")
     public boolean signUp(@RequestBody Member member){
         Member newMember = new Member();
@@ -41,29 +42,24 @@ public class MemberController {
         newMember.setUserPw(member.getUserPw());
         newMember.setEmail(member.getEmail());
 
-        //체크
-        System.out.println(member.getUserId());
-
         try{
             long checkDuplicate = memberService.join(newMember);
             if(checkDuplicate == -1L){
-                System.out.println("중복회원이라 false 리턴");
                 return false;
             }
             return true;
         }catch (Exception e){
-            System.out.println("예외발생: " + e.getMessage());
             return false;
         }
     }
 
-    @PostMapping("/forgetPassword")
-    public boolean forgetPassword(@RequestBody Member member){
-        //이메일 정보 받아서 내부적으로 인증코드 이메일 발송해줌
-        System.out.println(member.getEmail());
-        return true;
+    //유저 삭제
+    @DeleteMapping("/delete/{userIdx}")
+    public boolean delete(@PathVariable Long userIdx){
+        return memberService.delete(userIdx);
     }
 
+    //프로필 생성, 수정
     @PostMapping("/setMyProfile")
     public boolean setMyProfile(@RequestBody Profile profile,
                                 @RequestHeader Map<String, String> header){
@@ -93,26 +89,23 @@ public class MemberController {
         return false;
     }
 
+    //프로필 조회
     @GetMapping("/getUserProfile/{userId}")
     public Profile getUserProfile(@PathVariable String userId){
-        System.out.println("프로필 로드: " + userId);
         return memberService.findProfileByUserId(userId);
     }
 
-    @GetMapping("/getProfileImg/{imgPath}")
-    public MultipartFile getProfileImg(@PathVariable String imgPath){
-        return null;
-    }
 
+    //프로필 이미지 업로드
     @PostMapping("/upload/image")
     public ApiResponse uploadsProfileImg(@RequestParam(name="image") MultipartFile image) throws IOException {
 
         String fileName = UUID.randomUUID().toString();
-//        String absolutePath = new File("/home/ec2-user/downloads/img").getAbsolutePath()
-//                + "/" + fileName + ".jpg";
-
-        String absolutePath = new File("/Users/duskite/Downloads/img").getAbsolutePath()
+        String absolutePath = new File("/home/ec2-user/downloads/img").getAbsolutePath()
                 + "/" + fileName + ".jpg";
+
+//        String absolutePath = new File("/Users/duskite/Downloads/img").getAbsolutePath()
+//                + "/" + fileName + ".jpg";
 
         System.out.println(absolutePath);
 

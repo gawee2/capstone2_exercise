@@ -14,6 +14,8 @@ public class PreferenceUtil {
         sharedPreferences.edit().putString("accessToken", defaultValue).apply();
         sharedPreferences.edit().putString("refreshIdx", defaultValue).apply();
         sharedPreferences.edit().putString("userId", defaultValue).apply();
+        sharedPreferences.edit().putString("userIdx", defaultValue).apply();
+        sharedPreferences.edit().putString("nickname", defaultValue).apply();
     }
 
     public static PreferenceUtil getInstance(Context context){
