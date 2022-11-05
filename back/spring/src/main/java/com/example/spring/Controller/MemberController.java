@@ -59,7 +59,7 @@ public class MemberController {
         return memberService.delete(userIdx);
     }
 
-    //프로필 설정
+    //프로필 생성, 수정
     @PostMapping("/setMyProfile")
     public boolean setMyProfile(@RequestBody Profile profile,
                                 @RequestHeader Map<String, String> header){
@@ -95,22 +95,17 @@ public class MemberController {
         return memberService.findProfileByUserId(userId);
     }
 
-    //프로필 이미지 조회
-    @GetMapping("/getProfileImg/{imgPath}")
-    public MultipartFile getProfileImg(@PathVariable String imgPath){
-        return null;
-    }
 
     //프로필 이미지 업로드
     @PostMapping("/upload/image")
     public ApiResponse uploadsProfileImg(@RequestParam(name="image") MultipartFile image) throws IOException {
 
         String fileName = UUID.randomUUID().toString();
-//        String absolutePath = new File("/home/ec2-user/downloads/img").getAbsolutePath()
-//                + "/" + fileName + ".jpg";
-
-        String absolutePath = new File("/Users/duskite/Downloads/img").getAbsolutePath()
+        String absolutePath = new File("/home/ec2-user/downloads/img").getAbsolutePath()
                 + "/" + fileName + ".jpg";
+
+//        String absolutePath = new File("/Users/duskite/Downloads/img").getAbsolutePath()
+//                + "/" + fileName + ".jpg";
 
         System.out.println(absolutePath);
 
