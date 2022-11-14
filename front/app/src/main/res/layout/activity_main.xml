@@ -21,11 +21,4 @@
         android:id="@+id/btnMap"
         />
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="채팅"
-        android:id="@+id/btnChat"
-        />
-
 </LinearLayout>
