@@ -66,4 +66,15 @@
             android:layout_height="wrap_content"
             android:text="번호"/>
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/hmHp"
+        android:layout_marginTop="5dp"
+        android:textSize="13dp"
+        android:fontFamily="@font/scdream7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="홈페이지"/>
+
+
 </LinearLayout>
