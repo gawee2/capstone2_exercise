@@ -1,13 +1,17 @@
 package com.mju.exercise;
 
+import android.content.Intent;
 import android.graphics.PointF;
 import android.os.Bundle;
 import android.view.MotionEvent;
+import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.mju.exercise.OpenMatch.OpenMatchOpenFrag;
 import com.naver.maps.geometry.LatLng;
 import com.naver.maps.map.MapView;
 import com.naver.maps.map.NaverMap;
@@ -31,6 +35,10 @@ public class PopupMapActivity extends AppCompatActivity implements NaverMap.OnMa
     private String strRegion;
 
 
+    //경기장소 선택완료 처리용
+    ExtendedFloatingActionButton btnSelectOk;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,7 +49,27 @@ public class PopupMapActivity extends AppCompatActivity implements NaverMap.OnMa
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
 
+        btnSelectOk = (ExtendedFloatingActionButton) findViewById(R.id.btnSelectOk);
+        btnSelectOk.setOnClickListener(setOnClickListener);
+
     }
+
+    private View.OnClickListener setOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()){
+                case R.id.btnSelectOk:
+                    Intent intent = new Intent(PopupMapActivity.this, OpenMatchOpenFrag.class);
+                    intent.putExtra("lat", lat);
+                    intent.putExtra("lng", lng);
+                    intent.putExtra("strRegion", strRegion);
+                    setResult(RESULT_OK, intent);
+                    finish();
+                    break;
+            }
+
+        }
+    };
 
     @Override
     public void onMapReady(@NonNull NaverMap naverMap) {
@@ -61,6 +89,7 @@ public class PopupMapActivity extends AppCompatActivity implements NaverMap.OnMa
 
                 lat = latLng.latitude;
                 lng = latLng.longitude;
+
                 Toast.makeText(getApplicationContext(), latLng.toString(), Toast.LENGTH_SHORT).show();
             }
         });
