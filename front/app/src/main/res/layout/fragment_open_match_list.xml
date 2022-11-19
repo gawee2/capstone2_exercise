@@ -9,18 +9,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:id="@+id/tvSelectedSportType"
-            android:text="" />
-
+        
         <ListView
             android:id="@+id/listViewOpenMatchList"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="9"
+            android:layout_weight="10"
+            android:layout_margin="5dp"
             ></ListView>
     </LinearLayout>
 

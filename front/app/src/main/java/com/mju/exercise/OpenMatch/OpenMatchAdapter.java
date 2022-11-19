@@ -41,6 +41,8 @@ public class OpenMatchAdapter extends ArrayAdapter implements AdapterView.OnItem
         public TextView tvPersonnel;
         public TextView tvPlayDateTime;
         public TextView tvOpenUserId;
+
+        public TextView tvDistance;
     }
 
     @NonNull
@@ -53,20 +55,20 @@ public class OpenMatchAdapter extends ArrayAdapter implements AdapterView.OnItem
         }
 
         viewHolder = new ViewHolder();
-        viewHolder.tvArticle = (TextView) convertView.findViewById(R.id.omArticle);
+//        viewHolder.tvArticle = (TextView) convertView.findViewById(R.id.omArticle);
         viewHolder.tvSubect = (TextView) convertView.findViewById(R.id.omSubject);
         viewHolder.tvSportType = (TextView) convertView.findViewById(R.id.omSportType);
         viewHolder.tvPersonnel = (TextView) convertView.findViewById(R.id.omPersonnel);
         viewHolder.tvPlayDateTime = (TextView) convertView.findViewById(R.id.omPlayDateTime);
-        viewHolder.tvOpenUserId = (TextView) convertView.findViewById(R.id.omOpenUserId);
+//        viewHolder.tvOpenUserId = (TextView) convertView.findViewById(R.id.omOpenUserId);
 
         final OpenMatchDTO openMatchDTO = (OpenMatchDTO) list.get(position);
-        viewHolder.tvArticle.setText(openMatchDTO.getArticle());
+//        viewHolder.tvArticle.setText(openMatchDTO.getArticle());
         viewHolder.tvSubect.setText(openMatchDTO.getSubject());
         viewHolder.tvSportType.setText(openMatchDTO.getSportType());
         viewHolder.tvPersonnel.setText(String.valueOf(openMatchDTO.getPersonnel()));
         viewHolder.tvPlayDateTime.setText(String.valueOf(openMatchDTO.getPlayDateTime()));
-        viewHolder.tvOpenUserId.setText(openMatchDTO.getOpenUserId());
+//        viewHolder.tvOpenUserId.setText(openMatchDTO.getOpenUserId());
 
         return convertView;
 

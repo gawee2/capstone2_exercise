@@ -13,6 +13,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mju.exercise.Domain.ProfileDTO;
 import com.mju.exercise.HttpRequest.RetrofitUtil;
 import com.mju.exercise.Preference.PreferenceUtil;
@@ -25,12 +27,15 @@ import retrofit2.Response;
 
 public class UserInfoActivity extends AppCompatActivity {
     private Context mContext;
-    private ImageView mImgProfile, mImgViewEditProfile;
+    private ImageView mImgProfile;
     private TextView mTxtUserName, mTxtAddress, mTxtFavoriteSport, mTxtProfileMsg, mTxtFavoriteDay;
     private Button btnLogout;
+    private ExtendedFloatingActionButton mbtnEditProfile;
 
     private PreferenceUtil preferenceUtil;
     private RetrofitUtil retrofitUtil;
+
+    private ProfileDTO profileDTO;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,8 +66,8 @@ public class UserInfoActivity extends AppCompatActivity {
         //상태 메시지
         mTxtProfileMsg = (TextView) findViewById(R.id.txtProfileMsg);
         //수정 버튼
-        mImgViewEditProfile = (ImageView) findViewById(R.id.imgViewEditProfile);
-        mImgViewEditProfile.setOnClickListener(setOnClickListener);
+        mbtnEditProfile = (ExtendedFloatingActionButton) findViewById(R.id.btnEditProfile);
+        mbtnEditProfile.setOnClickListener(setOnClickListener);
 
         //로그아웃버튼
         btnLogout = (Button) findViewById(R.id.btnLogout);
@@ -89,8 +94,6 @@ public class UserInfoActivity extends AppCompatActivity {
                     reflectImg(response.body().getImage());
                     //통째로 넘겨서 가져온 데이터로 프로필 변경
                     reflectProfile(response.body());
-//                    mTxtUserName.setText(response.body().getNickname());
-//                    mTxtProfileMsg.setText(response.body().getIntroduce());
 
                     Log.d("프로필로드", response.body().getNickname());
                     Log.d("프로필로드", response.body().getIntroduce());
@@ -113,9 +116,12 @@ public class UserInfoActivity extends AppCompatActivity {
     }
 
     private void reflectProfile(ProfileDTO profileDTO){
+        //현재 프로필 정보 저장, 수정화면으로 넘어갈때 넘겨주려고
+        this.profileDTO = profileDTO;
+
         mTxtUserName.setText(profileDTO.getNickname());
         mTxtProfileMsg.setText(profileDTO.getIntroduce());
-//        mTxtAddress.setText(profileDTO.getRegion());
+        mTxtAddress.setText(profileDTO.getRegion());
 
         boolean[] favDay = new boolean[]{profileDTO.isFavMon(),
                 profileDTO.isFavTue(), profileDTO.isFavWed(),
@@ -167,10 +173,14 @@ public class UserInfoActivity extends AppCompatActivity {
     private View.OnClickListener setOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            if (v == mImgViewEditProfile) {
+            if (v == mbtnEditProfile) {
 
-                Toast.makeText(mContext, "수정", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getApplicationContext(), EditProfileActivity.class);
+
+                //로드된 프로필이 있으면 담아서 전달
+                if(profileDTO != null){
+                    intent.putExtra("profile", profileDTO);
+                }
                 startActivity(intent);
                 finish();
 
