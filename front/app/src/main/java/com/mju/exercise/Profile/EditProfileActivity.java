@@ -137,6 +137,7 @@ public class EditProfileActivity extends AppCompatActivity {
         edtProfileMsg = (EditText) findViewById(R.id.txtProfileMsg);
 
         chipGroupFavDay = (ChipGroup) findViewById(R.id.chipGroupFavDay);
+        chipGroupFavDay.setOnCheckedStateChangeListener(setOnCheckedStateChangeListener);
 
 
         chkFavSoccer = (CheckBox) findViewById(R.id.chkFavSoccer);
@@ -319,17 +320,13 @@ public class EditProfileActivity extends AppCompatActivity {
         }
     };
 
-//    //칩그룹 리스너
-//    private ChipGroup.OnCheckedStateChangeListener setOnCheckedStateChangeListener = new ChipGroup.OnCheckedStateChangeListener() {
-//        @Override
-//        public void onCheckedChanged(@NonNull ChipGroup group, @NonNull List<Integer> checkedIds) {
-//            int chk = group.getCheckedChipId();
-//            String tmp = sportTypeByChip(chk);
-//            if(tmp != null){
-//                sportType = tmp;
-//            }
-//        }
-//    };
+    //칩그룹 리스너
+    private ChipGroup.OnCheckedStateChangeListener setOnCheckedStateChangeListener = new ChipGroup.OnCheckedStateChangeListener() {
+        @Override
+        public void onCheckedChanged(@NonNull ChipGroup group, @NonNull List<Integer> checkedIds) {
+
+        }
+    };
 
 
     private CompoundButton.OnCheckedChangeListener onCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {

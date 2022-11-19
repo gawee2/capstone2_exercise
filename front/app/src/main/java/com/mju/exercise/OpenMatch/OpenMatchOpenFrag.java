@@ -244,10 +244,16 @@ public class OpenMatchOpenFrag extends Fragment {
 
     private void createOpenMatch(){
 
+//        LocalDateTime nowTime = null;
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            LocalDateTime tmp = LocalDateTime.now(Clock.systemDefaultZone());
+//            nowTime = LocalDateTime.of(tmp.getYear(), tmp.getMonth(), tmp.getDayOfMonth(), tmp.getHour(), tmp.getMinute(), 0);
+//        }
+
         OpenMatchDTO openMatchDTO = new OpenMatchDTO();
         openMatchDTO.setSubject(edtSubject.getText().toString());
         openMatchDTO.setArticle(edtArticle.getText().toString());
-        openMatchDTO.setOpenTime(nowTime());
+//        openMatchDTO.setOpenTime(nowTime);
         openMatchDTO.setOpenUserId(preferenceUtil.getString("userId"));
 
         Log.d("오픈매치", "제목: " + openMatchDTO.getSubject()
@@ -262,12 +268,12 @@ public class OpenMatchOpenFrag extends Fragment {
         if(personnel != null){
             openMatchDTO.setPersonnel(personnel);
         }
-        if(year != 0 && month != 0 && day != 0 && hour !=0 && min != 0){
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                LocalDateTime playDateTime = LocalDateTime.of(year, month, day, hour, min, 0);
-                openMatchDTO.setPlayTime(playDateTime);
-            }
-        }
+
+//        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+//            LocalDateTime playDateTime = LocalDateTime.of(year, month, day, hour, min, 0);
+//            openMatchDTO.setPlayTime(playDateTime);
+//        }
+
 
         retrofitUtil.getRetrofitAPI().openMatch(openMatchDTO).enqueue(new Callback<OpenMatchDTO>() {
             @Override
@@ -287,15 +293,6 @@ public class OpenMatchOpenFrag extends Fragment {
             }
         });
 
-    }
-
-    private LocalDateTime nowTime(){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            return LocalDateTime.now(Clock.systemDefaultZone());
-        }
-        //오레오 미만 기기에서는 지원하지 않는 다고 함.
-        //나중에 추가 필요
-        return null;
     }
 
 
