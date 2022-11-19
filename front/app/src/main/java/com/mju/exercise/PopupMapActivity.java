@@ -3,10 +3,8 @@ package com.mju.exercise;
 import android.graphics.PointF;
 import android.os.Bundle;
 import android.view.MotionEvent;
-import android.view.Window;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.naver.maps.geometry.LatLng;
@@ -28,8 +26,7 @@ public class PopupMapActivity extends AppCompatActivity implements NaverMap.OnMa
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.popup_map);
+        setContentView(R.layout.activity_select_map);
 
         //네이버 지도
         mapView = (MapView) findViewById(R.id.popupMap);
@@ -45,8 +42,40 @@ public class PopupMapActivity extends AppCompatActivity implements NaverMap.OnMa
         naverMap.setLocationSource(locationSource);
         UiSettings uiSettings = naverMap.getUiSettings();
         uiSettings.setLocationButtonEnabled(true);
-        naverMap.setOnMapClickListener(this);
+    }
 
+    @Override
+    public void onStart()
+    {
+        super.onStart();
+        mapView.onStart();
+    }
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+        mapView.onResume();
+    }
+
+    @Override
+    public void onPause()
+    {
+        super.onPause();
+        mapView.onPause();
+    }
+
+    @Override
+    public void onStop()
+    {
+        super.onStop();
+        mapView.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mapView.onDestroy();
     }
 
 
@@ -73,6 +102,22 @@ public class PopupMapActivity extends AppCompatActivity implements NaverMap.OnMa
     @Override
     public void onMapClick(@NonNull PointF pointF, @NonNull LatLng latLng) {
 
+    }
+
+
+
+    @Override
+    public void onSaveInstanceState(Bundle outState)
+    {
+        super.onSaveInstanceState(outState);
+        mapView.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onLowMemory()
+    {
+        super.onLowMemory();
+        mapView.onLowMemory();
     }
 
 

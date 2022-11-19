@@ -11,11 +11,8 @@ import android.widget.Button;
 import android.widget.NumberPicker;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.chip.ChipGroup;
@@ -31,7 +28,7 @@ import java.time.LocalDateTime;
 
 public class OpenMatchOpenFrag extends Fragment {
 
-    Button btnCreate, btnDatePickOpen, btnPersonnelPickOpen;
+    Button btnCreate, btnDatePickOpen, btnPersonnelPickOpen, btnMapPickOpen;
     TextInputEditText edtSubject, edtArticle;
     PreferenceUtil preferenceUtil;
 
@@ -41,11 +38,12 @@ public class OpenMatchOpenFrag extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.bottomsheet_open_match_create, container, false);
+        View view = inflater.inflate(R.layout.fragment_open_match_open, container, false);
 
         btnCreate = view.findViewById(R.id.btnCreate);
         btnDatePickOpen = view.findViewById(R.id.btnDatePickOpen);
         btnPersonnelPickOpen = view.findViewById(R.id.btnPersonnelPickOpen);
+        btnMapPickOpen = view.findViewById(R.id.btnMapPickOpen);
 
 
         edtSubject = view.findViewById(R.id.edtSubject);
@@ -53,8 +51,10 @@ public class OpenMatchOpenFrag extends Fragment {
 
 
         btnCreate.setOnClickListener(setOnClickListener);
+
         btnDatePickOpen.setOnClickListener(setOnClickListener);
         btnPersonnelPickOpen.setOnClickListener(setOnClickListener);
+        btnMapPickOpen.setOnClickListener(setOnClickListener);
 
         preferenceUtil = PreferenceUtil.getInstance(getContext());
 

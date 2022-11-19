@@ -75,8 +75,6 @@ public class OpenMatchListFrag extends Fragment {
         loadOpenMatchesSportType(sportTypeToString(mSportType));
 
         View view = inflater.inflate(R.layout.fragment_open_match_list, container, false);
-        TextView textView = view.findViewById(R.id.tvSelectedSportType);
-        textView.setText(sportTypeToString(mSportType));
 
         customListView = (ListView) view.findViewById(R.id.listViewOpenMatchList);
 

@@ -1,7 +1,14 @@
 package com.mju.exercise.Profile;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -13,12 +20,14 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import com.bumptech.glide.Glide;
 import com.mju.exercise.Domain.ApiResponseDTO;
@@ -29,8 +38,11 @@ import com.mju.exercise.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 import okhttp3.MediaType;
@@ -42,7 +54,8 @@ import retrofit2.Response;
 
 public class EditProfileActivity extends AppCompatActivity {
 
-    Button btnEnter;
+    Button btnEnter, btnRegionLoad;
+    TextView tvRegion;
     ImageView imgProfile;
     EditText edtNickname, edtProfileMsg;
     Spinner ddo, si, gu;
@@ -61,21 +74,49 @@ public class EditProfileActivity extends AppCompatActivity {
     private boolean[] favDays = new boolean[7];
     private boolean[] favSports = new boolean[6];
 
+    ProfileDTO profileDTO;
+
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
 
         init();
+
+        //넘어온 인텐트가 있으면 해당 내용으로 수정란 채워놓음
+        Intent intent = getIntent();
+        if(intent != null){
+            profileDTO = (ProfileDTO) intent.getSerializableExtra("profile");
+            loadBeforeProfile();
+        }
     }
 
-    public void init(){
+    //수정전 기존 프로필 내용으로 반영
+    public void loadBeforeProfile(){
+        edtNickname.setText(profileDTO.getNickname());
+        tvRegion.setText(profileDTO.getRegion());
+
+        String path = profileDTO.getImage();
+        String url = retrofitUtil.getBASE_URL_NONE_SLASH() + path;
+        Log.d("이미지로드", url);
+        if(path != null && !path.equals("")){
+            Glide.with(this).load(url).into(imgProfile);
+        }
+        edtProfileMsg.setText(profileDTO.getIntroduce());
+    }
+
+    public void init() {
         preferenceUtil = PreferenceUtil.getInstance(getApplicationContext());
         retrofitUtil = RetrofitUtil.getInstance();
         retrofitUtil.setToken(preferenceUtil.getString("accessToken"));
 
         btnEnter = (Button) findViewById(R.id.btnEnter);
         btnEnter.setOnClickListener(onClickListener);
+        btnRegionLoad = (Button) findViewById(R.id.btnRegionLoad);
+        btnRegionLoad.setOnClickListener(onClickListener);
+
+        tvRegion = (TextView) findViewById(R.id.tvRegion);
 
         imgProfile = (ImageView) findViewById(R.id.imgProfile);
         imgProfile.setOnClickListener(onClickListener);
@@ -115,18 +156,19 @@ public class EditProfileActivity extends AppCompatActivity {
         chkFavCycle.setOnCheckedChangeListener(onCheckedChangeListener);
 
         activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
-            if(result.getResultCode() == RESULT_OK && result.getData().getData() != null){
+            if (result.getResultCode() == RESULT_OK && result.getData().getData() != null) {
                 imgUri = result.getData().getData();
                 Glide.with(this).load(imgUri).into(imgProfile);
-            }else{
+            } else {
 
             }
         });
 
     }
 
+
     //프로필 내용 전송
-    private void sendProfileData(ProfileDTO profileDTO){
+    private void sendProfileData(ProfileDTO profileDTO) {
         //선호 요일, 종목 값 체크한대로 반영해서 전송
         profileDTO.setFavMon(favDays[0]);
         profileDTO.setFavTue(favDays[1]);
@@ -148,15 +190,15 @@ public class EditProfileActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Boolean> call, Response<Boolean> response) {
                 Log.d("프로필", "onResponse");
-                if(response.isSuccessful()){
-                    if(response.body()){
+                if (response.isSuccessful()) {
+                    if (response.body()) {
                         Log.d("프로필", "응답 true");
                         Toast.makeText(getApplicationContext(), "프로필 업데이트 완료", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(getApplicationContext(), UserInfoActivity.class);
                         startActivity(intent);
                         finish();
 
-                    }else {
+                    } else {
                         Log.d("프로필", "응답 false");
                         Toast.makeText(getApplicationContext(), "프로필 업데이트 실패!!!!", Toast.LENGTH_SHORT).show();
                     }
@@ -175,7 +217,7 @@ public class EditProfileActivity extends AppCompatActivity {
     private View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            if(view == btnEnter) {
+            if (view == btnEnter) {
                 retrofitUtil.setToken(preferenceUtil.getString("accessToken"));
                 Log.d("프로필", preferenceUtil.getString("accessToken"));
                 //여기서 서버로 요청
@@ -187,14 +229,14 @@ public class EditProfileActivity extends AppCompatActivity {
 
 
                 //이미지가 있으면 이미지 전송
-                if(imgUri != null){
+                if (imgUri != null) {
                     RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), getRealFile(imgUri));
                     MultipartBody.Part body = MultipartBody.Part.createFormData("image", "image.jpg", requestFile);
 
                     retrofitUtil.getRetrofitAPI().uploadImg(body).enqueue(new Callback<ApiResponseDTO>() {
                         @Override
                         public void onResponse(Call<ApiResponseDTO> call, Response<ApiResponseDTO> response) {
-                            if(response.isSuccessful()){
+                            if (response.isSuccessful()) {
                                 JSONObject resultBody = new JSONObject((Map) response.body().getResult());
                                 try {
                                     Log.d("이미지", resultBody.getString("image"));
@@ -214,21 +256,26 @@ public class EditProfileActivity extends AppCompatActivity {
                     });
 
                     //이미지 없을때
-                }else{
+                } else {
                     sendProfileData(profileDTO);
                 }
 
 
-            //이미지 클릭했을때는 사진첩 열리면서 이미지 선택 가능하도록
-            }else if(view == imgProfile){
+                //이미지 클릭했을때는 사진첩 열리면서 이미지 선택 가능하도록
+            } else if (view == imgProfile) {
                 Intent intent = new Intent(Intent.ACTION_PICK);
                 intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
 
                 activityResultLauncher.launch(intent);
 
+
+                //위치 정보 가져오기
+            } else if (view == btnRegionLoad) {
+
             }
         }
     };
+
 
     private CompoundButton.OnCheckedChangeListener onCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {
         @Override
