@@ -12,6 +12,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.mju.exercise.ChatActivity;
 import com.mju.exercise.R;
 
 public class OpenMatchActivity extends AppCompatActivity {
@@ -66,10 +67,15 @@ public class OpenMatchActivity extends AppCompatActivity {
                 }
 
                 case R.id.open_match_create:
-                    OpenMatchCreate openMatchCreate = new OpenMatchCreate();
-                    openMatchCreate.show(getSupportFragmentManager(), "create");
+//                    OpenMatchCreate openMatchCreate = new OpenMatchCreate();
+//                    openMatchCreate.show(getSupportFragmentManager(), "create");
+
+                    fragmentTransaction.replace(R.id.host_fragment, new OpenMatchOpenFrag())
+                            .commit();
                     return true;
                 case R.id.chat_list:
+                    Intent intent = new Intent(OpenMatchActivity.this, ChatActivity.class);
+                    startActivity(intent);
                     return true;
 
             }
