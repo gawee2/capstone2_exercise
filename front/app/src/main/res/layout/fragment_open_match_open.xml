@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:layout_margin="20dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -59,31 +60,100 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
-            <Button
-                android:id="@+id/btnPersonnelPickOpen"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="인원 선택"
-                style="?attr/materialButtonOutlinedStyle"
-                />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+                <TextView
+                    android:gravity="center_vertical"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:text="인원"
+                    android:id="@+id/tvPersonnel"
+                    />
+                <Button
+                    android:layout_weight="1"
+                    android:id="@+id/btnPersonnelPickOpen"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="인원 선택"
+                    style="?attr/materialButtonOutlinedStyle"
+                    />
 
-            <Button
-                android:id="@+id/btnDatePickOpen"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="날짜 선택"
-                style="?attr/materialButtonOutlinedStyle"
-                />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+                <TextView
+                    android:gravity="center_vertical"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:text="날짜"
+                    android:id="@+id/tvDay"
+                    />
+                <Button
+                    android:layout_weight="1"
+                    android:id="@+id/btnDatePickOpen"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="날짜 선택"
+                    style="?attr/materialButtonOutlinedStyle"
+                    />
 
-            <Button
-                android:id="@+id/btnMapPickOpen"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="장소 선택"
-                style="?attr/materialButtonOutlinedStyle"
-                />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+                <TextView
+                    android:gravity="center_vertical"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:text="시간"
+                    android:id="@+id/tvTime"
+                    />
+                <Button
+                    android:layout_weight="1"
+                    android:id="@+id/btnTimePickOpen"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="시간 선택"
+                    style="?attr/materialButtonOutlinedStyle"
+                    />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+                <TextView
+                    android:gravity="center_vertical"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2"
+                    android:text="장소"
+                    android:id="@+id/tvRegion"
+                    />
+                <Button
+                    android:layout_weight="1"
+                    android:id="@+id/btnMapPickOpen"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="장소 선택"
+                    style="?attr/materialButtonOutlinedStyle"
+                    />
+
+            </LinearLayout>
         </LinearLayout>
 
     </LinearLayout>
