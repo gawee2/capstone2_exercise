@@ -36,6 +36,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.CancellationTokenSource;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.chip.ChipGroup;
 import com.mju.exercise.Domain.ApiResponseDTO;
 import com.mju.exercise.Domain.ProfileDTO;
 import com.mju.exercise.HttpRequest.RetrofitUtil;
@@ -64,7 +65,7 @@ public class EditProfileActivity extends AppCompatActivity {
     TextView tvRegion;
     ImageView imgProfile;
     EditText edtNickname, edtProfileMsg;
-    CheckBox chkFavMon, chkFavTue, chkFavWed, chkFavThu, chkFavFri, chkFavSat, chkFavSun;
+    ChipGroup chipGroupFavDay, chipGroupFavSport;
     CheckBox chkFavSoccer, chkFavFutsal, chkFavBaseball, chkFavBasketball, chkFavBadminton, chkFavCycle;
 
     //이미지 업로드 위해서 액티비티 결과값 체크
@@ -135,13 +136,8 @@ public class EditProfileActivity extends AppCompatActivity {
         edtNickname = (EditText) findViewById(R.id.txtNickname);
         edtProfileMsg = (EditText) findViewById(R.id.txtProfileMsg);
 
-        chkFavMon = (CheckBox) findViewById(R.id.chkFavMon);
-        chkFavTue = (CheckBox) findViewById(R.id.chkFavTue);
-        chkFavWed = (CheckBox) findViewById(R.id.chkFavWed);
-        chkFavThu = (CheckBox) findViewById(R.id.chkFavThu);
-        chkFavFri = (CheckBox) findViewById(R.id.chkFavFri);
-        chkFavSat = (CheckBox) findViewById(R.id.chkFavSat);
-        chkFavSun = (CheckBox) findViewById(R.id.chkFavSun);
+        chipGroupFavDay = (ChipGroup) findViewById(R.id.chipGroupFavDay);
+
 
         chkFavSoccer = (CheckBox) findViewById(R.id.chkFavSoccer);
         chkFavFutsal = (CheckBox) findViewById(R.id.chkFavFutsal);
@@ -149,15 +145,6 @@ public class EditProfileActivity extends AppCompatActivity {
         chkFavBasketball = (CheckBox) findViewById(R.id.chkFavBasketball);
         chkFavBadminton = (CheckBox) findViewById(R.id.chkFavBadminton);
         chkFavCycle = (CheckBox) findViewById(R.id.chkFavCycle);
-
-
-        chkFavMon.setOnCheckedChangeListener(onCheckedChangeListener);
-        chkFavTue.setOnCheckedChangeListener(onCheckedChangeListener);
-        chkFavWed.setOnCheckedChangeListener(onCheckedChangeListener);
-        chkFavThu.setOnCheckedChangeListener(onCheckedChangeListener);
-        chkFavFri.setOnCheckedChangeListener(onCheckedChangeListener);
-        chkFavSat.setOnCheckedChangeListener(onCheckedChangeListener);
-        chkFavSun.setOnCheckedChangeListener(onCheckedChangeListener);
 
         chkFavSoccer.setOnCheckedChangeListener(onCheckedChangeListener);
         chkFavFutsal.setOnCheckedChangeListener(onCheckedChangeListener);
@@ -331,6 +318,18 @@ public class EditProfileActivity extends AppCompatActivity {
             }
         }
     };
+
+//    //칩그룹 리스너
+//    private ChipGroup.OnCheckedStateChangeListener setOnCheckedStateChangeListener = new ChipGroup.OnCheckedStateChangeListener() {
+//        @Override
+//        public void onCheckedChanged(@NonNull ChipGroup group, @NonNull List<Integer> checkedIds) {
+//            int chk = group.getCheckedChipId();
+//            String tmp = sportTypeByChip(chk);
+//            if(tmp != null){
+//                sportType = tmp;
+//            }
+//        }
+//    };
 
 
     private CompoundButton.OnCheckedChangeListener onCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {

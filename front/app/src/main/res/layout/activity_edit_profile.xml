@@ -67,58 +67,64 @@
 
                 <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="운동 선호 요일"
                     android:textColor="@color/black" />
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="9"
+                    android:layout_height="wrap_content"
                     android:orientation="horizontal">
-                    <CheckBox
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/chkFavMon"
-                        android:text="월요일"
-                        />
-                    <CheckBox
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/chkFavTue"
-                        android:text="화요일"
-                        />
-                    <CheckBox
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/chkFavWed"
-                        android:text="수요일"
-                        />
-                    <CheckBox
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/chkFavThu"
-                        android:text="목요일"
-                        />
-                    <CheckBox
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/chkFavFri"
-                        android:text="금요일"
-                        />
-                    <CheckBox
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/chkFavSat"
-                        android:text="토요일"
-                        />
-                    <CheckBox
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/chkFavSun"
-                        android:text="일요일"
-                        />
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/chipGroupFavDay"
+                        >
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chkFavMon"
+                            style="@style/Widget.MaterialComponents.Chip.Choice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="월요일"/>
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chkFavTue"
+                            style="@style/Widget.MaterialComponents.Chip.Choice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="화요일"/>
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chkFavWed"
+                            style="@style/Widget.MaterialComponents.Chip.Choice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="수요일"/>
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chkFavThu"
+                            style="@style/Widget.MaterialComponents.Chip.Choice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="목요일"/>
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chkFavFri"
+                            style="@style/Widget.MaterialComponents.Chip.Choice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="금요일"/>
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chkFavSat"
+                            style="@style/Widget.MaterialComponents.Chip.Choice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="토요일"/>
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chkFavSun"
+                            style="@style/Widget.MaterialComponents.Chip.Choice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="일요일"/>
+
+                    </com.google.android.material.chip.ChipGroup>
                 </LinearLayout>
             </LinearLayout>
 
@@ -130,15 +136,13 @@
 
                 <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="선호 종목"
                     android:textColor="@color/black" />
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="9"
+                    android:layout_height="wrap_content"
                     android:orientation="horizontal">
                     <CheckBox
                         android:layout_width="wrap_content"
@@ -209,7 +213,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1">
-
 
                 <EditText
                     android:id="@+id/txtProfileMsg"
