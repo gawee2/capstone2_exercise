@@ -47,6 +47,8 @@
         <activity android:name=".MapActivity" />
         <activity android:name=".ChatActivity" />
         <activity android:name=".OpenMatch.OpenMatchActivity" />
+        <activity android:name=".PopupMapActivity"
+            android:theme="@android:style/Theme.Dialog"/>
 
 
     </application>

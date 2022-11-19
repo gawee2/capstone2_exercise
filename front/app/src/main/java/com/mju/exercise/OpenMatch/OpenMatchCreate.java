@@ -1,8 +1,12 @@
 package com.mju.exercise.OpenMatch;
 
+import static android.app.Activity.RESULT_OK;
+
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
@@ -11,15 +15,26 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.NumberPicker;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.google.android.material.chip.ChipGroup;
+import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.textfield.TextInputEditText;
+import com.mju.exercise.ChatActivity;
+import com.mju.exercise.Domain.OpenMatchDTO;
+import com.mju.exercise.MainActivity;
+import com.mju.exercise.PopupMapActivity;
+import com.mju.exercise.Preference.PreferenceUtil;
 import com.mju.exercise.R;
 
 import java.time.Clock;
@@ -27,8 +42,13 @@ import java.time.LocalDateTime;
 
 public class OpenMatchCreate extends BottomSheetDialogFragment {
 
-    Button btnCreate, btnClose;
+    Button btnCreate, btnDatePickOpen, btnPersonnelPickOpen;
     TextInputEditText edtSubject, edtArticle;
+    PreferenceUtil preferenceUtil;
+
+    ChipGroup chipGroup;
+
+    ActivityResultLauncher<Intent> activityResultLauncher;
 
     @Nullable
     @Override
@@ -36,12 +56,30 @@ public class OpenMatchCreate extends BottomSheetDialogFragment {
         View view = inflater.inflate(R.layout.bottomsheet_open_match_create, container, false);
 
         btnCreate = view.findViewById(R.id.btnCreate);
-        btnClose = view.findViewById(R.id.btnClose);
+        btnDatePickOpen = view.findViewById(R.id.btnDatePickOpen);
+        btnPersonnelPickOpen = view.findViewById(R.id.btnPersonnelPickOpen);
+
+
         edtSubject = view.findViewById(R.id.edtSubject);
         edtArticle = view.findViewById(R.id.edtArticle);
 
+
         btnCreate.setOnClickListener(setOnClickListener);
-        btnClose.setOnClickListener(setOnClickListener);
+        btnDatePickOpen.setOnClickListener(setOnClickListener);
+        btnPersonnelPickOpen.setOnClickListener(setOnClickListener);
+
+        preferenceUtil = PreferenceUtil.getInstance(getContext());
+
+        //작업중, 현재 단말기 없어서 테스트는 못함
+        chipGroup = view.findViewById(R.id.chipGroup);
+
+        activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+            if(result.getResultCode() == RESULT_OK && result.getData().getData() != null){
+
+            }else{
+
+            }
+        });
 
 
         return view;
@@ -60,8 +98,33 @@ public class OpenMatchCreate extends BottomSheetDialogFragment {
                     Toast.makeText(getContext(), "오픈매치 생성 완료", Toast.LENGTH_SHORT).show();
                     break;
 
-                case R.id.btnClose:
-                    dismiss();
+
+                case R.id.btnMapPickOpen:
+                    Intent intent = new Intent(getContext(), PopupMapActivity.class);
+//                    activityResultLauncher.launch(intent);
+                    startActivity(intent);
+                    break;
+
+                case R.id.btnDatePickOpen:
+                    MaterialDatePicker materialDatePicker;
+                    materialDatePicker = MaterialDatePicker.Builder.datePicker()
+                            .setTitleText("경기 날짜를 선택")
+                            .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+                            .build();
+
+                    materialDatePicker.show(getParentFragmentManager(), "date");
+
+                    break;
+
+                case R.id.btnPersonnelPickOpen:
+                    View dialogview = getLayoutInflater().inflate(R.layout.dialog_num_select, null);
+                    NumberPicker numberPicker = dialogview.findViewById(R.id.numberPicker);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    builder.setView(dialogview);
+
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
+
                     break;
             }
         }
@@ -69,8 +132,20 @@ public class OpenMatchCreate extends BottomSheetDialogFragment {
 
     private boolean createOpenMatch(){
 
-        edtSubject.getText().toString();
-        edtArticle.getText().toString();
+        OpenMatchDTO openMatchDTO = new OpenMatchDTO();
+
+        openMatchDTO.setSubject(edtSubject.getText().toString());
+        openMatchDTO.setArticle(edtArticle.getText().toString());
+        openMatchDTO.setOpenTime(nowTime());
+        openMatchDTO.setOpenUserId(preferenceUtil.getString("userId"));
+
+        Integer personnel;
+
+        String sportType;
+        LocalDateTime playDateTime;
+        Double lat;
+        Double lng;
+
 
         return false;
     }

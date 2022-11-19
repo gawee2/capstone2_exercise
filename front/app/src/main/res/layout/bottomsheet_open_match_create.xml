@@ -7,7 +7,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="5"
         android:orientation="vertical"
         >
         <com.google.android.material.textfield.TextInputLayout
@@ -33,28 +34,73 @@
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chipGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!-- Chips can be declared here, or added dynamically. -->
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipSoccer"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="축구"/>
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipBaseball"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="야구"/>
+
+
+        </com.google.android.material.chip.ChipGroup>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnPersonnelPickOpen"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="인원 선택"
+                style="?attr/materialButtonOutlinedStyle"
+                />
+
+            <Button
+                android:id="@+id/btnDatePickOpen"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="날짜 선택"
+                style="?attr/materialButtonOutlinedStyle"
+                />
+
+            <Button
+                android:id="@+id/btnMapPickOpen"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="장소 선택"
+                style="?attr/materialButtonOutlinedStyle"
+                />
+        </LinearLayout>
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/btnClose"
-            style="?attr/materialButtonOutlinedStyle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="닫기" />
 
         <Button
             android:id="@+id/btnCreate"
             style="@style/Widget.Material3.Button.ElevatedButton"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="생성" />
+            android:textSize="15dp"
+            android:text="생성하기" />
     </LinearLayout>
 
 </LinearLayout>
