@@ -65,4 +65,10 @@ public interface RetrofitAPI {
     @GET("/api/match/openMatchList")
     Call<List<OpenMatchDTO>> loadOpenMatchesAll();
 
+
+    //오픈매치 생성
+    @Headers("Content-Type: application/json")
+    @POST("/api/match/openMatch")
+    Call<OpenMatchDTO> openMatch(@Body OpenMatchDTO openMatchDTO);
+
 }

@@ -67,8 +67,6 @@ public class OpenMatchActivity extends AppCompatActivity {
                 }
 
                 case R.id.open_match_create:
-//                    OpenMatchCreate openMatchCreate = new OpenMatchCreate();
-//                    openMatchCreate.show(getSupportFragmentManager(), "create");
 
                     fragmentTransaction.replace(R.id.host_fragment, new OpenMatchOpenFrag())
                             .commit();

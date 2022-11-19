@@ -64,7 +64,6 @@ public class EditProfileActivity extends AppCompatActivity {
     TextView tvRegion;
     ImageView imgProfile;
     EditText edtNickname, edtProfileMsg;
-    Spinner ddo, si, gu;
     CheckBox chkFavMon, chkFavTue, chkFavWed, chkFavThu, chkFavFri, chkFavSat, chkFavSun;
     CheckBox chkFavSoccer, chkFavFutsal, chkFavBaseball, chkFavBasketball, chkFavBadminton, chkFavCycle;
 
