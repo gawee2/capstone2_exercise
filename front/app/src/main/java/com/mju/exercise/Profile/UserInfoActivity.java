@@ -35,7 +35,7 @@ public class UserInfoActivity extends AppCompatActivity {
     private PreferenceUtil preferenceUtil;
     private RetrofitUtil retrofitUtil;
 
-    private ProfileDTO profileDTO;
+    private ProfileDTO beforeProfile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,7 +117,7 @@ public class UserInfoActivity extends AppCompatActivity {
 
     private void reflectProfile(ProfileDTO profileDTO){
         //현재 프로필 정보 저장, 수정화면으로 넘어갈때 넘겨주려고
-        this.profileDTO = profileDTO;
+        beforeProfile = profileDTO;
 
         mTxtUserName.setText(profileDTO.getNickname());
         mTxtProfileMsg.setText(profileDTO.getIntroduce());
@@ -178,8 +178,8 @@ public class UserInfoActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), EditProfileActivity.class);
 
                 //로드된 프로필이 있으면 담아서 전달
-                if(profileDTO != null){
-                    intent.putExtra("profile", profileDTO);
+                if(beforeProfile != null){
+                    intent.putExtra("profile", beforeProfile);
                 }
                 startActivity(intent);
                 finish();

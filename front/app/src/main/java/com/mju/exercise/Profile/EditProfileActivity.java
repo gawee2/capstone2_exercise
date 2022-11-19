@@ -25,11 +25,17 @@ import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.CancellationTokenSource;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.mju.exercise.Domain.ApiResponseDTO;
 import com.mju.exercise.Domain.ProfileDTO;
 import com.mju.exercise.HttpRequest.RetrofitUtil;
@@ -74,8 +80,11 @@ public class EditProfileActivity extends AppCompatActivity {
     private boolean[] favDays = new boolean[7];
     private boolean[] favSports = new boolean[6];
 
-    ProfileDTO profileDTO;
+    private ProfileDTO beforeProfile;
 
+    //gps
+    private FusedLocationProviderClient fusedLocationProviderClient;
+    private final CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -87,26 +96,29 @@ public class EditProfileActivity extends AppCompatActivity {
         //넘어온 인텐트가 있으면 해당 내용으로 수정란 채워놓음
         Intent intent = getIntent();
         if(intent != null){
-            profileDTO = (ProfileDTO) intent.getSerializableExtra("profile");
+            beforeProfile = (ProfileDTO) intent.getSerializableExtra("profile");
             loadBeforeProfile();
         }
     }
 
     //수정전 기존 프로필 내용으로 반영
     public void loadBeforeProfile(){
-        edtNickname.setText(profileDTO.getNickname());
-        tvRegion.setText(profileDTO.getRegion());
+        edtNickname.setText(beforeProfile.getNickname());
+        tvRegion.setText(beforeProfile.getRegion());
 
-        String path = profileDTO.getImage();
+        String path = beforeProfile.getImage();
         String url = retrofitUtil.getBASE_URL_NONE_SLASH() + path;
         Log.d("이미지로드", url);
         if(path != null && !path.equals("")){
             Glide.with(this).load(url).into(imgProfile);
         }
-        edtProfileMsg.setText(profileDTO.getIntroduce());
+        edtProfileMsg.setText(beforeProfile.getIntroduce());
     }
 
     public void init() {
+        //gps
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+
         preferenceUtil = PreferenceUtil.getInstance(getApplicationContext());
         retrofitUtil = RetrofitUtil.getInstance();
         retrofitUtil.setToken(preferenceUtil.getString("accessToken"));
@@ -164,6 +176,51 @@ public class EditProfileActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    //현재 위치 가져오기
+    public void checkGPS () {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        Task<Location> currentLocationTask = fusedLocationProviderClient.getCurrentLocation(
+                100,
+                cancellationTokenSource.getToken()
+        );
+        currentLocationTask.addOnCompleteListener(new OnCompleteListener<Location>() {
+            @Override
+            public void onComplete(@NonNull Task<Location> task) {
+                if (task.isSuccessful()) {
+                    Location location = task.getResult();
+
+                    try{
+                        Log.d("지오코더", geocoderToStr(location));
+                        tvRegion.setText(geocoderToStr(location));
+
+                    }catch (IOException e){
+                        Toast.makeText(getApplicationContext(), "지역정보 조회 실패", Toast.LENGTH_SHORT).show();
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+        });
+    }
+
+    private String geocoderToStr(Location location) throws IOException {
+        Geocoder geocoder = new Geocoder(getApplicationContext());
+        List<Address> addressList = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(),
+                1);
+        Address address = addressList.get(0);
+
+        return address.getAdminArea() + " " + address.getLocality() + " " + address.getThoroughfare();
     }
 
 
@@ -226,7 +283,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 profileDTO.setUserID(preferenceUtil.getString("userId"));
                 profileDTO.setNickname(edtNickname.getText().toString());
                 profileDTO.setIntroduce(edtProfileMsg.getText().toString());
-
+                profileDTO.setRegion(tvRegion.getText().toString());
 
                 //이미지가 있으면 이미지 전송
                 if (imgUri != null) {
@@ -271,7 +328,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
                 //위치 정보 가져오기
             } else if (view == btnRegionLoad) {
-
+                checkGPS();
             }
         }
     };

@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.NumberPicker;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -17,20 +18,25 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.datepicker.MaterialDatePicker;
+import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.textfield.TextInputEditText;
 import com.mju.exercise.Domain.OpenMatchDTO;
 import com.mju.exercise.PopupMapActivity;
 import com.mju.exercise.Preference.PreferenceUtil;
 import com.mju.exercise.R;
 
+import java.text.SimpleDateFormat;
 import java.time.Clock;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 public class OpenMatchOpenFrag extends Fragment {
 
     Button btnCreate, btnDatePickOpen, btnPersonnelPickOpen, btnMapPickOpen;
     TextInputEditText edtSubject, edtArticle;
     PreferenceUtil preferenceUtil;
+
+    TextView tvPersonnel, tvDay;
 
     ChipGroup chipGroup;
 
@@ -44,6 +50,9 @@ public class OpenMatchOpenFrag extends Fragment {
         btnDatePickOpen = view.findViewById(R.id.btnDatePickOpen);
         btnPersonnelPickOpen = view.findViewById(R.id.btnPersonnelPickOpen);
         btnMapPickOpen = view.findViewById(R.id.btnMapPickOpen);
+
+        tvDay = view.findViewById(R.id.tvDay);
+        tvPersonnel = view.findViewById(R.id.tvPersonnel);
 
 
         edtSubject = view.findViewById(R.id.edtSubject);
@@ -93,17 +102,29 @@ public class OpenMatchOpenFrag extends Fragment {
                             .setTitleText("경기 날짜를 선택")
                             .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
                             .build();
+                    materialDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener<Long>() {
+                        @Override
+                        public void onPositiveButtonClick(Long selection) {
+                            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy년 MM월 dd일");
+                            Date date = new Date();
+                            date.setTime(selection);
+
+                            String dateString = simpleDateFormat.format(date);
+
+                            tvDay.setText(dateString);
+                        }
+                    });
 
                     materialDatePicker.show(getChildFragmentManager(), "date");
 
                     break;
 
                 case R.id.btnPersonnelPickOpen:
-                    final NumberPicker numberPicker = new NumberPicker(getActivity());
+                    NumberPicker numberPicker = new NumberPicker(getContext());
                     numberPicker.setMinValue(1);
                     numberPicker.setMinValue(50);
 
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
                     builder.setTitle("인원선택");
                     builder.setView(numberPicker);
