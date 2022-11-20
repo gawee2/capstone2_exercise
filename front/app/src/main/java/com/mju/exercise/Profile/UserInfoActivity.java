@@ -86,9 +86,11 @@ public class UserInfoActivity extends AppCompatActivity {
         chipGroupFavDay = (ChipGroup) findViewById(R.id.chipGroupFavDay);
         chipGroupFavSport = (ChipGroup) findViewById(R.id.chipGroupFavSport);
 
+        //다른 사람의 프로필도 볼 수 있도록 하기 위하여 인텐트에 유저 아이디를 담어서 넘기도록 함
+        Intent intent = getIntent();
+        String userId = intent.getStringExtra("userId");
 
-        //우선 값 넘기는거 테스트
-        loadProfile(preferenceUtil.getString("userId"));
+        loadProfile(userId);
     }
 
 

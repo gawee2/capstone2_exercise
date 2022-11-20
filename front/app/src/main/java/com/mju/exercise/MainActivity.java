@@ -109,23 +109,14 @@ public class MainActivity extends AppCompatActivity {
     private View.OnClickListener setOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-//            if (v == btnLoginOrUserInfo) {
-//
-//                if (isLogined) {
-//                    //마이페이지 이동
-//                    startActivity(new Intent(mContext, UserInfoActivity.class));
-//                } else {
-//                    //로그인창으로 이동
-//                    Intent intent = new Intent(getApplicationContext(), SignInActivity.class);
-//                    startActivity(intent);
-//                }
-//            }
 
             switch (v.getId()){
                 case R.id.btnLoginOrUserInfo:
                     if (isLogined) {
                         //마이페이지 이동
-                        startActivity(new Intent(mContext, UserInfoActivity.class));
+                        Intent intent = new Intent(getApplicationContext(), UserInfoActivity.class);
+                        intent.putExtra("userId", preferenceUtil.getString("userId"));
+                        startActivity(intent);
                     } else {
                         //로그인창으로 이동
                         Intent intent = new Intent(getApplicationContext(), SignInActivity.class);
