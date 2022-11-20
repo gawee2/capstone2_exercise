@@ -13,6 +13,8 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mju.exercise.Domain.ProfileDTO;
@@ -37,6 +39,8 @@ public class UserInfoActivity extends AppCompatActivity {
 
     private ProfileDTO beforeProfile;
 
+    ChipGroup chipGroupFavDay, chipGroupFavSport;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +59,8 @@ public class UserInfoActivity extends AppCompatActivity {
     private void init() {
         //프로필 사진
         mImgProfile = (ImageView) findViewById(R.id.imgProfile);
+        mImgProfile.setOnClickListener(setOnClickListener);
+
         //사용자 이름
         mTxtUserName = (TextView) findViewById(R.id.txtUserName);
         //지역
@@ -75,6 +81,11 @@ public class UserInfoActivity extends AppCompatActivity {
 
         preferenceUtil = PreferenceUtil.getInstance(getApplicationContext());
         retrofitUtil = RetrofitUtil.getInstance();
+
+        //선호 요일, 선호 종목. 서버에서 가져온 데이터로 동적 추가
+        chipGroupFavDay = (ChipGroup) findViewById(R.id.chipGroupFavDay);
+        chipGroupFavSport = (ChipGroup) findViewById(R.id.chipGroupFavSport);
+
 
         //우선 값 넘기는거 테스트
         loadProfile(preferenceUtil.getString("userId"));
@@ -115,6 +126,7 @@ public class UserInfoActivity extends AppCompatActivity {
         }
     }
 
+    //프로필 화면에 띄우기, 서버에서 가져온것 반영
     private void reflectProfile(ProfileDTO profileDTO){
         //현재 프로필 정보 저장, 수정화면으로 넘어갈때 넘겨주려고
         beforeProfile = profileDTO;
@@ -128,43 +140,48 @@ public class UserInfoActivity extends AppCompatActivity {
                 profileDTO.isFavThu(), profileDTO.isFavFri(),
                 profileDTO.isFavSat(), profileDTO.isFavSun()
         };
-
-        mTxtFavoriteDay.setText("선호 요일: " + makeFavDayString(favDay));
-
         boolean[] favSport = new boolean[]{
                 profileDTO.isFavSoccer(), profileDTO.isFavFutsal(),
                 profileDTO.isFavBaseball(), profileDTO.isFavBasketball(),
                 profileDTO.isFavBadminton(), profileDTO.isFavCycle()
         };
 
-        mTxtFavoriteSport.setText("선호 종목: " + makeFavSportString(favSport));
+        makeFavSportChipGroup(favSport);
+        makeFavDayChipGroup(favDay);
+
     }
 
-    //선호 날짜 담겨있는 불린 배열 받아서 좋아하는 종목을 한 줄짜리 문자열로 변환
-    private String makeFavSportString(boolean[] favSportArray){
+    //칩 안에 넣을 스트링 전달후 칩 만들어서 리턴
+    private Chip makeChip(String chipText){
+        Chip chip = new Chip(this); // Must contain context in parameter
+        chip.setText(chipText);
+        chip.setCheckable(false);
+
+        return chip;
+    }
+
+    private void makeFavSportChipGroup(boolean[] favSportArray){
         String[] sports = {
                 "축구", "풋살", "야구", "농구", "배드민턴", "사이클"
         };
-        StringBuilder result = new StringBuilder();
-        for(int i=0; i<favSportArray.length; i++){
+        for(int i=0; i < favSportArray.length; i++){
             if(favSportArray[i]){
-                result.append(sports[i] + " ");
+                chipGroupFavSport.addView(makeChip(sports[i]));
             }
         }
-        return result.toString();
+
     }
-    //선호 종목 담겨있는 불린 배열 받아서 좋아하는 종목을 한 줄짜리 문자열로 변환
-    private String makeFavDayString(boolean[] favDayArray){
+    private void makeFavDayChipGroup(boolean[] favDayArray){
+
         String[] days = {
-                "월", "화", "수","목","금","토","일"
+                "월요일", "화요일", "수요일","목요일","금요일","토요일","일요일"
         };
-        StringBuilder result = new StringBuilder();
-        for(int i=0; i<favDayArray.length; i++){
+        for(int i=0; i < favDayArray.length; i++){
             if(favDayArray[i]){
-                result.append(days[i] + " ");
+                chipGroupFavDay.addView(makeChip(days[i]));
             }
         }
-        return result.toString();
+
     }
 
     /**
@@ -173,24 +190,34 @@ public class UserInfoActivity extends AppCompatActivity {
     private View.OnClickListener setOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            if (v == mbtnEditProfile) {
 
-                Intent intent = new Intent(getApplicationContext(), EditProfileActivity.class);
+            switch (v.getId()){
+                case R.id.btnEditProfile:
+                    Intent intent = new Intent(getApplicationContext(), EditProfileActivity.class);
 
-                //로드된 프로필이 있으면 담아서 전달
-                if(beforeProfile != null){
-                    intent.putExtra("profile", beforeProfile);
-                }
-                startActivity(intent);
-                finish();
+                    //로드된 프로필이 있으면 담아서 전달
+                    if(beforeProfile != null){
+                        intent.putExtra("profile", beforeProfile);
+                    }
+                    startActivity(intent);
+                    finish();
+                    break;
 
-            }else if (v == btnLogout){
-                //로그아웃하면 모든 값을 비움
-                preferenceUtil.setString("accessToken", "");
-                preferenceUtil.setString("refreshIdx", "");
-                preferenceUtil.setString("userId", "");
-                finish();
+                case R.id.btnLogout:
+                    //로그아웃하면 모든 값을 비움
+                    preferenceUtil.setString("accessToken", "");
+                    preferenceUtil.setString("refreshIdx", "");
+                    preferenceUtil.setString("userId", "");
+                    finish();
+                    break;
+
+                case R.id.imgProfile:
+
+
+                    break;
             }
+
+
         }
     };
 }

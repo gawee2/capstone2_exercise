@@ -49,6 +49,7 @@ import org.w3c.dom.Text;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -66,7 +67,6 @@ public class EditProfileActivity extends AppCompatActivity {
     ImageView imgProfile;
     EditText edtNickname, edtProfileMsg;
     ChipGroup chipGroupFavDay, chipGroupFavSport;
-    CheckBox chkFavSoccer, chkFavFutsal, chkFavBaseball, chkFavBasketball, chkFavBadminton, chkFavCycle;
 
     //이미지 업로드 위해서 액티비티 결과값 체크
     ActivityResultLauncher<Intent> activityResultLauncher;
@@ -79,6 +79,8 @@ public class EditProfileActivity extends AppCompatActivity {
     //선호하는 요일과 운동 체크용, 디비에 전송하기 전에 잠시 담아둠
     private boolean[] favDays = new boolean[7];
     private boolean[] favSports = new boolean[6];
+    List<Integer> checkedDays = new ArrayList<>();
+    List<Integer> checkedSports = new ArrayList<>();
 
     private ProfileDTO beforeProfile;
 
@@ -138,21 +140,9 @@ public class EditProfileActivity extends AppCompatActivity {
 
         chipGroupFavDay = (ChipGroup) findViewById(R.id.chipGroupFavDay);
         chipGroupFavDay.setOnCheckedStateChangeListener(setOnCheckedStateChangeListener);
+        chipGroupFavSport = (ChipGroup) findViewById(R.id.chipGroupFavSport);
+        chipGroupFavSport.setOnCheckedStateChangeListener(setOnCheckedStateChangeListener);
 
-
-        chkFavSoccer = (CheckBox) findViewById(R.id.chkFavSoccer);
-        chkFavFutsal = (CheckBox) findViewById(R.id.chkFavFutsal);
-        chkFavBaseball = (CheckBox) findViewById(R.id.chkFavBaseball);
-        chkFavBasketball = (CheckBox) findViewById(R.id.chkFavBasketball);
-        chkFavBadminton = (CheckBox) findViewById(R.id.chkFavBadminton);
-        chkFavCycle = (CheckBox) findViewById(R.id.chkFavCycle);
-
-        chkFavSoccer.setOnCheckedChangeListener(onCheckedChangeListener);
-        chkFavFutsal.setOnCheckedChangeListener(onCheckedChangeListener);
-        chkFavBaseball.setOnCheckedChangeListener(onCheckedChangeListener);
-        chkFavBasketball.setOnCheckedChangeListener(onCheckedChangeListener);
-        chkFavBadminton.setOnCheckedChangeListener(onCheckedChangeListener);
-        chkFavCycle.setOnCheckedChangeListener(onCheckedChangeListener);
 
         activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
             if (result.getResultCode() == RESULT_OK && result.getData().getData() != null) {
@@ -210,9 +200,67 @@ public class EditProfileActivity extends AppCompatActivity {
         return address.getAdminArea() + " " + address.getLocality() + " " + address.getThoroughfare();
     }
 
+    //서버로 프로필 전송전에 칩그룹 값을 가지고 선호 요일, 선호 종목 boolean배열 바꿈
+    private void favReflectAtArray(){
+
+        for(Integer i : checkedDays){
+            switch (i.intValue()){
+                case R.id.chkFavMon:
+                    favDays[0] = !favDays[0];
+                    break;
+                case R.id.chkFavTue:
+                    favDays[1] = !favDays[1];
+                    break;
+                case R.id.chkFavWed:
+                    favDays[2] = !favDays[2];
+                    break;
+                case R.id.chkFavThu:
+                    favDays[3] = !favDays[3];
+                    break;
+                case R.id.chkFavFri:
+                    favDays[4] = !favDays[4];
+                    break;
+                case R.id.chkFavSat:
+                    favDays[5] = !favDays[5];
+                    break;
+                case R.id.chkFavSun:
+                    favDays[6] = !favDays[6];
+                    break;
+            }
+        }
+
+        for(Integer i : checkedSports){
+            switch (i.intValue()){
+                case R.id.chkFavSoccer:
+                    favSports[0] = !favSports[0];
+                    break;
+                case R.id.chkFavFutsal:
+                    favSports[1] = !favSports[1];
+                    break;
+                case R.id.chkFavBaseball:
+                    favSports[2] = !favSports[2];
+                    break;
+                case R.id.chkFavBasketball:
+                    favSports[3] = !favSports[3];
+                    break;
+                case R.id.chkFavBadminton:
+                    favSports[4] = !favSports[4];
+                    break;
+                case R.id.chkFavCycle:
+                    favSports[5] = !favSports[5];
+                    break;
+            }
+        }
+
+    }
+
 
     //프로필 내용 전송
     private void sendProfileData(ProfileDTO profileDTO) {
+
+        //chekcDays와 checkSports의 값으로 favDays, favSoprt 배열 값 변경
+        favReflectAtArray();
+
         //선호 요일, 종목 값 체크한대로 반영해서 전송
         profileDTO.setFavMon(favDays[0]);
         profileDTO.setFavTue(favDays[1]);
@@ -324,60 +372,18 @@ public class EditProfileActivity extends AppCompatActivity {
     private ChipGroup.OnCheckedStateChangeListener setOnCheckedStateChangeListener = new ChipGroup.OnCheckedStateChangeListener() {
         @Override
         public void onCheckedChanged(@NonNull ChipGroup group, @NonNull List<Integer> checkedIds) {
-
-        }
-    };
-
-
-    private CompoundButton.OnCheckedChangeListener onCheckedChangeListener = new CompoundButton.OnCheckedChangeListener() {
-        @Override
-        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-            switch (compoundButton.getId()){
-                case R.id.chkFavMon:
-                    favDays[0] = !favDays[0];
+            switch (group.getId()){
+                case R.id.chipGroupFavDay:
+                    checkedDays = checkedIds;
                     break;
-                case R.id.chkFavTue:
-                    favDays[1] = !favDays[1];
-                    break;
-                case R.id.chkFavWed:
-                    favDays[2] = !favDays[2];
-                    break;
-                case R.id.chkFavThu:
-                    favDays[3] = !favDays[3];
-                    break;
-                case R.id.chkFavFri:
-                    favDays[4] = !favDays[4];
-                    break;
-                case R.id.chkFavSat:
-                    favDays[5] = !favDays[5];
-                    break;
-                case R.id.chkFavSun:
-                    favDays[6] = !favDays[6];
-                    break;
-
-
-
-                case R.id.chkFavSoccer:
-                    favSports[0] = !favSports[0];
-                    break;
-                case R.id.chkFavFutsal:
-                    favSports[1] = !favSports[1];
-                    break;
-                case R.id.chkFavBaseball:
-                    favSports[2] = !favSports[2];
-                    break;
-                case R.id.chkFavBasketball:
-                    favSports[3] = !favSports[3];
-                    break;
-                case R.id.chkFavBadminton:
-                    favSports[4] = !favSports[4];
-                    break;
-                case R.id.chkFavCycle:
-                    favSports[5] = !favSports[5];
+                case R.id.chipGroupFavSport:
+                    checkedSports = checkedIds;
                     break;
             }
+
         }
     };
+
 
     //이미지 업로드전 경로 가져옴
     private File getRealFile(Uri uri) {

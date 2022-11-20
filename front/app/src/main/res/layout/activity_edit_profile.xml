@@ -144,43 +144,52 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
-                    <CheckBox
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/chkFavSoccer"
-                        android:text="축구"
-                        />
-                    <CheckBox
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/chkFavFutsal"
-                        android:text="풋살"
-                        />
-                    <CheckBox
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/chkFavBasketball"
-                        android:text="농구"
-                        />
-                    <CheckBox
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/chkFavBaseball"
-                        android:text="야구"
-                        />
-                    <CheckBox
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/chkFavBadminton"
-                        android:text="배드민턴"
-                        />
-                    <CheckBox
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/chkFavCycle"
-                        android:text="사이클"
-                        />
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/chipGroupFavSport"
+                        >
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chkFavSoccer"
+                            style="@style/Widget.MaterialComponents.Chip.Choice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="축구"/>
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chkFavFutsal"
+                            style="@style/Widget.MaterialComponents.Chip.Choice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="풋살"/>
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chkFavBasketball"
+                            style="@style/Widget.MaterialComponents.Chip.Choice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="농구"/>
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chkFavBaseball"
+                            style="@style/Widget.MaterialComponents.Chip.Choice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="야구"/>
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chkFavBadminton"
+                            style="@style/Widget.MaterialComponents.Chip.Choice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="배드민턴"/>
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chkFavCycle"
+                            style="@style/Widget.MaterialComponents.Chip.Choice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="사이클"/>
+
+                    </com.google.android.material.chip.ChipGroup>
                 </LinearLayout>
+
             </LinearLayout>
 
             <LinearLayout
