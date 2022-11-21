@@ -71,4 +71,10 @@ public interface RetrofitAPI {
     @POST("/api/match/openMatch")
     Call<OpenMatchDTO> openMatch(@Body OpenMatchDTO openMatchDTO);
 
+
+    //현재 오픈매치에 참여중인 모든 유저 프로필 정보 가져오기
+    @Headers("Content-Type: application/json")
+    @GET("/api/match//joinedUserProfiles/{openMatchIdx}")
+    Call<List<ProfileDTO>> getJoinedUserProfiles(@Path(value = "openMatchIdx", encoded = true) Long openMatchIdx);
+
 }

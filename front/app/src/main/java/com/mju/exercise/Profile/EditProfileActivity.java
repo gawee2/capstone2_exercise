@@ -287,6 +287,7 @@ public class EditProfileActivity extends AppCompatActivity {
                         Log.d("프로필", "응답 true");
                         Toast.makeText(getApplicationContext(), "프로필 업데이트 완료", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(getApplicationContext(), UserInfoActivity.class);
+                        intent.putExtra("userId", profileDTO.getUserID());
                         startActivity(intent);
                         finish();
 

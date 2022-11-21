@@ -9,27 +9,38 @@ import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.mju.exercise.Domain.OpenMatchDTO;
+import com.mju.exercise.Domain.ProfileDTO;
+import com.mju.exercise.HttpRequest.RetrofitUtil;
+import com.mju.exercise.Profile.SmallProfileAdapter;
 import com.mju.exercise.R;
 import com.skydoves.expandablelayout.ExpandableLayout;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class OpenMatchAdapter extends ArrayAdapter implements AdapterView.OnItemClickListener {
 
     private Context mContext;
     private List list;
+    RetrofitUtil retrofitUtil;
 
     public OpenMatchAdapter(@NonNull Context context, @NonNull ArrayList list) {
         super(context, 0, list);
         this.mContext = context;
         this.list = list;
+
+        retrofitUtil = RetrofitUtil.getInstance();
     }
 
     @Override
@@ -48,6 +59,11 @@ public class OpenMatchAdapter extends ArrayAdapter implements AdapterView.OnItem
 
         public Double lat, lng;
         public int distance;
+
+        //스몰 프로필 부분
+        public ArrayList<ProfileDTO> profileDTOs;
+        public ListView customListView;
+        public SmallProfileAdapter smallProfileAdapter;
     }
 
     @NonNull
@@ -111,9 +127,34 @@ public class OpenMatchAdapter extends ArrayAdapter implements AdapterView.OnItem
             viewHolder.lng = openMatchDTO.getLng();
         }
 
+        loadAllProfileThisMatch(viewHolder, openMatchDTO.getId());
+        //스몰 프로필 부분
+        viewHolder.profileDTOs = new ArrayList<>();
+        viewHolder.customListView = (ListView) convertView.findViewById(R.id.detailProfileList);
+
 
 
         return convertView;
+
+    }
+
+    public void loadAllProfileThisMatch(ViewHolder viewHolder, Long id){
+
+        retrofitUtil.getRetrofitAPI().getJoinedUserProfiles(id).enqueue(new Callback<List<ProfileDTO>>() {
+            @Override
+            public void onResponse(Call<List<ProfileDTO>> call, Response<List<ProfileDTO>> response) {
+                if(response.isSuccessful()){
+                    viewHolder.profileDTOs = (ArrayList<ProfileDTO>) response.body();
+                    viewHolder.smallProfileAdapter = new SmallProfileAdapter(getContext(), viewHolder.profileDTOs);
+                    viewHolder.customListView.setAdapter(viewHolder.smallProfileAdapter);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<ProfileDTO>> call, Throwable t) {
+
+            }
+        });
 
     }
 
