@@ -69,6 +69,14 @@ public interface RetrofitAPI {
     @Headers("Content-Type: application/json")
     @GET("/api/match/openMatchList")
     Call<List<OpenMatchDTO>> loadOpenMatchesAll();
+    //내가 만든 오픈매치만 가져오기
+    @Headers("Content-Type: application/json")
+    @GET("/api/match/openMatchByMe/{userIdx}")
+    Call<List<OpenMatchDTO>> loadOpenMatchesCreatedByMe(@Path(value = "userIdx", encoded = true) Long userIdx);
+    //내가 참여중인 오픈매치만 가져오기
+    @Headers("Content-Type: application/json")
+    @GET("/api/match/joinedOpenMatch/{userIdx}")
+    Call<List<OpenMatchDTO>> loadOpenMatchesJoined(@Path(value = "userIdx", encoded = true) Long userIdx);
 
 
     //오픈매치 생성

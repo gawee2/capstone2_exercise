@@ -29,6 +29,7 @@ import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.textfield.TextInputEditText;
+import com.mju.exercise.Domain.MatchingDTO;
 import com.mju.exercise.Domain.OpenMatchDTO;
 import com.mju.exercise.HttpRequest.RetrofitUtil;
 import com.mju.exercise.PopupMapActivity;
@@ -268,11 +269,11 @@ public class OpenMatchOpenFrag extends Fragment {
             openMatchDTO.setPersonnel(personnel);
         }
 
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            LocalDateTime playDateTime = LocalDateTime.of(year, month, day, hour, min, 0);
-            Log.d("날짜", playDateTime.toString());
-            openMatchDTO.setPlayTime(playDateTime);
-        }
+//        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+//            LocalDateTime playDateTime = LocalDateTime.of(year, month, day, hour, min, 0);
+//            Log.d("날짜", playDateTime.toString());
+//            openMatchDTO.setPlayTime(playDateTime);
+//        }
 
 
         retrofitUtil.getRetrofitAPI().openMatch(openMatchDTO).enqueue(new Callback<OpenMatchDTO>() {
@@ -281,6 +282,34 @@ public class OpenMatchOpenFrag extends Fragment {
 
                 if(response.isSuccessful()){
                     Toast.makeText(getContext(), "생성완료", Toast.LENGTH_SHORT).show();
+
+                    OpenMatchDTO newOpenMatch = response.body();
+
+                    //자신이 생성한 것은 참여처리 되어야 함
+                    //참여 처리
+                    MatchingDTO matchingDTO = new MatchingDTO();
+                    matchingDTO.setOpenMatchId(newOpenMatch.getId());
+                    Long userIdx = Long.valueOf(preferenceUtil.getString("userIdx"));
+                    // -1이면 조회되지 않는 유저임. 참가로직 안돌도록
+                    if(userIdx == -1l){
+                        return;
+                    }
+                    matchingDTO.setUserIndex(userIdx);
+                    retrofitUtil.getRetrofitAPI().joinMatch(matchingDTO).enqueue(new Callback<Long>() {
+                        @Override
+                        public void onResponse(Call<Long> call, Response<Long> response) {
+                            if(response.isSuccessful()){
+                                Toast.makeText(getContext(), "참여 완료", Toast.LENGTH_SHORT).show();
+                            }else {
+                                Toast.makeText(getContext(), "응답 없음", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<Long> call, Throwable t) {
+
+                        }
+                    });
                 }else{
                     Log.d("날짜", "응답코드: " + String.valueOf(response.code()));
                 }

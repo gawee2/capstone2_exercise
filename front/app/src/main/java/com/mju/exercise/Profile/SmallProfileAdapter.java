@@ -1,6 +1,7 @@
 package com.mju.exercise.Profile;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.mju.exercise.Domain.OpenMatchDTO;
 import com.mju.exercise.Domain.ProfileDTO;
 import com.mju.exercise.HttpRequest.RetrofitUtil;
@@ -52,19 +54,20 @@ public class SmallProfileAdapter extends ArrayAdapter implements AdapterView.OnI
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        final SmallProfileAdapter.ViewHolder viewHolder;
+        final ViewHolder viewHolder;
         if(convertView == null){
             LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
             convertView = layoutInflater.inflate(R.layout.small_profile_item, parent, false);
         }
 
-        viewHolder = new SmallProfileAdapter.ViewHolder();
+        viewHolder = new ViewHolder();
 
         viewHolder.tvSmallProfileNickname = (TextView) convertView.findViewById(R.id.tvSmallProfileNickname);
         viewHolder.imgSmallProfile = (ImageView) convertView.findViewById(R.id.imgSmallProfile);
 
 
         final ProfileDTO profileDTO = (ProfileDTO) list.get(position);
+
         //닉네임
         viewHolder.tvSmallProfileNickname.setText(profileDTO.getNickname());
         //프로필 사진
@@ -72,12 +75,15 @@ public class SmallProfileAdapter extends ArrayAdapter implements AdapterView.OnI
         String url = retrofitUtil.getBASE_URL_NONE_SLASH() + path;
         Log.d("이미지로드", url);
         if(path != null && !path.equals("")){
-            Glide.with(mContext).load(url).into(viewHolder.imgSmallProfile);
+            Glide.with(mContext).load(url).circleCrop().into(viewHolder.imgSmallProfile);
         }
         viewHolder.imgSmallProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getContext(), "스몰프로필 눌림", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getContext(), "스몰프로필 눌림", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getContext(), UserInfoActivity.class);
+                intent.putExtra("userId", profileDTO.getUserID());
+                getContext().startActivity(intent);
             }
         });
 

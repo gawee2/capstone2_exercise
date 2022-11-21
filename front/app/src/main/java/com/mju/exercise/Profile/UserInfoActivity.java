@@ -1,9 +1,11 @@
 package com.mju.exercise.Profile;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -89,6 +91,11 @@ public class UserInfoActivity extends AppCompatActivity {
         //다른 사람의 프로필도 볼 수 있도록 하기 위하여 인텐트에 유저 아이디를 담어서 넘기도록 함
         Intent intent = getIntent();
         String userId = intent.getStringExtra("userId");
+        //만약 현재 보는 프로필과 내 유저아이디가 다르다면 로그아웃과 수정하기 비활성화
+        if(!userId.equals(preferenceUtil.getString("userId"))){
+            btnLogout.setVisibility(View.GONE);
+            mbtnEditProfile.setVisibility(View.GONE);
+        }
 
         loadProfile(userId);
     }
@@ -124,7 +131,19 @@ public class UserInfoActivity extends AppCompatActivity {
         String url = retrofitUtil.getBASE_URL_NONE_SLASH() + path;
         Log.d("이미지로드", url);
         if(path != null && !path.equals("")){
-            Glide.with(this).load(url).into(mImgProfile);
+            Glide.with(this).load(url).circleCrop().into(mImgProfile);
+            mImgProfile.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    LayoutInflater inflater = getLayoutInflater();
+                    View dialogLayout = inflater.inflate(R.layout.dialog_profile_image, null);
+                    ImageView imageView = (ImageView) dialogLayout.findViewById(R.id.imgBigProfile);
+                    Glide.with(getApplicationContext()).load(url).into(imageView);
+                    new AlertDialog.Builder(mContext)
+                            .setView(dialogLayout)
+                            .show();
+                }
+            });
         }
     }
 

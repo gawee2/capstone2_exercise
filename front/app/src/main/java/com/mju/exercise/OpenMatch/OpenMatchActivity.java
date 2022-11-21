@@ -136,13 +136,26 @@ public class OpenMatchActivity extends AppCompatActivity {
                     return true;
                 }
                 case R.id.open_match_created:{
-                    fragmentTransaction.replace(R.id.host_fragment, new OpenMatchCreatedFrag())
-                            .commit();
+                    if(loginCheck()){
+                        fragmentTransaction.replace(R.id.host_fragment, new OpenMatchCreatedFrag())
+                                .commit();
+                    }else{
+                        fragmentTransaction.replace(R.id.host_fragment, new LoginNoticeFrag())
+                                .commit();
+                    }
+
+
                     return true;
                 }
                 case R.id.open_match_joined:{
-                    fragmentTransaction.replace(R.id.host_fragment, new OpenMatchJoinedFrag())
-                            .commit();
+                    if(loginCheck()){
+                        fragmentTransaction.replace(R.id.host_fragment, new OpenMatchJoinedFrag())
+                                .commit();
+                    }else{
+                        fragmentTransaction.replace(R.id.host_fragment, new LoginNoticeFrag())
+                                .commit();
+                    }
+
                     return true;
                 }
 

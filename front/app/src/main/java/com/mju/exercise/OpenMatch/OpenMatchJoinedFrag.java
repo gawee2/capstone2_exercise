@@ -7,8 +7,19 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
+import com.mju.exercise.Domain.OpenMatchDTO;
+import com.mju.exercise.HttpRequest.RetrofitUtil;
+import com.mju.exercise.Preference.PreferenceUtil;
 import com.mju.exercise.R;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -25,6 +36,12 @@ public class OpenMatchJoinedFrag extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    ArrayList<OpenMatchDTO> openMatches;
+    ListView customListView;
+    RetrofitUtil retrofitUtil;
+    OpenMatchAdapter openMatchAdapter;
+    PreferenceUtil preferenceUtil;
 
     public OpenMatchJoinedFrag() {
         // Required empty public constructor
@@ -60,7 +77,37 @@ public class OpenMatchJoinedFrag extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        preferenceUtil = PreferenceUtil.getInstance(getContext());
+        retrofitUtil = RetrofitUtil.getInstance();
+        openMatches = new ArrayList<>();
+        loadOpenMatchesJoined();
+
+        View view = inflater.inflate(R.layout.fragment_open_match_list, container, false);
+
+        customListView = (ListView) view.findViewById(R.id.listViewOpenMatchList);
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_open_match_joined, container, false);
+        return view;
+    }
+
+    private void loadOpenMatchesJoined(){
+        Long userIdx = Long.valueOf(preferenceUtil.getString("userIdx"));
+        retrofitUtil.getRetrofitAPI().loadOpenMatchesJoined(userIdx).enqueue(new Callback<List<OpenMatchDTO>>() {
+            @Override
+            public void onResponse(Call<List<OpenMatchDTO>> call, Response<List<OpenMatchDTO>> response) {
+                if(response.isSuccessful()){
+                    openMatches = (ArrayList<OpenMatchDTO>) response.body();
+                    openMatchAdapter = new OpenMatchAdapter(getContext(), openMatches);
+                    customListView.setAdapter(openMatchAdapter);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<OpenMatchDTO>> call, Throwable t) {
+
+            }
+        });
+
     }
 }
