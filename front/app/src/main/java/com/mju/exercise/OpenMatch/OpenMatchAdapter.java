@@ -1,6 +1,7 @@
 package com.mju.exercise.OpenMatch;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,6 +21,7 @@ import com.mju.exercise.Domain.MatchingDTO;
 import com.mju.exercise.Domain.OpenMatchDTO;
 import com.mju.exercise.Domain.ProfileDTO;
 import com.mju.exercise.HttpRequest.RetrofitUtil;
+import com.mju.exercise.PopupMapActivity;
 import com.mju.exercise.Preference.PreferenceUtil;
 import com.mju.exercise.Profile.SmallProfileAdapter;
 import com.mju.exercise.R;
@@ -113,7 +115,13 @@ public class OpenMatchAdapter extends ArrayAdapter implements AdapterView.OnItem
         viewHolder.btnDetailOnMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Double lat = openMatchDTO.getLat();
+                Double lng = openMatchDTO.getLng();
+                Intent intent = new Intent(getContext(), PopupMapActivity.class);
+                intent.putExtra("lat", lat);
+                intent.putExtra("lng", lng);
+                intent.putExtra("type", false);
+                getContext().startActivity(intent);
             }
         });
         viewHolder.btnDetailJoin.setOnClickListener(new View.OnClickListener() {
