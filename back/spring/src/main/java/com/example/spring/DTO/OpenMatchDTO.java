@@ -18,7 +18,7 @@ public class OpenMatchDTO {
 
     private String openUserId;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime openTime;
 
     private String subject;
@@ -27,7 +27,7 @@ public class OpenMatchDTO {
     private String sportType;
     private Integer personnel; //인원
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime playDateTime;
 
     private Double lat;
