@@ -53,12 +53,15 @@ public class FilteringDialog extends BottomSheetDialogFragment {
     private void initExpandableLayout(ExpandableLayout expandableLayout){
         TextView tvFilterType = (TextView) expandableLayout.parentLayout.findViewById(R.id.tvFilterType);
         Button btnFilterDetail = (Button) expandableLayout.parentLayout.findViewById(R.id.btnFilterDetail);
+
         btnFilterDetail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(expandableLayout.isExpanded()){
+                    btnFilterDetail.setText("더 보기");
                     expandableLayout.collapse();
                 }else {
+                    btnFilterDetail.setText("축소하기");
                     expandableLayout.expand();
                 }
             }

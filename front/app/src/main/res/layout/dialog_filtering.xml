@@ -36,12 +36,6 @@
             app:expandable_isExpanded="true"
             app:expandable_parentLayout="@layout/dialog_filtering_type"
             app:expandable_secondLayout="@layout/dialog_filtering_detail"
-            app:expandable_showSpinner="true"
-            app:expandable_spinner="@drawable/ic_arrow_down"
-            app:expandable_spinner_animate="true"
-            app:expandable_spinner_margin="14dp"
-            app:expandable_spinner_gravity="end"
-            app:expandable_spinner_size="32dp"
             >
         </com.skydoves.expandablelayout.ExpandableLayout>
 
@@ -58,12 +52,6 @@
             app:expandable_isExpanded="false"
             app:expandable_parentLayout="@layout/dialog_filtering_type"
             app:expandable_secondLayout="@layout/dialog_filtering_detail"
-            app:expandable_showSpinner="true"
-            app:expandable_spinner="@drawable/ic_arrow_down"
-            app:expandable_spinner_animate="true"
-            app:expandable_spinner_margin="14dp"
-            app:expandable_spinner_gravity="end"
-            app:expandable_spinner_size="32dp"
             >
         </com.skydoves.expandablelayout.ExpandableLayout>
 
@@ -81,12 +69,6 @@
             app:expandable_isExpanded="false"
             app:expandable_parentLayout="@layout/dialog_filtering_type"
             app:expandable_secondLayout="@layout/dialog_filtering_detail"
-            app:expandable_showSpinner="true"
-            app:expandable_spinner="@drawable/ic_arrow_down"
-            app:expandable_spinner_animate="true"
-            app:expandable_spinner_margin="14dp"
-            app:expandable_spinner_gravity="end"
-            app:expandable_spinner_size="32dp"
             >
         </com.skydoves.expandablelayout.ExpandableLayout>
 

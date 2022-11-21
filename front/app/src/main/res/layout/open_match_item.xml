@@ -5,64 +5,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
-    <com.google.android.material.card.MaterialCardView
+    <com.skydoves.expandablelayout.ExpandableLayout
+        android:id="@+id/exItem"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        app:cardElevation="0dp"
-        app:strokeWidth="1dp"
+        android:layout_height="match_parent"
+        app:expandable_duration="300"
+        app:expandable_isExpanded="false"
+        app:expandable_parentLayout="@layout/open_match_preview"
+        app:expandable_secondLayout="@layout/open_match_detail"
+        app:expandable_showSpinner="true"
+        app:expandable_spinner="@drawable/ic_arrow_down"
+        app:expandable_spinner_color="@color/black"
+        app:expandable_spinner_animate="true"
+        app:expandable_spinner_margin="14dp"
+        app:expandable_spinner_gravity="end"
+        app:expandable_spinner_size="32dp"
         >
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            >
-            <LinearLayout
-                android:layout_weight="2"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                >
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:id="@+id/omSportType"
-                    />
-            </LinearLayout>
-            <LinearLayout
-                android:layout_weight="8"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                >
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/omSubject"
-                    />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/omPersonnel"
-                    />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/omPlayDateTime"
-                    />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="나와의 거리"
-                    />
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-    </com.google.android.material.card.MaterialCardView>
-
-
-
+    </com.skydoves.expandablelayout.ExpandableLayout>
 
 </LinearLayout>
