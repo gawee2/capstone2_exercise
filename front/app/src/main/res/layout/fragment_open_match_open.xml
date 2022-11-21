@@ -38,7 +38,8 @@
         <com.google.android.material.chip.ChipGroup
             android:id="@+id/chipGroup"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            >
 
             <!-- Chips can be declared here, or added dynamically. -->
             <com.google.android.material.chip.Chip
@@ -48,11 +49,35 @@
                 android:layout_height="wrap_content"
                 android:text="축구"/>
             <com.google.android.material.chip.Chip
+                android:id="@+id/chipFutsal"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="풋살"/>
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipBasketball"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="농구"/>
+            <com.google.android.material.chip.Chip
                 android:id="@+id/chipBaseball"
                 style="@style/Widget.MaterialComponents.Chip.Choice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="야구"/>
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipBadminton"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="배드민턴"/>
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipCycle"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="사이클"/>
 
 
         </com.google.android.material.chip.ChipGroup>

@@ -55,6 +55,9 @@ dependencies {
     implementation "androidx.recyclerview:recyclerview:1.2.1"
     implementation "androidx.recyclerview:recyclerview-selection:1.1.0"
 
+    //expendable layout
+    implementation "com.github.skydoves:expandablelayout:1.0.7"
+
 
 
 }

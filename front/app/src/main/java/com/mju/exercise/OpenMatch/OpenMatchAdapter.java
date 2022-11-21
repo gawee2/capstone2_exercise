@@ -1,32 +1,46 @@
 package com.mju.exercise.OpenMatch;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.mju.exercise.Domain.OpenMatchDTO;
+import com.mju.exercise.Domain.ProfileDTO;
+import com.mju.exercise.HttpRequest.RetrofitUtil;
+import com.mju.exercise.Profile.SmallProfileAdapter;
 import com.mju.exercise.R;
+import com.skydoves.expandablelayout.ExpandableLayout;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class OpenMatchAdapter extends ArrayAdapter implements AdapterView.OnItemClickListener {
 
     private Context mContext;
     private List list;
+    RetrofitUtil retrofitUtil;
 
     public OpenMatchAdapter(@NonNull Context context, @NonNull ArrayList list) {
         super(context, 0, list);
         this.mContext = context;
         this.list = list;
+
+        retrofitUtil = RetrofitUtil.getInstance();
     }
 
     @Override
@@ -40,9 +54,16 @@ public class OpenMatchAdapter extends ArrayAdapter implements AdapterView.OnItem
         public TextView tvSportType;
         public TextView tvPersonnel;
         public TextView tvPlayDateTime;
-        public TextView tvOpenUserId;
 
-        public TextView tvDistance;
+        public Button btnDetailOnMap, btnDetailJoin;
+
+        public Double lat, lng;
+        public int distance;
+
+        //스몰 프로필 부분
+        public ArrayList<ProfileDTO> profileDTOs;
+        public ListView customListView;
+        public SmallProfileAdapter smallProfileAdapter;
     }
 
     @NonNull
@@ -54,23 +75,101 @@ public class OpenMatchAdapter extends ArrayAdapter implements AdapterView.OnItem
             convertView = layoutInflater.inflate(R.layout.open_match_item, parent, false);
         }
 
+        ExpandableLayout expandableLayout = (ExpandableLayout) convertView.findViewById(R.id.exItem);
+        expandableLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(expandableLayout.isExpanded()){
+                    expandableLayout.collapse();
+                }else {
+                    expandableLayout.expand();
+                }
+            }
+        });
+
         viewHolder = new ViewHolder();
-//        viewHolder.tvArticle = (TextView) convertView.findViewById(R.id.omArticle);
+
+        //프리뷰 부분
         viewHolder.tvSubect = (TextView) convertView.findViewById(R.id.omSubject);
         viewHolder.tvSportType = (TextView) convertView.findViewById(R.id.omSportType);
         viewHolder.tvPersonnel = (TextView) convertView.findViewById(R.id.omPersonnel);
         viewHolder.tvPlayDateTime = (TextView) convertView.findViewById(R.id.omPlayDateTime);
-//        viewHolder.tvOpenUserId = (TextView) convertView.findViewById(R.id.omOpenUserId);
 
+        //디테일 부분
+        viewHolder.tvArticle = (TextView) expandableLayout.secondLayout.findViewById(R.id.detailArticle);
+        viewHolder.btnDetailOnMap = (Button) convertView.findViewById(R.id.detailOnMap);
+        viewHolder.btnDetailOnMap.setOnClickListener(setOnClickListener);
+        viewHolder.btnDetailJoin = (Button) convertView.findViewById(R.id.detailJoin);
+        viewHolder.btnDetailJoin.setOnClickListener(setOnClickListener);
+
+        //데이터 하나 뽑은 후
         final OpenMatchDTO openMatchDTO = (OpenMatchDTO) list.get(position);
-//        viewHolder.tvArticle.setText(openMatchDTO.getArticle());
+
         viewHolder.tvSubect.setText(openMatchDTO.getSubject());
         viewHolder.tvSportType.setText(openMatchDTO.getSportType());
-        viewHolder.tvPersonnel.setText(String.valueOf(openMatchDTO.getPersonnel()));
+        viewHolder.tvPersonnel.setText(String.valueOf("인원:" + "??/" + openMatchDTO.getPersonnel()));
         viewHolder.tvPlayDateTime.setText(String.valueOf(openMatchDTO.getPlayDateTime()));
-//        viewHolder.tvOpenUserId.setText(openMatchDTO.getOpenUserId());
+
+        //디테일 부분
+        // 상세내용
+        Log.d("디테일", "아티클: " + openMatchDTO.getArticle());
+        if(openMatchDTO.getArticle() == null){
+            viewHolder.tvArticle.setText("상세 내용 없음");
+        }else {
+            viewHolder.tvArticle.setText(openMatchDTO.getArticle());
+        }
+        //지도 내용 없으면 버튼 비활성화
+        if(openMatchDTO.getLat() == null || openMatchDTO.getLng() == null){
+            viewHolder.btnDetailOnMap.setEnabled(false);
+            viewHolder.btnDetailOnMap.setText("위치 미정");
+        }else {
+            viewHolder.lat = openMatchDTO.getLat();
+            viewHolder.lng = openMatchDTO.getLng();
+        }
+
+        loadAllProfileThisMatch(viewHolder, openMatchDTO.getId());
+        //스몰 프로필 부분
+        viewHolder.profileDTOs = new ArrayList<>();
+        viewHolder.customListView = (ListView) convertView.findViewById(R.id.detailProfileList);
+
+
 
         return convertView;
 
     }
+
+    public void loadAllProfileThisMatch(ViewHolder viewHolder, Long id){
+
+        retrofitUtil.getRetrofitAPI().getJoinedUserProfiles(id).enqueue(new Callback<List<ProfileDTO>>() {
+            @Override
+            public void onResponse(Call<List<ProfileDTO>> call, Response<List<ProfileDTO>> response) {
+                if(response.isSuccessful()){
+                    viewHolder.profileDTOs = (ArrayList<ProfileDTO>) response.body();
+                    viewHolder.smallProfileAdapter = new SmallProfileAdapter(getContext(), viewHolder.profileDTOs);
+                    viewHolder.customListView.setAdapter(viewHolder.smallProfileAdapter);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<ProfileDTO>> call, Throwable t) {
+
+            }
+        });
+
+    }
+
+    private View.OnClickListener setOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            switch (view.getId()){
+                case R.id.detailOnMap:
+                    Log.d("디테일", "지도 보기");
+
+                    break;
+                case R.id.detailJoin:
+                    //참여 처리
+                    break;
+            }
+        }
+    };
 }
