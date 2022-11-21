@@ -295,42 +295,4 @@ public class OpenMatchOpenFrag extends Fragment {
 
     }
 
-
-//    @NonNull
-//    @Override
-//    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-//        Dialog dialog = super.onCreateDialog(savedInstanceState);
-//        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
-//            @Override
-//            public void onShow(DialogInterface dialogInterface) {
-//                BottomSheetDialog bottomSheetDialog = (BottomSheetDialog) dialog;
-//                setupRatio(bottomSheetDialog);
-//            }
-//        });
-//        return dialog;
-//    }
-//
-//    private void setupRatio(BottomSheetDialog bottomSheetDialog) {
-//        //id = com.google.android.material.R.id.design_bottom_sheet for Material Components
-//        // id = android.support.design.R.id.design_bottom_sheet for support librares
-//        FrameLayout bottomSheet = (FrameLayout) bottomSheetDialog.findViewById(com.google.android.material.R.id.design_bottom_sheet);
-//        BottomSheetBehavior behavior = BottomSheetBehavior.from(bottomSheet);
-//        ViewGroup.LayoutParams layoutParams = bottomSheet.getLayoutParams();
-//        layoutParams.height = getBottomSheetDialogDefaultHeight();
-//        bottomSheet.setLayoutParams(layoutParams);
-//        behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-//    }
-//    private int getBottomSheetDialogDefaultHeight() { return getWindowHeight() * 90 / 100; }
-//    private int getWindowHeight() {
-//        // Calculate window height for fullscreen use
-//        DisplayMetrics displayMetrics = new DisplayMetrics();
-//        ((Activity) getContext()).getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-//        return displayMetrics.heightPixels;
-//    }
-//
-//    @Override
-//    public void onPause() {
-//        super.onPause();
-//        dismiss();
-//    }
 }

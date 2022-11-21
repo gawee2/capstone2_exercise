@@ -90,6 +90,10 @@ public class OpenMatchActivity extends AppCompatActivity {
 
             switch (view.getId()){
                 case R.id.btnFilterOpen:
+
+                    FilteringDialog filteringDialog = new FilteringDialog();
+                    filteringDialog.show(getSupportFragmentManager(), "filtering");
+
                     break;
 
                 case R.id.btnProfileOpen:

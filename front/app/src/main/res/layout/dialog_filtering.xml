@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:text="필터링"
+        android:textSize="35dp"
+        android:gravity="center"
+        />
+
+    <com.google.android.material.divider.MaterialDivider
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="5"
+        android:orientation="vertical"
+        android:layout_margin="10dp"
+        >
+
+        <com.skydoves.expandablelayout.ExpandableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/exlayoutDistance"
+            android:layout_margin="5dp"
+            app:expandable_duration="300"
+            app:expandable_isExpanded="true"
+            app:expandable_parentLayout="@layout/dialog_filtering_type"
+            app:expandable_secondLayout="@layout/dialog_filtering_detail"
+            app:expandable_showSpinner="true"
+            app:expandable_spinner="@drawable/ic_arrow_down"
+            app:expandable_spinner_animate="true"
+            app:expandable_spinner_margin="14dp"
+            app:expandable_spinner_gravity="end"
+            app:expandable_spinner_size="32dp"
+            >
+        </com.skydoves.expandablelayout.ExpandableLayout>
+
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <com.skydoves.expandablelayout.ExpandableLayout
+            android:layout_margin="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/exlayoutDay"
+            app:expandable_duration="300"
+            app:expandable_isExpanded="false"
+            app:expandable_parentLayout="@layout/dialog_filtering_type"
+            app:expandable_secondLayout="@layout/dialog_filtering_detail"
+            app:expandable_showSpinner="true"
+            app:expandable_spinner="@drawable/ic_arrow_down"
+            app:expandable_spinner_animate="true"
+            app:expandable_spinner_margin="14dp"
+            app:expandable_spinner_gravity="end"
+            app:expandable_spinner_size="32dp"
+            >
+        </com.skydoves.expandablelayout.ExpandableLayout>
+
+
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <com.skydoves.expandablelayout.ExpandableLayout
+            android:layout_margin="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/exlayoutPerssonel"
+            app:expandable_duration="300"
+            app:expandable_isExpanded="false"
+            app:expandable_parentLayout="@layout/dialog_filtering_type"
+            app:expandable_secondLayout="@layout/dialog_filtering_detail"
+            app:expandable_showSpinner="true"
+            app:expandable_spinner="@drawable/ic_arrow_down"
+            app:expandable_spinner_animate="true"
+            app:expandable_spinner_margin="14dp"
+            app:expandable_spinner_gravity="end"
+            app:expandable_spinner_size="32dp"
+            >
+        </com.skydoves.expandablelayout.ExpandableLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        >
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/btnFilterApply"
+            android:text="적용하기"
+            />
+    </LinearLayout>
+
+</LinearLayout>
