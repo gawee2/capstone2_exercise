@@ -2,6 +2,7 @@ package com.mju.exercise.HttpRequest;
 
 import com.mju.exercise.Domain.ApiResponseDTO;
 import com.mju.exercise.Domain.JwtDTO;
+import com.mju.exercise.Domain.MatchingDTO;
 import com.mju.exercise.Domain.OpenMatchDTO;
 import com.mju.exercise.Domain.ProfileDTO;
 import com.mju.exercise.Domain.SignInDTO;
@@ -35,6 +36,10 @@ public interface RetrofitAPI {
     @Headers({"Content-Type: application/json"})
     @GET("/api/user/getUserProfile/{userId}")
     Call<ProfileDTO> getUserProfile(@Path(value="userId", encoded = true) String userId);
+
+    @Headers({"Content-Type: application/json"})
+    @GET("/api/user/getUserIndexByUserId/{userId}")
+    Call<Long> getUserIndexByUserId(@Path(value="userId", encoded = true) String userId);
 
     //이미지 업로드
     @Multipart
@@ -71,10 +76,15 @@ public interface RetrofitAPI {
     @POST("/api/match/openMatch")
     Call<OpenMatchDTO> openMatch(@Body OpenMatchDTO openMatchDTO);
 
+    //오픈매치 참여
+    @Headers("Content-Type: application/json")
+    @POST("/api/match/joinMatch")
+    Call<Long> joinMatch(@Body MatchingDTO matchingDTO);
+
 
     //현재 오픈매치에 참여중인 모든 유저 프로필 정보 가져오기
     @Headers("Content-Type: application/json")
-    @GET("/api/match//joinedUserProfiles/{openMatchIdx}")
+    @GET("/api/match/joinedUserProfiles/{openMatchIdx}")
     Call<List<ProfileDTO>> getJoinedUserProfiles(@Path(value = "openMatchIdx", encoded = true) Long openMatchIdx);
 
 }

@@ -230,7 +230,7 @@ public class OpenMatchOpenFrag extends Fragment {
                         public void onTimeSet(TimePicker timePicker, int i, int i1) {
                             hour = i;
                             min = i1;
-                            sec = 1;
+//                            sec = 1;
 
                             tvTime.setText(String.valueOf(i) + "시 " + String.valueOf(i1) + "분");
                         }
@@ -269,7 +269,7 @@ public class OpenMatchOpenFrag extends Fragment {
         }
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            LocalDateTime playDateTime = LocalDateTime.of(year, month, day, hour, min, sec);
+            LocalDateTime playDateTime = LocalDateTime.of(year, month, day, hour, min, 0);
             Log.d("날짜", playDateTime.toString());
             openMatchDTO.setPlayTime(playDateTime);
         }

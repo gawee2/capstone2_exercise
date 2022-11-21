@@ -11,17 +11,21 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.mju.exercise.Domain.MatchingDTO;
 import com.mju.exercise.Domain.OpenMatchDTO;
 import com.mju.exercise.Domain.ProfileDTO;
 import com.mju.exercise.HttpRequest.RetrofitUtil;
+import com.mju.exercise.Preference.PreferenceUtil;
 import com.mju.exercise.Profile.SmallProfileAdapter;
 import com.mju.exercise.R;
 import com.skydoves.expandablelayout.ExpandableLayout;
 
+import java.lang.ref.PhantomReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +38,7 @@ public class OpenMatchAdapter extends ArrayAdapter implements AdapterView.OnItem
     private Context mContext;
     private List list;
     RetrofitUtil retrofitUtil;
+    PreferenceUtil preferenceUtil;
 
     public OpenMatchAdapter(@NonNull Context context, @NonNull ArrayList list) {
         super(context, 0, list);
@@ -41,6 +46,7 @@ public class OpenMatchAdapter extends ArrayAdapter implements AdapterView.OnItem
         this.list = list;
 
         retrofitUtil = RetrofitUtil.getInstance();
+        preferenceUtil = PreferenceUtil.getInstance(context);
     }
 
     @Override
@@ -98,12 +104,47 @@ public class OpenMatchAdapter extends ArrayAdapter implements AdapterView.OnItem
         //디테일 부분
         viewHolder.tvArticle = (TextView) expandableLayout.secondLayout.findViewById(R.id.detailArticle);
         viewHolder.btnDetailOnMap = (Button) convertView.findViewById(R.id.detailOnMap);
-        viewHolder.btnDetailOnMap.setOnClickListener(setOnClickListener);
+
         viewHolder.btnDetailJoin = (Button) convertView.findViewById(R.id.detailJoin);
-        viewHolder.btnDetailJoin.setOnClickListener(setOnClickListener);
 
         //데이터 하나 뽑은 후
         final OpenMatchDTO openMatchDTO = (OpenMatchDTO) list.get(position);
+
+        viewHolder.btnDetailOnMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+        viewHolder.btnDetailJoin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //참여 처리
+                MatchingDTO matchingDTO = new MatchingDTO();
+                matchingDTO.setOpenMatchId(openMatchDTO.getId());
+                Long userIdx = Long.valueOf(preferenceUtil.getString("userIdx"));
+                // -1이면 조회되지 않는 유저임. 참가로직 안돌도록
+                if(userIdx == -1l){
+                    return;
+                }
+                matchingDTO.setUserIndex(userIdx);
+                retrofitUtil.getRetrofitAPI().joinMatch(matchingDTO).enqueue(new Callback<Long>() {
+                    @Override
+                    public void onResponse(Call<Long> call, Response<Long> response) {
+                        if(response.isSuccessful()){
+                            Toast.makeText(mContext, "참여 완료", Toast.LENGTH_SHORT).show();
+                        }else {
+                            Toast.makeText(mContext, "응답 없음", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<Long> call, Throwable t) {
+
+                    }
+                });
+            }
+        });
 
         viewHolder.tvSubect.setText(openMatchDTO.getSubject());
         viewHolder.tvSportType.setText(openMatchDTO.getSportType());
@@ -133,7 +174,6 @@ public class OpenMatchAdapter extends ArrayAdapter implements AdapterView.OnItem
         viewHolder.customListView = (ListView) convertView.findViewById(R.id.detailProfileList);
 
 
-
         return convertView;
 
     }
@@ -158,18 +198,4 @@ public class OpenMatchAdapter extends ArrayAdapter implements AdapterView.OnItem
 
     }
 
-    private View.OnClickListener setOnClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            switch (view.getId()){
-                case R.id.detailOnMap:
-                    Log.d("디테일", "지도 보기");
-
-                    break;
-                case R.id.detailJoin:
-                    //참여 처리
-                    break;
-            }
-        }
-    };
 }
