@@ -6,7 +6,7 @@ import java.io.Serializable;
 
 public class ProfileDTO implements Serializable {
 
-    @SerializedName("id")
+    @SerializedName("idx")
     private Long idx;
 
     @SerializedName("userId")
