@@ -19,6 +19,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -93,6 +94,21 @@ public class MemberController {
     @GetMapping("/getUserProfile/{userId}")
     public Profile getUserProfile(@PathVariable String userId){
         return memberService.findProfileByUserId(userId);
+    }
+
+    //유저 인덱스 조회
+    @GetMapping("/getUserIndexByUserId/{userId}")
+    public Long getUserIndexByUserId(@PathVariable String userId){
+
+        Long userIdx;
+
+        Optional<Member> member = memberService.findOne(userId);
+        if(member.isPresent()){
+            userIdx = member.get().getId();
+            return userIdx;
+        }else {
+            return -1l;
+        }
     }
 
 
