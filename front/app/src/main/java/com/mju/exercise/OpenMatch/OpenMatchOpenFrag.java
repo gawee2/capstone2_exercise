@@ -66,7 +66,7 @@ public class OpenMatchOpenFrag extends Fragment {
     ActivityResultLauncher<Intent> activityResultLauncher;
     Double lat, lng;
     //오픈매치 운동 모집 날짜
-    int year, month, day, hour, min;
+    int year, month, day, hour, min, sec;
     Integer personnel;
 
 
@@ -230,6 +230,7 @@ public class OpenMatchOpenFrag extends Fragment {
                         public void onTimeSet(TimePicker timePicker, int i, int i1) {
                             hour = i;
                             min = i1;
+                            sec = 1;
 
                             tvTime.setText(String.valueOf(i) + "시 " + String.valueOf(i1) + "분");
                         }
@@ -256,8 +257,6 @@ public class OpenMatchOpenFrag extends Fragment {
 //        openMatchDTO.setOpenTime(nowTime);
         openMatchDTO.setOpenUserId(preferenceUtil.getString("userId"));
 
-        Log.d("오픈매치", "제목: " + openMatchDTO.getSubject()
-            + ", 오픈 유저 아이디: " + openMatchDTO.getOpenUserId());
         if(lat != null && lng != null){
             openMatchDTO.setLat(lat);
             openMatchDTO.setLng(lng);
@@ -265,14 +264,15 @@ public class OpenMatchOpenFrag extends Fragment {
         if(sportType != null){
             openMatchDTO.setSportType(sportType);
         }
-        if(personnel != null){
+        if(personnel != null) {
             openMatchDTO.setPersonnel(personnel);
         }
 
-//        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-//            LocalDateTime playDateTime = LocalDateTime.of(year, month, day, hour, min, 0);
-//            openMatchDTO.setPlayTime(playDateTime);
-//        }
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            LocalDateTime playDateTime = LocalDateTime.of(year, month, day, hour, min, sec);
+            Log.d("날짜", playDateTime.toString());
+            openMatchDTO.setPlayTime(playDateTime);
+        }
 
 
         retrofitUtil.getRetrofitAPI().openMatch(openMatchDTO).enqueue(new Callback<OpenMatchDTO>() {
@@ -282,7 +282,7 @@ public class OpenMatchOpenFrag extends Fragment {
                 if(response.isSuccessful()){
                     Toast.makeText(getContext(), "생성완료", Toast.LENGTH_SHORT).show();
                 }else{
-                    Log.d("오픈매치", "응답코드: " + String.valueOf(response.code()));
+                    Log.d("날짜", "응답코드: " + String.valueOf(response.code()));
                 }
 
             }

@@ -105,6 +105,7 @@ public class UserInfoActivity extends AppCompatActivity {
                     Log.d("프로필로드", "isSuccessful");
                     //프로필 이미지 변경
                     reflectImg(response.body().getImage());
+                    Log.d("프로필로드", response.body().getImage());
                     //통째로 넘겨서 가져온 데이터로 프로필 변경
                     reflectProfile(response.body());
 

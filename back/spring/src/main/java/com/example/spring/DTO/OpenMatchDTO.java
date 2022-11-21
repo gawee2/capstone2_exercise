@@ -1,5 +1,8 @@
 package com.example.spring.DTO;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,6 +17,8 @@ public class OpenMatchDTO {
     private Long id; //오픈매치 인덱스, 이거로 매칭 테이블에서 해당 유저와 오픈 매치와의 관계 파악할 예정
 
     private String openUserId;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime openTime;
 
     private String subject;
@@ -22,6 +27,7 @@ public class OpenMatchDTO {
     private String sportType;
     private Integer personnel; //인원
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime playDateTime;
 
     private Double lat;
