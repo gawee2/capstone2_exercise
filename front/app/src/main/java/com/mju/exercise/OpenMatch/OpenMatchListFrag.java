@@ -26,7 +26,7 @@ import retrofit2.Response;
  * Use the {@link OpenMatchListFrag#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class OpenMatchListFrag extends Fragment {
+public class OpenMatchListFrag extends Fragment implements OpenMatchFilter {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER

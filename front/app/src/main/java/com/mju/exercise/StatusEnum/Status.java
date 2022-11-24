@@ -9,7 +9,6 @@ public class Status {
 
     public static enum FilterType{
         JOIN_CAN,
-        JOIN_CANNOT,
         JOIN_ALL,
 
         DISTANCE_NEAR,
@@ -18,5 +17,15 @@ public class Status {
         DAY_NEAR,
         DAY_FAV,
         DAY_PICK
+    }
+
+    public static enum DayType{
+        MON,
+        TUE,
+        WED,
+        THU,
+        FRI,
+        SAT,
+        SUN
     }
 }

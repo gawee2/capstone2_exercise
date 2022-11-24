@@ -47,7 +47,6 @@ public class OpenMatchActivity extends AppCompatActivity {
     private final CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
     private Double lat, lng;
 
-
     private int sportType;
 
     @Override
@@ -208,6 +207,9 @@ public class OpenMatchActivity extends AppCompatActivity {
 
                     lat = location.getLatitude();
                     lng = location.getLongitude();
+
+                    preferenceUtil.setString("lat", lat.toString());
+                    preferenceUtil.setString("lng", lng.toString());
                 }
             }
         });
