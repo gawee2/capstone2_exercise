@@ -159,7 +159,26 @@ public class OpenMatchAdapter extends ArrayAdapter implements AdapterView.OnItem
 
         viewHolder.tvSubect.setText(openMatchDTO.getSubject());
         viewHolder.tvSportType.setText(openMatchDTO.getSportType());
-        viewHolder.tvPersonnel.setText(String.valueOf("인원:" + "??/" + openMatchDTO.getPersonnel()));
+        //해당 오픈 매치에 유저 얼마나 있는지 확인용
+        retrofitUtil.getRetrofitAPI().getJoinedUserProfiles(openMatchDTO.getId()).enqueue(new Callback<List<ProfileDTO>>() {
+            @Override
+            public void onResponse(Call<List<ProfileDTO>> call, Response<List<ProfileDTO>> response) {
+                if(response.isSuccessful()){
+                    int cnt = response.body().size();
+
+                    viewHolder.tvPersonnel.setText(String.valueOf("현재 인원:" + String.valueOf(cnt) + openMatchDTO.getPersonnel()));
+                }else {
+                    viewHolder.tvPersonnel.setText(String.valueOf("현재 인원:" + "로딩 오류/" + openMatchDTO.getPersonnel()));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<ProfileDTO>> call, Throwable t) {
+
+            }
+        });
+
+
         viewHolder.tvPlayDateTime.setText(String.valueOf(openMatchDTO.getPlayDateTime()));
         if(!preferenceUtil.getString("lat").equals("") && !preferenceUtil.getString("lng").equals("")){
             viewHolder.myLat = Double.valueOf(preferenceUtil.getString("lat"));
