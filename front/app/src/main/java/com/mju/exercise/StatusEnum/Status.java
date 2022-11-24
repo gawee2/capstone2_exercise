@@ -7,19 +7,35 @@ public class Status {
         POST;
     }
 
-    public static enum FilterType{
-        JOIN_CAN,
-        JOIN_ALL,
-
+    public static enum FilterTypeJoin{
+        JOIN_DEFAULT,
+        JOIN_CAN
+    }
+    public static enum FilterTypeDistance{
+        DISTANCE_DEFAULT,
         DISTANCE_NEAR,
-        DISTANCE_DIFFERENCE,
-
+        DISTANCE_DIFFERENCE
+    }
+    public static enum FilterTypeDay{
+        DAY_DEFAULT,
         DAY_NEAR,
-        DAY_FAV,
+        DAY_FAVDAY,
         DAY_PICK
     }
 
-    public static enum DayType{
+    public static enum DistanceDiff{
+        DEFAULT,
+        M50,
+        M100,
+        M300,
+        M500,
+        M1KM,
+        M3KM,
+        M3KMUP
+    }
+
+    public static enum FavDayType{
+        DEFAULT,
         MON,
         TUE,
         WED,

@@ -25,17 +25,19 @@ import com.mju.exercise.PopupMapActivity;
 import com.mju.exercise.Preference.PreferenceUtil;
 import com.mju.exercise.Profile.SmallProfileAdapter;
 import com.mju.exercise.R;
+import com.mju.exercise.StatusEnum.Status;
 import com.skydoves.expandablelayout.ExpandableLayout;
 
 import java.lang.ref.PhantomReference;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class OpenMatchAdapter extends ArrayAdapter implements AdapterView.OnItemClickListener {
+public class OpenMatchAdapter extends ArrayAdapter implements AdapterView.OnItemClickListener, Filtering {
 
     private Context mContext;
     private List list;
@@ -245,6 +247,67 @@ public class OpenMatchAdapter extends ArrayAdapter implements AdapterView.OnItem
 
             }
         });
+
+    }
+
+    @Override
+    public void filterJoin(Status.FilterTypeJoin filterTypeJoin) {
+        //디폴트 값이면 필터 적용 안함
+        if(filterTypeJoin == Status.FilterTypeJoin.JOIN_DEFAULT){
+            return;
+        }else if(filterTypeJoin == Status.FilterTypeJoin.JOIN_CAN){
+            List<OpenMatchDTO> newOpenMatches = new ArrayList<>();
+
+
+//            for(OpenMatchDTO openMatchDTO: list){
+//                int totalUser = openMatchDTO.getPersonnel();
+//                retrofitUtil.getRetrofitAPI().getJoinedUserProfiles(openMatchDTO.getId()).enqueue(new Callback<List<ProfileDTO>>() {
+//                    @Override
+//                    public void onResponse(Call<List<ProfileDTO>> call, Response<List<ProfileDTO>> response) {
+//                        if(response.isSuccessful()){
+//                            int nowUser = response.body().size();
+//
+//                            if(totalUser > nowUser){
+//                                newOpenMatches.add(openMatchDTO);
+//                            }
+//                        }
+//
+//                    }
+//
+//                    @Override
+//                    public void onFailure(Call<List<ProfileDTO>> call, Throwable t) {
+//
+//                    }
+//                });
+//            }
+        }
+
+    }
+
+    @Override
+    public void filterDistance(Status.FilterTypeDistance filterTypeDistance) {
+
+
+    }
+
+    @Override
+    public void filterDay(Status.FilterTypeDay filterTypeDay) {
+        switch (filterTypeDay){
+            case DAY_DEFAULT:
+                break;
+            case DAY_NEAR:
+                sortOpenMatchesByNear();
+                break;
+            case DAY_FAVDAY:
+                break;
+            case DAY_PICK:
+                break;
+        }
+
+    }
+
+    //가까운 거리순으로 정렬
+    public void sortOpenMatchesByNear(){
 
     }
 

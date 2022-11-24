@@ -111,7 +111,7 @@ public class OpenMatchOpenFrag extends Fragment {
                 lat = result.getData().getDoubleExtra("lat", 0.0);
                 lng = result.getData().getDoubleExtra("lng", 0.0);
 
-                tvRegion.setText("테스트용: " + String.valueOf(lat) + ", " + String.valueOf(lng));
+                tvRegion.setText("장소 선택 완료");
 
             } else {
 

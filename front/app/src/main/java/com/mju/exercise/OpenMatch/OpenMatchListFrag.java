@@ -11,8 +11,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.mju.exercise.Domain.OpenMatchDTO;
+import com.mju.exercise.Domain.ProfileDTO;
 import com.mju.exercise.HttpRequest.RetrofitUtil;
 import com.mju.exercise.R;
+import com.mju.exercise.StatusEnum.Status;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +28,7 @@ import retrofit2.Response;
  * Use the {@link OpenMatchListFrag#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class OpenMatchListFrag extends Fragment implements OpenMatchFilter {
+public class OpenMatchListFrag extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -120,4 +122,6 @@ public class OpenMatchListFrag extends Fragment implements OpenMatchFilter {
 
         return "없음";
     }
+
+
 }
