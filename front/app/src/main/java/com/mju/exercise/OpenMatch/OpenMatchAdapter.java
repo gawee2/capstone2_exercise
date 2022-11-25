@@ -168,7 +168,7 @@ public class OpenMatchAdapter extends ArrayAdapter implements AdapterView.OnItem
                 if(response.isSuccessful()){
                     int cnt = response.body().size();
 
-                    viewHolder.tvPersonnel.setText(String.valueOf("현재 인원:" + String.valueOf(cnt) + openMatchDTO.getPersonnel()));
+                    viewHolder.tvPersonnel.setText(String.valueOf("현재 인원:" + String.valueOf(cnt) + "/" + openMatchDTO.getPersonnel()));
                 }else {
                     viewHolder.tvPersonnel.setText(String.valueOf("현재 인원:" + "로딩 오류/" + openMatchDTO.getPersonnel()));
                 }
@@ -205,7 +205,7 @@ public class OpenMatchAdapter extends ArrayAdapter implements AdapterView.OnItem
             viewHolder.mapLng = openMatchDTO.getLng();
 
             viewHolder.distanceToMe = computeDistance(viewHolder.myLat, viewHolder.myLng, viewHolder.mapLat, viewHolder.mapLng);
-            viewHolder.tvDistanceToMe.setText("나와의 거리: " + String.valueOf(viewHolder.distanceToMe));
+            viewHolder.tvDistanceToMe.setText("나와의 거리: " + String.valueOf(convertMtoKM(viewHolder.distanceToMe)) + "km    ");
         }
 
         loadAllProfileThisMatch(viewHolder, openMatchDTO.getId());
@@ -228,6 +228,13 @@ public class OpenMatchAdapter extends ArrayAdapter implements AdapterView.OnItem
         Double c = 2 * Math.asin(Math.sqrt(a));
 
         return (int) (R * c);
+    }
+
+    private double convertMtoKM(int distance){
+        double result = 0.0;
+        result = distance / 1000;
+
+        return result;
     }
 
     public void loadAllProfileThisMatch(ViewHolder viewHolder, Long id){

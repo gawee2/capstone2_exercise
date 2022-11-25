@@ -83,7 +83,6 @@ public interface RetrofitAPI {
     @Headers("Content-Type: application/json")
     @POST("/api/match/openMatch")
     Call<OpenMatchDTO> openMatch(@Body OpenMatchDTO openMatchDTO);
-
     //오픈매치 참여
     @Headers("Content-Type: application/json")
     @POST("/api/match/joinMatch")
