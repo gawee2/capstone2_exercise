@@ -112,7 +112,7 @@ public class EditProfileActivity extends AppCompatActivity {
         String url = retrofitUtil.getBASE_URL_NONE_SLASH() + path;
         Log.d("이미지로드", url);
         if(path != null && !path.equals("")){
-            Glide.with(this).load(url).into(imgProfile);
+            Glide.with(this).load(url).circleCrop().into(imgProfile);
         }
         edtProfileMsg.setText(beforeProfile.getIntroduce());
     }
@@ -147,7 +147,7 @@ public class EditProfileActivity extends AppCompatActivity {
         activityResultLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
             if (result.getResultCode() == RESULT_OK && result.getData().getData() != null) {
                 imgUri = result.getData().getData();
-                Glide.with(this).load(imgUri).into(imgProfile);
+                Glide.with(this).load(imgUri).circleCrop().into(imgProfile);
             } else {
 
             }
@@ -348,7 +348,7 @@ public class EditProfileActivity extends AppCompatActivity {
                         }
                     });
 
-                    //이미지 없을때
+                    //사진 없을때
                 } else {
                     sendProfileData(profileDTO);
                 }

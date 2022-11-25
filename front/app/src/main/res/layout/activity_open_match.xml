@@ -27,7 +27,8 @@
             android:layout_height="match_parent"
             android:text="필터링"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
-            android:layout_margin="10dp"
+            android:layout_margin="5dp"
+            android:textSize="15dp"
             />
 
         <Button
@@ -36,7 +37,8 @@
             android:layout_weight="1"
             android:layout_height="match_parent"
             android:text="프로필"
-            android:layout_margin="10dp"
+            android:layout_margin="5dp"
+            android:textSize="15dp"
             />
 
 

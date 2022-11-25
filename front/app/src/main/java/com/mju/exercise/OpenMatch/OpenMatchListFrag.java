@@ -11,8 +11,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.mju.exercise.Domain.OpenMatchDTO;
+import com.mju.exercise.Domain.ProfileDTO;
 import com.mju.exercise.HttpRequest.RetrofitUtil;
 import com.mju.exercise.R;
+import com.mju.exercise.StatusEnum.Status;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -120,4 +122,6 @@ public class OpenMatchListFrag extends Fragment {
 
         return "없음";
     }
+
+
 }

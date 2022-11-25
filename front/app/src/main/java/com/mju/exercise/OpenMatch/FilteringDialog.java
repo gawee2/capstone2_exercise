@@ -22,14 +22,22 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.mju.exercise.R;
+import com.mju.exercise.StatusEnum.Status;
 import com.skydoves.expandablelayout.ExpandableLayout;
 
 import java.util.List;
 
-public class FilteringDialog extends BottomSheetDialogFragment {
+public class FilteringDialog extends BottomSheetDialogFragment{
 
     private ExpandableLayout exlayoutDistance, exlayoutDay, exlayoutPerssonel;
     private Button btnFilterApply;
+
+    private Status.FilterTypeDay filterTypeDay = Status.FilterTypeDay.DAY_DEFAULT;
+    private Status.FilterTypeJoin filterTypeJoin = Status.FilterTypeJoin.JOIN_DEFAULT;
+    private Status.FilterTypeDistance filterTypeDistance = Status.FilterTypeDistance.DISTANCE_DEFAULT;
+    private Status.DistanceDiff mDiff = Status.DistanceDiff.DEFAULT;
+    private Status.FavDayType mFavDay = Status.FavDayType.DEFAULT;
+    public OpenMatchFilter openMatchFilter;
 
     @Nullable
     @Override
@@ -117,12 +125,17 @@ public class FilteringDialog extends BottomSheetDialogFragment {
         return chip;
     }
 
+    //적용하기 눌렀을때
     private View.OnClickListener setOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
 
             switch (view.getId()){
                 case R.id.btnFilterApply:
+
+                    //원래 OpenMatchActivity로 값 넘김
+                    openMatchFilter.setFilter(filterTypeJoin, filterTypeDistance, filterTypeDay);
+
                     dismiss();
                     break;
             }
@@ -166,5 +179,9 @@ public class FilteringDialog extends BottomSheetDialogFragment {
     public void onPause() {
         super.onPause();
         dismiss();
+    }
+
+    public void setDialogResult(OpenMatchFilter openMatchFilter){
+        this.openMatchFilter = openMatchFilter;
     }
 }

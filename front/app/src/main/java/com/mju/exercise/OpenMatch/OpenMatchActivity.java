@@ -31,6 +31,7 @@ import com.mju.exercise.Preference.PreferenceUtil;
 import com.mju.exercise.Profile.UserInfoActivity;
 import com.mju.exercise.R;
 import com.mju.exercise.Sign.SignInActivity;
+import com.mju.exercise.StatusEnum.Status;
 
 import java.io.IOException;
 
@@ -47,8 +48,14 @@ public class OpenMatchActivity extends AppCompatActivity {
     private final CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
     private Double lat, lng;
 
-
     private int sportType;
+
+    //필터관련, 필터 선택 안할시 기본값
+    private Status.FilterTypeDay mFilterTypeDay = Status.FilterTypeDay.DAY_DEFAULT;
+    private Status.FilterTypeJoin mFilterTypeJoin = Status.FilterTypeJoin.JOIN_DEFAULT;
+    private Status.FilterTypeDistance mFilterTypeDistance = Status.FilterTypeDistance.DISTANCE_DEFAULT;
+    private Status.DistanceDiff mDiff = Status.DistanceDiff.DEFAULT;
+    private Status.FavDayType mFavDay = Status.FavDayType.DEFAULT;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +100,24 @@ public class OpenMatchActivity extends AppCompatActivity {
 
                     FilteringDialog filteringDialog = new FilteringDialog();
                     filteringDialog.show(getSupportFragmentManager(), "filtering");
+                    filteringDialog.setDialogResult(new OpenMatchFilter() {
+                        @Override
+                        public void setFilter(Status.FilterTypeJoin filterTypeJoin, Status.FilterTypeDistance filterTypeDistance, Status.FilterTypeDay filterTypeDay) {
+                            mFilterTypeDay = filterTypeDay;
+                            mFilterTypeDistance = filterTypeDistance;
+                            mFilterTypeJoin = filterTypeJoin;
+                        }
+
+                        @Override
+                        public void setDistanceDifference(Status.DistanceDiff diff) {
+                            mDiff = diff;
+                        }
+
+                        @Override
+                        public void setFavDay(Status.FavDayType favDayType) {
+                            mFavDay = favDayType;
+                        }
+                    });
 
                     break;
 
@@ -136,13 +161,26 @@ public class OpenMatchActivity extends AppCompatActivity {
                     return true;
                 }
                 case R.id.open_match_created:{
-                    fragmentTransaction.replace(R.id.host_fragment, new OpenMatchCreatedFrag())
-                            .commit();
+                    if(loginCheck()){
+                        fragmentTransaction.replace(R.id.host_fragment, new OpenMatchCreatedFrag())
+                                .commit();
+                    }else{
+                        fragmentTransaction.replace(R.id.host_fragment, new LoginNoticeFrag())
+                                .commit();
+                    }
+
+
                     return true;
                 }
                 case R.id.open_match_joined:{
-                    fragmentTransaction.replace(R.id.host_fragment, new OpenMatchJoinedFrag())
-                            .commit();
+                    if(loginCheck()){
+                        fragmentTransaction.replace(R.id.host_fragment, new OpenMatchJoinedFrag())
+                                .commit();
+                    }else{
+                        fragmentTransaction.replace(R.id.host_fragment, new LoginNoticeFrag())
+                                .commit();
+                    }
+
                     return true;
                 }
 
@@ -195,6 +233,9 @@ public class OpenMatchActivity extends AppCompatActivity {
 
                     lat = location.getLatitude();
                     lng = location.getLongitude();
+
+                    preferenceUtil.setString("lat", lat.toString());
+                    preferenceUtil.setString("lng", lng.toString());
                 }
             }
         });

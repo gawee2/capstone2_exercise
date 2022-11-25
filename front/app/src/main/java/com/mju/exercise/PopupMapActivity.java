@@ -5,6 +5,7 @@ import android.graphics.PointF;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -13,6 +14,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.mju.exercise.OpenMatch.OpenMatchOpenFrag;
 import com.naver.maps.geometry.LatLng;
+import com.naver.maps.map.CameraAnimation;
+import com.naver.maps.map.CameraUpdate;
 import com.naver.maps.map.MapView;
 import com.naver.maps.map.NaverMap;
 import com.naver.maps.map.OnMapReadyCallback;
@@ -34,9 +37,11 @@ public class PopupMapActivity extends AppCompatActivity implements NaverMap.OnMa
     //액티비티 리턴용 해당 위치 값
     private String strRegion;
 
+    //오픈매치 생성시 지도를 연 것인지, 아니면 지도에서 보기로 단순 확인인지 구분용
+    private boolean isMake;
 
     //경기장소 선택완료 처리용
-    ExtendedFloatingActionButton btnSelectOk;
+    ExtendedFloatingActionButton btnSelectOk, btnClose;
 
 
     @Override
@@ -44,28 +49,42 @@ public class PopupMapActivity extends AppCompatActivity implements NaverMap.OnMa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_map);
 
+        Intent intent = getIntent();
+        isMake = intent.getBooleanExtra("type", true);
+
         //네이버 지도
         mapView = (MapView) findViewById(R.id.popupMap);
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
 
-        btnSelectOk = (ExtendedFloatingActionButton) findViewById(R.id.btnSelectOk);
-        btnSelectOk.setOnClickListener(setOnClickListener);
+        // true면 오픈매치 생성할때 연거임
+        if(isMake){
+            btnSelectOk = (ExtendedFloatingActionButton) findViewById(R.id.btnSelectOk);
+            btnSelectOk.setOnClickListener(setOnClickListener);
+        }else {
+            lat = intent.getDoubleExtra("lat", 0.0);
+            lng = intent.getDoubleExtra("lng", 0.0);
+
+            btnClose = (ExtendedFloatingActionButton) findViewById(R.id.btnSelectOk);
+            btnClose.setOnClickListener(setOnClickListener);
+
+            btnClose.setText("닫기");
+        }
 
     }
 
     private View.OnClickListener setOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            switch (v.getId()){
-                case R.id.btnSelectOk:
-                    Intent intent = new Intent(PopupMapActivity.this, OpenMatchOpenFrag.class);
-                    intent.putExtra("lat", lat);
-                    intent.putExtra("lng", lng);
-                    intent.putExtra("strRegion", strRegion);
-                    setResult(RESULT_OK, intent);
-                    finish();
-                    break;
+            if(v == btnSelectOk){
+                Intent intent = new Intent(PopupMapActivity.this, OpenMatchOpenFrag.class);
+                intent.putExtra("lat", lat);
+                intent.putExtra("lng", lng);
+                intent.putExtra("strRegion", strRegion);
+                setResult(RESULT_OK, intent);
+                finish();
+            }else if(v==btnClose){
+                finish();
             }
 
         }
@@ -79,20 +98,34 @@ public class PopupMapActivity extends AppCompatActivity implements NaverMap.OnMa
         UiSettings uiSettings = naverMap.getUiSettings();
         uiSettings.setLocationButtonEnabled(true);
 
-        //사용자가 해당 위치 클릭시 마커 생성하고 위경도 값 담음
-        naverMap.setOnMapClickListener(new NaverMap.OnMapClickListener() {
-            @Override
-            public void onMapClick(@NonNull PointF pointF, @NonNull LatLng latLng) {
-                Marker marker = new Marker();
-                marker.setPosition(latLng);
-                marker.setMap(naverMap);
+        if(isMake){
+            //사용자가 해당 위치 클릭시 마커 생성하고 위경도 값 담음
+            naverMap.setOnMapClickListener(new NaverMap.OnMapClickListener() {
+                @Override
+                public void onMapClick(@NonNull PointF pointF, @NonNull LatLng latLng) {
+                    Marker marker = new Marker();
+                    marker.setPosition(latLng);
+                    marker.setMap(naverMap);
 
-                lat = latLng.latitude;
-                lng = latLng.longitude;
+                    lat = latLng.latitude;
+                    lng = latLng.longitude;
 
-                Toast.makeText(getApplicationContext(), latLng.toString(), Toast.LENGTH_SHORT).show();
-            }
-        });
+                    Toast.makeText(getApplicationContext(), latLng.toString(), Toast.LENGTH_SHORT).show();
+                }
+            });
+        }else {
+            LatLng latLng = new LatLng(lat, lng);
+            Marker marker = new Marker();
+            marker.setPosition(latLng);
+            marker.setMap(naverMap);
+
+            CameraUpdate cameraUpdate = CameraUpdate.scrollAndZoomTo(
+                    latLng, 15)
+                    .animate(CameraAnimation.Fly, 1500);
+            naverMap.moveCamera(cameraUpdate);
+        }
+
+
     }
 
     @Override

@@ -29,6 +29,7 @@ import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.textfield.TextInputEditText;
+import com.mju.exercise.Domain.MatchingDTO;
 import com.mju.exercise.Domain.OpenMatchDTO;
 import com.mju.exercise.HttpRequest.RetrofitUtil;
 import com.mju.exercise.PopupMapActivity;
@@ -110,7 +111,7 @@ public class OpenMatchOpenFrag extends Fragment {
                 lat = result.getData().getDoubleExtra("lat", 0.0);
                 lng = result.getData().getDoubleExtra("lng", 0.0);
 
-                tvRegion.setText("테스트용: " + String.valueOf(lat) + ", " + String.valueOf(lng));
+                tvRegion.setText("장소 선택 완료");
 
             } else {
 
@@ -243,6 +244,15 @@ public class OpenMatchOpenFrag extends Fragment {
         }
     };
 
+    private boolean filedCheck(OpenMatchDTO openMatchDTO){
+
+        if(openMatchDTO.getSubject() != null && openMatchDTO.getPersonnel() != null && openMatchDTO.getSportType() != null){
+            return true;
+        }
+
+        return false;
+    }
+
     private void createOpenMatch(){
 
 //        LocalDateTime nowTime = null;
@@ -268,10 +278,17 @@ public class OpenMatchOpenFrag extends Fragment {
             openMatchDTO.setPersonnel(personnel);
         }
 
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            LocalDateTime playDateTime = LocalDateTime.of(year, month, day, hour, min, 0);
-            Log.d("날짜", playDateTime.toString());
-            openMatchDTO.setPlayTime(playDateTime);
+//        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+//            LocalDateTime playDateTime = LocalDateTime.of(year, month, day, hour, min, 0);
+//            Log.d("날짜", playDateTime.toString());
+//            openMatchDTO.setPlayTime(playDateTime);
+//        }
+
+        //제목, 종목, 인원수 값 채워져 있는지 체크
+        // 날짜, 위치, 상세 내용은 미정상태로 둘 수 있음
+        if(!filedCheck(openMatchDTO)){
+            Toast.makeText(getContext(), "제목, 종목, 인원 수는 필수값입니다.", Toast.LENGTH_SHORT).show();
+            return;
         }
 
 
@@ -281,6 +298,34 @@ public class OpenMatchOpenFrag extends Fragment {
 
                 if(response.isSuccessful()){
                     Toast.makeText(getContext(), "생성완료", Toast.LENGTH_SHORT).show();
+
+                    OpenMatchDTO newOpenMatch = response.body();
+
+                    //자신이 생성한 것은 참여처리 되어야 함
+                    //참여 처리
+                    MatchingDTO matchingDTO = new MatchingDTO();
+                    matchingDTO.setOpenMatchId(newOpenMatch.getId());
+                    Long userIdx = Long.valueOf(preferenceUtil.getString("userIdx"));
+                    // -1이면 조회되지 않는 유저임. 참가로직 안돌도록
+                    if(userIdx == -1l){
+                        return;
+                    }
+                    matchingDTO.setUserIndex(userIdx);
+                    retrofitUtil.getRetrofitAPI().joinMatch(matchingDTO).enqueue(new Callback<Long>() {
+                        @Override
+                        public void onResponse(Call<Long> call, Response<Long> response) {
+                            if(response.isSuccessful()){
+                                Toast.makeText(getContext(), "참여 완료", Toast.LENGTH_SHORT).show();
+                            }else {
+                                Toast.makeText(getContext(), "응답 없음", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<Long> call, Throwable t) {
+
+                        }
+                    });
                 }else{
                     Log.d("날짜", "응답코드: " + String.valueOf(response.code()));
                 }
