@@ -244,6 +244,15 @@ public class OpenMatchOpenFrag extends Fragment {
         }
     };
 
+    private boolean filedCheck(OpenMatchDTO openMatchDTO){
+
+        if(openMatchDTO.getSubject() != null && openMatchDTO.getPersonnel() != null && openMatchDTO.getSportType() != null){
+            return true;
+        }
+
+        return false;
+    }
+
     private void createOpenMatch(){
 
 //        LocalDateTime nowTime = null;
@@ -274,6 +283,13 @@ public class OpenMatchOpenFrag extends Fragment {
 //            Log.d("날짜", playDateTime.toString());
 //            openMatchDTO.setPlayTime(playDateTime);
 //        }
+
+        //제목, 종목, 인원수 값 채워져 있는지 체크
+        // 날짜, 위치, 상세 내용은 미정상태로 둘 수 있음
+        if(!filedCheck(openMatchDTO)){
+            Toast.makeText(getContext(), "제목, 종목, 인원 수는 필수값입니다.", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
 
         retrofitUtil.getRetrofitAPI().openMatch(openMatchDTO).enqueue(new Callback<OpenMatchDTO>() {

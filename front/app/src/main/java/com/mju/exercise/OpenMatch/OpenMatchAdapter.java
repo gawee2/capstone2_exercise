@@ -76,6 +76,11 @@ public class OpenMatchAdapter extends ArrayAdapter implements AdapterView.OnItem
         public ArrayList<ProfileDTO> profileDTOs;
         public ListView customListView;
         public SmallProfileAdapter smallProfileAdapter;
+
+        //참여가능 여부
+        public boolean isCanJoin = true;
+        //자신이 만든것인지 여부
+        public boolean isMadeMe = false;
     }
 
     @NonNull
@@ -169,6 +174,12 @@ public class OpenMatchAdapter extends ArrayAdapter implements AdapterView.OnItem
                     int cnt = response.body().size();
 
                     viewHolder.tvPersonnel.setText(String.valueOf("현재 인원:" + String.valueOf(cnt) + "/" + openMatchDTO.getPersonnel()));
+
+                    //모집인원 수가 다 채워진 오픈매치는 disabled 함
+                    if(cnt >= openMatchDTO.getPersonnel()){
+                        viewHolder.btnDetailJoin.setText("참여 불가");
+                        viewHolder.btnDetailJoin.setEnabled(false);
+                    }
                 }else {
                     viewHolder.tvPersonnel.setText(String.valueOf("현재 인원:" + "로딩 오류/" + openMatchDTO.getPersonnel()));
                 }
@@ -200,12 +211,16 @@ public class OpenMatchAdapter extends ArrayAdapter implements AdapterView.OnItem
         if(openMatchDTO.getLat() == null || openMatchDTO.getLng() == null){
             viewHolder.btnDetailOnMap.setEnabled(false);
             viewHolder.btnDetailOnMap.setText("위치 미정");
+            viewHolder.tvDistanceToMe.setText("나와의 거리: 장소 미정");
         }else {
             viewHolder.mapLat = openMatchDTO.getLat();
             viewHolder.mapLng = openMatchDTO.getLng();
 
             viewHolder.distanceToMe = computeDistance(viewHolder.myLat, viewHolder.myLng, viewHolder.mapLat, viewHolder.mapLng);
             viewHolder.tvDistanceToMe.setText("나와의 거리: " + String.valueOf(convertMtoKM(viewHolder.distanceToMe)) + "km    ");
+        }
+        if(openMatchDTO.getPlayDateTime() == null){
+            viewHolder.tvPlayDateTime.setText("날짜 미정");
         }
 
         loadAllProfileThisMatch(viewHolder, openMatchDTO.getId());
@@ -265,28 +280,6 @@ public class OpenMatchAdapter extends ArrayAdapter implements AdapterView.OnItem
         }else if(filterTypeJoin == Status.FilterTypeJoin.JOIN_CAN){
             List<OpenMatchDTO> newOpenMatches = new ArrayList<>();
 
-
-//            for(OpenMatchDTO openMatchDTO: list){
-//                int totalUser = openMatchDTO.getPersonnel();
-//                retrofitUtil.getRetrofitAPI().getJoinedUserProfiles(openMatchDTO.getId()).enqueue(new Callback<List<ProfileDTO>>() {
-//                    @Override
-//                    public void onResponse(Call<List<ProfileDTO>> call, Response<List<ProfileDTO>> response) {
-//                        if(response.isSuccessful()){
-//                            int nowUser = response.body().size();
-//
-//                            if(totalUser > nowUser){
-//                                newOpenMatches.add(openMatchDTO);
-//                            }
-//                        }
-//
-//                    }
-//
-//                    @Override
-//                    public void onFailure(Call<List<ProfileDTO>> call, Throwable t) {
-//
-//                    }
-//                });
-//            }
         }
 
     }
