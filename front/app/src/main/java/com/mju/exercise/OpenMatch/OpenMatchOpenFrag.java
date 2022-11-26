@@ -41,6 +41,8 @@ import java.time.Clock;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.util.Date;
 import java.util.List;
 
@@ -69,7 +71,7 @@ public class OpenMatchOpenFrag extends Fragment {
     Double lat, lng;
     //오픈매치 운동 모집 날짜
     LocalDateTime playDateTime;
-    int year, month, day, hour, min, sec;
+    int year, month, day, hour, min;
     Integer personnel;
 
 
@@ -188,6 +190,9 @@ public class OpenMatchOpenFrag extends Fragment {
                             Date date = new Date(selection);
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                                 playDateTime = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+                                year = playDateTime.getYear();
+                                month = playDateTime.getMonthValue();
+                                day = playDateTime.getDayOfMonth();
                             }
 
                             String dateString = simpleDateFormat.format(date);
@@ -228,8 +233,8 @@ public class OpenMatchOpenFrag extends Fragment {
                         @Override
                         public void onTimeSet(TimePicker timePicker, int i, int i1) {
 
-//                            hour = i;
-//                            min = i1;
+                            hour = i;
+                            min = i1;
                             tvTime.setText(String.valueOf(i) + "시 " + String.valueOf(i1) + "분");
                         }
                     },0,0, false);
@@ -254,18 +259,24 @@ public class OpenMatchOpenFrag extends Fragment {
 
         LocalDateTime nowTime = null;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            LocalDateTime tmp = LocalDateTime.now(Clock.systemDefaultZone());
-            nowTime = LocalDateTime.of(tmp.getYear(), tmp.getMonth(), tmp.getDayOfMonth(), tmp.getHour(), tmp.getMinute());
-
-//            nowTime = LocalDateTime.now(Clock.systemDefaultZone());
+            nowTime = LocalDateTime.now(Clock.systemDefaultZone());
+            nowTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"));
         }
         Log.d("날짜", nowTime.toString());
 
         OpenMatchDTO openMatchDTO = new OpenMatchDTO();
         openMatchDTO.setSubject(edtSubject.getText().toString());
         openMatchDTO.setArticle(edtArticle.getText().toString());
-        openMatchDTO.setOpenTime(nowTime);
         openMatchDTO.setOpenUserId(preferenceUtil.getString("userId"));
+
+        //날짜 전송
+        openMatchDTO.setOpenTime(nowTime.toString());
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            LocalDateTime playDateTime = LocalDateTime.of(year, month, day, hour, min, 0);
+            Log.d("날짜", playDateTime.toString());
+            playDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"));
+            openMatchDTO.setPlayTime(playDateTime.toString());
+        }
 
         if(lat != null && lng != null){
             openMatchDTO.setLat(lat);
@@ -278,11 +289,7 @@ public class OpenMatchOpenFrag extends Fragment {
             openMatchDTO.setPersonnel(personnel);
         }
 
-//        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-////            LocalDateTime playDateTime = LocalDateTime.of(year, month, day, hour, min, 0);
-//            Log.d("날짜", playDateTime.toString());
-//            openMatchDTO.setPlayTime(playDateTime);
-//        }
+
 
         //제목, 종목, 인원수 값 채워져 있는지 체크
         // 날짜, 위치, 상세 내용은 미정상태로 둘 수 있음

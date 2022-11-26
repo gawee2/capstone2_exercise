@@ -18,7 +18,6 @@ public class OpenMatchDTO {
 
     private String openUserId;
 
-    @JsonFormat
     private LocalDateTime openTime;
 
     private String subject;
@@ -27,7 +26,6 @@ public class OpenMatchDTO {
     private String sportType;
     private Integer personnel; //인원
 
-    @JsonFormat
     private LocalDateTime playDateTime;
 
     private Double lat;

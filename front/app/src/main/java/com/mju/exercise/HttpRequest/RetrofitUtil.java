@@ -6,14 +6,19 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
 import com.mju.exercise.Domain.OpenMatchDTO;
 import com.mju.exercise.Preference.PreferenceUtil;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
@@ -66,10 +71,8 @@ public class RetrofitUtil {
         });
         this.client = httpClient.build();
 
-
         Gson gson = null;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            Log.d("날짜", "추가설정됨");
             gson = new GsonBuilder()
                     .registerTypeAdapter(LocalDateTime.class, (JsonDeserializer<LocalDateTime>) (json, typeOfT, context)
                             -> LocalDateTime.parse(json.getAsString(), DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")))
@@ -83,8 +86,8 @@ public class RetrofitUtil {
         Log.d("날짜", "디폴트");
         this.retrofit = new Retrofit.Builder()
                     .baseUrl(BASE_URL)
-                    .addConverterFactory(GsonConverterFactory.create(gson))
                     .client(this.client)
+                    .addConverterFactory(GsonConverterFactory.create(gson))
                     .build();
         this.retrofitAPI = this.retrofit.create(RetrofitAPI.class);
 
