@@ -41,6 +41,8 @@ import java.time.Clock;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.util.Date;
 import java.util.List;
 
@@ -264,8 +266,15 @@ public class OpenMatchOpenFrag extends Fragment {
         OpenMatchDTO openMatchDTO = new OpenMatchDTO();
         openMatchDTO.setSubject(edtSubject.getText().toString());
         openMatchDTO.setArticle(edtArticle.getText().toString());
-//        openMatchDTO.setOpenTime(nowTime);
         openMatchDTO.setOpenUserId(preferenceUtil.getString("userId"));
+        //        openMatchDTO.setOpenTime(nowTime);
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            LocalDateTime test = LocalDateTime.of(2022, 10, 3, 7, 5);
+            test.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"));
+
+            openMatchDTO.setOpenTime(test);
+            openMatchDTO.setPlayTime(test);
+        }
 
         if(lat != null && lng != null){
             openMatchDTO.setLat(lat);
