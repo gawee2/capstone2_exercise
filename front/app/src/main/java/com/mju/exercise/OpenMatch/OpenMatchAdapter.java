@@ -158,7 +158,8 @@ public class OpenMatchAdapter extends ArrayAdapter implements AdapterView.OnItem
                 matchingDTO.setOpenMatchId(openMatchDTO.getId());
                 Long userIdx = Long.valueOf(preferenceUtil.getString("userIdx"));
                 // -1이면 조회되지 않는 유저임. 참가로직 안돌도록
-                if(userIdx == -1l){
+                if(userIdx == -1l || userIdx == null){
+                    Toast.makeText(mContext, "참가 실패", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 matchingDTO.setUserIndex(userIdx);

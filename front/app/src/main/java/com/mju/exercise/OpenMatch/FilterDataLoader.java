@@ -16,6 +16,10 @@ import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -47,6 +51,62 @@ public class FilterDataLoader {
                 }
             }
             return false;
+        });
+    }
+
+    //가까운 거리순으로 뽑기
+    public void getDataDistanceSort(){
+        Double myLat = Double.valueOf(preferenceUtil.getString("lat"));
+        Double myLng = Double.valueOf(preferenceUtil.getString("lng"));
+
+        ArrayList<Integer> distacnceList = new ArrayList<>();
+        HashMap<Integer, OpenMatchDTO> map = new HashMap<>();
+
+        if(myLat !=null && myLng != null) {
+            //우선 각각의 오픈 매치와 나의 거리를 쭉 계산함
+            for (OpenMatchDTO openMatchDTO : list) {
+                //미정인 애들 뒤로 보내려고
+                int distanceToMe = 10000;
+
+                Double tmpLat = openMatchDTO.getLat();
+                Double tmpLng = openMatchDTO.getLng();
+
+                //운동장소가 선택된 것들만 거리 비교함
+                if(tmpLat != null && tmpLng != null) {
+                    distanceToMe = computeDistance(myLat, myLng, tmpLat, tmpLng);
+                }
+                distacnceList.add(distanceToMe);
+
+                //거리에 따라서 오픈매치 해시맵에 넣어놓고
+                //거리 돌면서 해시맵값 뽑아서 최종 정렬
+                map.put(distanceToMe, openMatchDTO);
+            }
+            Collections.sort(distacnceList, new Comparator<Integer>() {
+                @Override
+                public int compare(Integer integer, Integer t1) {
+                    return integer.compareTo(t1);
+                }
+            });
+
+            //최종정렬
+            for(Integer integer: distacnceList){
+                dataLoadedListener.dataLoaded(map.get(integer));
+            }
+
+
+        }
+    }
+    //가까운 날짜순으로 뽑기
+    public void getDataDaySort(){
+        Collections.sort(list, new Comparator<OpenMatchDTO>() {
+            @Override
+            public int compare(OpenMatchDTO openMatchDTO, OpenMatchDTO t1) {
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    return openMatchDTO.getPlayDateTime().compareTo(t1.getPlayDateTime());
+                }
+                return 0;
+            }
         });
     }
 
