@@ -160,27 +160,46 @@ public class OpenMatchAdapter extends ArrayAdapter implements AdapterView.OnItem
                     MatchingDTO matchingDTO = new MatchingDTO();
                     matchingDTO.setOpenMatchId(openMatchDTO.getId());
                     Long userIdx = Long.valueOf(preferenceUtil.getString("userIdx"));
-                    // -1이면 조회되지 않는 유저임. 참가로직 안돌도록
+                    // -1이면 조회되지 않는 유저임(없는 유저). 참가로직 안돌도록
                     if(userIdx == -1l || userIdx == null){
                         Toast.makeText(mContext, "참가 실패", Toast.LENGTH_SHORT).show();
                         return;
                     }
                     matchingDTO.setUserIndex(userIdx);
-                    retrofitUtil.getRetrofitAPI().joinMatch(matchingDTO).enqueue(new Callback<Long>() {
+                    retrofitUtil.getRetrofitAPI().getUserProfile(preferenceUtil.getString("userId")).enqueue(new Callback<ProfileDTO>() {
                         @Override
-                        public void onResponse(Call<Long> call, Response<Long> response) {
+                        public void onResponse(Call<ProfileDTO> call, Response<ProfileDTO> response) {
                             if(response.isSuccessful()){
-                                Toast.makeText(mContext, "참여 완료", Toast.LENGTH_SHORT).show();
+                                if(response.body() != null){
+                                    Log.d("프로필제한", "프로필이 있는 유저");
+                                    retrofitUtil.getRetrofitAPI().joinMatch(matchingDTO).enqueue(new Callback<Long>() {
+                                        @Override
+                                        public void onResponse(Call<Long> call, Response<Long> response) {
+                                            if(response.isSuccessful()){
+                                                Toast.makeText(mContext, "참여 완료", Toast.LENGTH_SHORT).show();
+                                            }else {
+                                                Toast.makeText(mContext, "응답 없음", Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<Long> call, Throwable t) {
+
+                                        }
+                                    });
+                                }
                             }else {
-                                Toast.makeText(mContext, "응답 없음", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(mContext, "프로필 생성 후 이용가능합니다.", Toast.LENGTH_SHORT).show();
+                                Log.d("프로필제한", "프로필이 없는 유저");
                             }
                         }
 
                         @Override
-                        public void onFailure(Call<Long> call, Throwable t) {
+                        public void onFailure(Call<ProfileDTO> call, Throwable t) {
 
                         }
                     });
+
                 }
             });
         }
