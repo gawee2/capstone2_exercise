@@ -83,6 +83,17 @@ public class MatchService {
 
     //매칭 참가
     public Long joinMatch(MatchingDTO matchingDTO){
+        //유저가 이미 참여했던 매칭리스트 가져옴
+        List<MatchingDTO> matchingDTOList = matchRepository.findAllMatchingByUserId(matchingDTO.getUserIndex());
+        if(!matchingDTOList.isEmpty()){
+            for(MatchingDTO matching: matchingDTOList){
+                //현재 요청하는 매칭이 이미 있는 매칭일 경우 db에 반영하지 않음
+                if(matchingDTO.getUserIndex() == matching.getUserIndex() && matchingDTO.getOpenMatchId() == matching.getOpenMatchId()){
+                    return -1l;
+                }
+            }
+        }
+
         return matchRepository.saveMatchingInfo(matchingDTO);
     }
 

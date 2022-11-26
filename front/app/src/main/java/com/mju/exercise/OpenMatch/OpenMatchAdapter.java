@@ -176,7 +176,12 @@ public class OpenMatchAdapter extends ArrayAdapter implements AdapterView.OnItem
                                         @Override
                                         public void onResponse(Call<Long> call, Response<Long> response) {
                                             if(response.isSuccessful()){
-                                                Toast.makeText(mContext, "참여 완료", Toast.LENGTH_SHORT).show();
+                                                if(response.body() == -1l){
+                                                    Toast.makeText(mContext, "이미 참여한 오픈매치", Toast.LENGTH_SHORT).show();
+                                                }else {
+                                                    Toast.makeText(mContext, "참여 완료", Toast.LENGTH_SHORT).show();
+                                                }
+
                                             }else {
                                                 Toast.makeText(mContext, "응답 없음", Toast.LENGTH_SHORT).show();
                                             }
