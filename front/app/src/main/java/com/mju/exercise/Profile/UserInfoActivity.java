@@ -233,6 +233,8 @@ public class UserInfoActivity extends AppCompatActivity {
                     preferenceUtil.setString("accessToken", "");
                     preferenceUtil.setString("refreshIdx", "");
                     preferenceUtil.setString("userId", "");
+                    preferenceUtil.setString("lat", "");
+                    preferenceUtil.setString("lng", "");
                     finish();
                     break;
             }

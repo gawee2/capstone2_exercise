@@ -16,6 +16,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.mju.exercise.Domain.MatchingDTO;
 import com.mju.exercise.Domain.OpenMatchDTO;
@@ -74,7 +76,7 @@ public class OpenMatchAdapter extends ArrayAdapter implements AdapterView.OnItem
 
         //스몰 프로필 부분
         public ArrayList<ProfileDTO> profileDTOs;
-        public ListView customListView;
+        public RecyclerView customListView;
         public SmallProfileAdapter smallProfileAdapter;
 
         //참여가능 여부
@@ -190,7 +192,6 @@ public class OpenMatchAdapter extends ArrayAdapter implements AdapterView.OnItem
                     viewHolder.tvPersonnel.setText(String.valueOf("현재 인원:" + String.valueOf(cnt) + "/" + openMatchDTO.getPersonnel()));
 
 
-
                     //모집인원 수가 다 채워진 오픈매치는 disabled 함
                     if(cnt >= openMatchDTO.getPersonnel()){
                         viewHolder.isCanJoin = false;
@@ -243,9 +244,7 @@ public class OpenMatchAdapter extends ArrayAdapter implements AdapterView.OnItem
         loadAllProfileThisMatch(viewHolder, openMatchDTO.getId());
         //스몰 프로필 부분
         viewHolder.profileDTOs = new ArrayList<>();
-        viewHolder.customListView = (ListView) convertView.findViewById(R.id.detailProfileList);
-
-
+        viewHolder.customListView = (RecyclerView) convertView.findViewById(R.id.detailProfileList);
 
         return convertView;
 
@@ -279,6 +278,7 @@ public class OpenMatchAdapter extends ArrayAdapter implements AdapterView.OnItem
                     viewHolder.profileDTOs = (ArrayList<ProfileDTO>) response.body();
                     viewHolder.smallProfileAdapter = new SmallProfileAdapter(getContext(), viewHolder.profileDTOs);
                     viewHolder.customListView.setAdapter(viewHolder.smallProfileAdapter);
+                    viewHolder.customListView.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.HORIZONTAL, false));
                 }
             }
 
