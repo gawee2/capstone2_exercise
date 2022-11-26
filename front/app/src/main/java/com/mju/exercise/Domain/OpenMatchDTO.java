@@ -13,7 +13,7 @@ public class OpenMatchDTO {
     private String openUserId;
 
     @SerializedName("openTime")
-    private LocalDateTime openTime;
+    private String openTime;
 
     @SerializedName("subject")
     private String subject;
@@ -26,7 +26,7 @@ public class OpenMatchDTO {
     private Integer personnel; //인원
 
     @SerializedName("playDateTime")
-    private LocalDateTime playDateTime;
+    private String playDateTime;
 
     @SerializedName("lat")
     private Double lat;
@@ -49,11 +49,11 @@ public class OpenMatchDTO {
         this.openUserId = openUserId;
     }
 
-    public LocalDateTime getOpenTime() {
+    public String getOpenTime() {
         return openTime;
     }
 
-    public void setOpenTime(LocalDateTime openTime) {
+    public void setOpenTime(String openTime) {
         this.openTime = openTime;
     }
 
@@ -90,11 +90,11 @@ public class OpenMatchDTO {
     }
 
 
-    public LocalDateTime getPlayDateTime() {
+    public String getPlayDateTime() {
         return playDateTime;
     }
 
-    public void setPlayTime(LocalDateTime playDateTime) {
+    public void setPlayTime(String playDateTime) {
         this.playDateTime = playDateTime;
     }
 

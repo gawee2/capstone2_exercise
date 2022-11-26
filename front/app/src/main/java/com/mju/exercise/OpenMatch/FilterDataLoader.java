@@ -44,8 +44,9 @@ public class FilterDataLoader {
     public void getDataPickDay(LocalDateTime pickDay){
         list.stream().filter(openMatchDTO -> {
 
-            LocalDateTime localDateTime = openMatchDTO.getPlayDateTime();
+            String strLocalDateTime = openMatchDTO.getPlayDateTime();
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                LocalDateTime localDateTime = LocalDateTime.parse(strLocalDateTime);
                 if(pickDay.isEqual(localDateTime)){
                     dataLoadedListener.dataLoaded(openMatchDTO);
                 }
@@ -141,14 +142,14 @@ public class FilterDataLoader {
         String finalTmp = tmp;
         list.stream().filter(openMatchDTO -> {
 
-            LocalDateTime localDateTime = openMatchDTO.getPlayDateTime();
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            String strLocalDateTime = openMatchDTO.getPlayDateTime();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                LocalDateTime localDateTime = LocalDateTime.parse(strLocalDateTime);
                 DayOfWeek dayOfWeek = localDateTime.getDayOfWeek();
 
                 if(convertDayOfWeek(dayOfWeek).equals(finalTmp)){
                     dataLoadedListener.dataLoaded(openMatchDTO);
                 }
-
             }
             return false;
         });
