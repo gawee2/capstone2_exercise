@@ -11,7 +11,7 @@ public class OpenMatchDTO {
 
     @SerializedName("openUserId")
     private String openUserId;
-    @SerializedName("openTime")
+    
     private LocalDateTime openTime;
 
     @SerializedName("subject")
@@ -23,7 +23,7 @@ public class OpenMatchDTO {
     private String sportType;
     @SerializedName("personnel")
     private Integer personnel; //인원
-    @SerializedName("playDateTime")
+
     private LocalDateTime playDateTime;
 
     @SerializedName("lat")

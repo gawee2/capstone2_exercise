@@ -264,7 +264,7 @@ public class OpenMatchOpenFrag extends Fragment {
         OpenMatchDTO openMatchDTO = new OpenMatchDTO();
         openMatchDTO.setSubject(edtSubject.getText().toString());
         openMatchDTO.setArticle(edtArticle.getText().toString());
-        openMatchDTO.setOpenTime(nowTime);
+//        openMatchDTO.setOpenTime(nowTime);
         openMatchDTO.setOpenUserId(preferenceUtil.getString("userId"));
 
         if(lat != null && lng != null){
