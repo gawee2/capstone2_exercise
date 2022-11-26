@@ -1,11 +1,20 @@
 package com.mju.exercise.HttpRequest;
 
 import android.content.Context;
+import android.os.Build;
+import android.util.Log;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializer;
 import com.mju.exercise.Domain.OpenMatchDTO;
 import com.mju.exercise.Preference.PreferenceUtil;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import okhttp3.Interceptor;
@@ -57,13 +66,28 @@ public class RetrofitUtil {
         });
         this.client = httpClient.build();
 
-        this.retrofit = new Retrofit.Builder()
-                .baseUrl(BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .client(this.client)
-                .build();
 
+        Gson gson = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            Log.d("날짜", "추가설정됨");
+            gson = new GsonBuilder()
+                    .registerTypeAdapter(LocalDateTime.class, (JsonDeserializer<LocalDateTime>) (json, typeOfT, context)
+                            -> LocalDateTime.parse(json.getAsString(), DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")))
+                    .registerTypeAdapter(LocalDate.class, (JsonDeserializer<LocalDate>) (json, typeOfT, context)
+                            -> LocalDate.parse(json.getAsString(), DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+                    .registerTypeAdapter(LocalTime.class, (JsonDeserializer<LocalTime>) (json, typeOfT, context)
+                            -> LocalTime.parse(json.getAsString(), DateTimeFormatter.ofPattern("HH:mm:ss")))
+                    .create();
+        }
+
+        Log.d("날짜", "디폴트");
+        this.retrofit = new Retrofit.Builder()
+                    .baseUrl(BASE_URL)
+                    .addConverterFactory(GsonConverterFactory.create(gson))
+                    .client(this.client)
+                    .build();
         this.retrofitAPI = this.retrofit.create(RetrofitAPI.class);
+
     }
 
     public static RetrofitUtil getInstance(){

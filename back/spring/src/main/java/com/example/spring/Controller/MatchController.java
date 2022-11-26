@@ -29,6 +29,9 @@ public class MatchController {
     @PostMapping("/openMatch")
     public OpenMatchDTO openMatch(@RequestBody OpenMatchDTO openMatchDTO){
 
+        System.out.println("날짜 받은거: " + openMatchDTO.getOpenTime().toString());
+        System.out.println("날짜 받은거: " + openMatchDTO.getPlayDateTime().toString());
+
         return matchService.create(openMatchDTO);
     }
 
