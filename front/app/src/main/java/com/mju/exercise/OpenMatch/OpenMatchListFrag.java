@@ -19,6 +19,9 @@ import com.mju.exercise.StatusEnum.Status;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import retrofit2.Call;
@@ -185,6 +188,7 @@ public class OpenMatchListFrag extends Fragment implements OpenMatchFilter{
         filterDataLoader.getDataPickDay(localDateTime);
     }
     public void daySort(FilterDataLoader filterDataLoader){
+        filterDataLoader.getDataDaySort();
     }
 
 
@@ -193,7 +197,7 @@ public class OpenMatchListFrag extends Fragment implements OpenMatchFilter{
     }
 
     public void distanceSort(FilterDataLoader filterDataLoader){
-
+        filterDataLoader.getDataDistanceSort();
     }
 
     public void canJoin(FilterDataLoader filterDataLoader){

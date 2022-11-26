@@ -235,6 +235,7 @@ public class UserInfoActivity extends AppCompatActivity {
                     preferenceUtil.setString("userId", "");
                     preferenceUtil.setString("lat", "");
                     preferenceUtil.setString("lng", "");
+                    preferenceUtil.setString("userIdx","");
                     finish();
                     break;
             }
