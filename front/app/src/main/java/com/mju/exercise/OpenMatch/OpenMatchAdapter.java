@@ -69,7 +69,7 @@ public class OpenMatchAdapter extends ArrayAdapter implements AdapterView.OnItem
         public TextView tvPlayDateTime;
         public TextView tvDistanceToMe;
 
-        public Button btnDetailOnMap, btnDetailJoin;
+        public Button btnDetailOnMap, btnDetailClick;
 
         public Double myLat, myLng;
         public Double mapLat, mapLng;
@@ -120,12 +120,12 @@ public class OpenMatchAdapter extends ArrayAdapter implements AdapterView.OnItem
         //디테일 부분
         viewHolder.tvArticle = (TextView) expandableLayout.secondLayout.findViewById(R.id.detailArticle);
         viewHolder.btnDetailOnMap = (Button) convertView.findViewById(R.id.detailOnMap);
-        viewHolder.btnDetailJoin = (Button) convertView.findViewById(R.id.detailJoin);
+        viewHolder.btnDetailClick = (Button) convertView.findViewById(R.id.detailJoin);
+        viewHolder.profileDTOs = new ArrayList<>();
+        viewHolder.customListView = (RecyclerView) convertView.findViewById(R.id.detailProfileList);
 
         //데이터 하나 뽑은 후
         final OpenMatchDTO openMatchDTO = (OpenMatchDTO) list.get(position);
-
-
 
         //내가 만든것인지 체크
         if(preferenceUtil.getString("userId").equals(openMatchDTO.getOpenUserId())){
@@ -148,44 +148,47 @@ public class OpenMatchAdapter extends ArrayAdapter implements AdapterView.OnItem
         //로그인 안한 유저는 참여하지 못하도록
         if(preferenceUtil.getString("userId").equals("") || preferenceUtil.getString("userId") == null){
             viewHolder.isCanJoin = false;
-            viewHolder.btnDetailJoin.setText("로그인 필요");
-            viewHolder.btnDetailJoin.setEnabled(false);
-        }
-        viewHolder.btnDetailJoin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //참여 처리
-                MatchingDTO matchingDTO = new MatchingDTO();
-                matchingDTO.setOpenMatchId(openMatchDTO.getId());
-                Long userIdx = Long.valueOf(preferenceUtil.getString("userIdx"));
-                // -1이면 조회되지 않는 유저임. 참가로직 안돌도록
-                if(userIdx == -1l || userIdx == null){
-                    Toast.makeText(mContext, "참가 실패", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                matchingDTO.setUserIndex(userIdx);
-                retrofitUtil.getRetrofitAPI().joinMatch(matchingDTO).enqueue(new Callback<Long>() {
-                    @Override
-                    public void onResponse(Call<Long> call, Response<Long> response) {
-                        if(response.isSuccessful()){
-                            Toast.makeText(mContext, "참여 완료", Toast.LENGTH_SHORT).show();
-                        }else {
-                            Toast.makeText(mContext, "응답 없음", Toast.LENGTH_SHORT).show();
+            viewHolder.btnDetailClick.setText("로그인 필요");
+            viewHolder.btnDetailClick.setEnabled(false);
+        }else{
+            //오픈 매치에 참가할 수 있도록 하는 기능
+            viewHolder.btnDetailClick.setEnabled(true);
+            viewHolder.btnDetailClick.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //참여 처리
+                    MatchingDTO matchingDTO = new MatchingDTO();
+                    matchingDTO.setOpenMatchId(openMatchDTO.getId());
+                    Long userIdx = Long.valueOf(preferenceUtil.getString("userIdx"));
+                    // -1이면 조회되지 않는 유저임. 참가로직 안돌도록
+                    if(userIdx == -1l || userIdx == null){
+                        Toast.makeText(mContext, "참가 실패", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    matchingDTO.setUserIndex(userIdx);
+                    retrofitUtil.getRetrofitAPI().joinMatch(matchingDTO).enqueue(new Callback<Long>() {
+                        @Override
+                        public void onResponse(Call<Long> call, Response<Long> response) {
+                            if(response.isSuccessful()){
+                                Toast.makeText(mContext, "참여 완료", Toast.LENGTH_SHORT).show();
+                            }else {
+                                Toast.makeText(mContext, "응답 없음", Toast.LENGTH_SHORT).show();
+                            }
                         }
-                    }
 
-                    @Override
-                    public void onFailure(Call<Long> call, Throwable t) {
+                        @Override
+                        public void onFailure(Call<Long> call, Throwable t) {
 
-                    }
-                });
-            }
-        });
+                        }
+                    });
+                }
+            });
+        }
+
 
         viewHolder.tvSubect.setText(openMatchDTO.getSubject());
         //운동종류에 따라서 다른 이미지 아이콘 적용
         iconReflect(viewHolder, openMatchDTO.getSportType());
-//        viewHolder.tvSportType.setText(openMatchDTO.getSportType());
         //해당 오픈 매치에 유저 얼마나 있는지 확인용
         retrofitUtil.getRetrofitAPI().getJoinedUserProfiles(openMatchDTO.getId()).enqueue(new Callback<List<ProfileDTO>>() {
             @Override
@@ -199,9 +202,60 @@ public class OpenMatchAdapter extends ArrayAdapter implements AdapterView.OnItem
                     //모집인원 수가 다 채워진 오픈매치는 disabled 함
                     if(cnt >= openMatchDTO.getPersonnel()){
                         viewHolder.isCanJoin = false;
-                        viewHolder.btnDetailJoin.setText("참여 불가");
-                        viewHolder.btnDetailJoin.setEnabled(false);
+                        viewHolder.btnDetailClick.setText("참여 불가");
+                        viewHolder.btnDetailClick.setEnabled(false);
                     }
+                        //이미 참여한 오픈 매치는 나가기 버튼을 제공
+                        for(ProfileDTO profileDTO: response.body()){
+                            if(profileDTO.getUserID().equals(preferenceUtil.getString("userId"))){
+                                viewHolder.btnDetailClick.setEnabled(true);
+                                viewHolder.btnDetailClick.setText("나가기");
+                                viewHolder.btnDetailClick.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        //나가기 기능 제공
+                                    }
+                                });
+                                break;
+                            }
+                        }
+                        if(openMatchDTO.getOpenUserId().equals(preferenceUtil.getString("userId"))){
+                            viewHolder.btnDetailClick.setEnabled(true);
+                            //내가 만든 오픈매치는 삭제하기 버튼이 뜨도록
+                            viewHolder.btnDetailClick.setText("삭제 하기");
+                            viewHolder.btnDetailClick.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    //삭제처리
+                                    retrofitUtil.getRetrofitAPI().delete(openMatchDTO.getId()).enqueue(new Callback<Boolean>() {
+                                        @Override
+                                        public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                                            if(response.isSuccessful()){
+                                                if(response.body()){
+                                                    Toast.makeText(mContext, "삭제완료", Toast.LENGTH_SHORT).show();
+                                                }else {
+                                                    Toast.makeText(mContext, "오류로 삭제 실패", Toast.LENGTH_SHORT).show();
+                                                }
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<Boolean> call, Throwable t) {
+
+                                        }
+                                    });
+                                }
+                            });
+                        }
+
+
+
+                    //오픈매치 스몰 프로필 부분
+                    viewHolder.profileDTOs = (ArrayList<ProfileDTO>) response.body();
+                    viewHolder.smallProfileAdapter = new SmallProfileAdapter(getContext(), viewHolder.profileDTOs);
+                    viewHolder.customListView.setAdapter(viewHolder.smallProfileAdapter);
+                    viewHolder.customListView.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.HORIZONTAL, false));
+
                 }else {
                     viewHolder.tvPersonnel.setText(String.valueOf("현재 인원:" + "로딩 오류/" + openMatchDTO.getPersonnel()));
                 }
@@ -218,6 +272,22 @@ public class OpenMatchAdapter extends ArrayAdapter implements AdapterView.OnItem
         if(!preferenceUtil.getString("lat").equals("") && !preferenceUtil.getString("lng").equals("")){
             viewHolder.myLat = Double.valueOf(preferenceUtil.getString("lat"));
             viewHolder.myLng = Double.valueOf(preferenceUtil.getString("lng"));
+
+            //지도 내용 없으면 버튼 비활성화
+            if(openMatchDTO.getLat() == null || openMatchDTO.getLng() == null){
+                viewHolder.btnDetailOnMap.setEnabled(false);
+                viewHolder.btnDetailOnMap.setText("위치 미정");
+                viewHolder.tvDistanceToMe.setText("나와의 거리: 장소 미정");
+            }else {
+                viewHolder.mapLat = openMatchDTO.getLat();
+                viewHolder.mapLng = openMatchDTO.getLng();
+
+                viewHolder.distanceToMe = computeDistance(viewHolder.myLat, viewHolder.myLng, viewHolder.mapLat, viewHolder.mapLng);
+                viewHolder.tvDistanceToMe.setText("나와의 거리: " + String.valueOf(convertMtoKM(viewHolder.distanceToMe)) + "km    ");
+            }
+        }else {
+            viewHolder.btnDetailOnMap.setEnabled(true);
+            viewHolder.tvDistanceToMe.setText("나와의 거리: 알 수 없음");
         }
 
 
@@ -229,26 +299,12 @@ public class OpenMatchAdapter extends ArrayAdapter implements AdapterView.OnItem
         }else {
             viewHolder.tvArticle.setText(openMatchDTO.getArticle());
         }
-        //지도 내용 없으면 버튼 비활성화
-        if(openMatchDTO.getLat() == null || openMatchDTO.getLng() == null){
-            viewHolder.btnDetailOnMap.setEnabled(false);
-            viewHolder.btnDetailOnMap.setText("위치 미정");
-            viewHolder.tvDistanceToMe.setText("나와의 거리: 장소 미정");
-        }else {
-            viewHolder.mapLat = openMatchDTO.getLat();
-            viewHolder.mapLng = openMatchDTO.getLng();
 
-            viewHolder.distanceToMe = computeDistance(viewHolder.myLat, viewHolder.myLng, viewHolder.mapLat, viewHolder.mapLng);
-            viewHolder.tvDistanceToMe.setText("나와의 거리: " + String.valueOf(convertMtoKM(viewHolder.distanceToMe)) + "km    ");
-        }
+
         if(openMatchDTO.getPlayDateTime() == null){
             viewHolder.tvPlayDateTime.setText("날짜 미정");
         }
 
-        loadAllProfileThisMatch(viewHolder, openMatchDTO.getId());
-        //스몰 프로필 부분
-        viewHolder.profileDTOs = new ArrayList<>();
-        viewHolder.customListView = (RecyclerView) convertView.findViewById(R.id.detailProfileList);
 
         return convertView;
 
@@ -288,27 +344,6 @@ public class OpenMatchAdapter extends ArrayAdapter implements AdapterView.OnItem
         result = distance / 1000;
 
         return result;
-    }
-
-    public void loadAllProfileThisMatch(ViewHolder viewHolder, Long id){
-
-        retrofitUtil.getRetrofitAPI().getJoinedUserProfiles(id).enqueue(new Callback<List<ProfileDTO>>() {
-            @Override
-            public void onResponse(Call<List<ProfileDTO>> call, Response<List<ProfileDTO>> response) {
-                if(response.isSuccessful()){
-                    viewHolder.profileDTOs = (ArrayList<ProfileDTO>) response.body();
-                    viewHolder.smallProfileAdapter = new SmallProfileAdapter(getContext(), viewHolder.profileDTOs);
-                    viewHolder.customListView.setAdapter(viewHolder.smallProfileAdapter);
-                    viewHolder.customListView.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.HORIZONTAL, false));
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<ProfileDTO>> call, Throwable t) {
-
-            }
-        });
-
     }
 
 }
