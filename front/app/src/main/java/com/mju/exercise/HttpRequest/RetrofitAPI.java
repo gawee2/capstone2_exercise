@@ -13,6 +13,7 @@ import java.util.List;
 import okhttp3.MultipartBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -28,15 +29,14 @@ public interface RetrofitAPI {
     @Headers("Content-Type: application/json")
     @POST("/api/user/signUp")
     Call<Boolean> signUp(@Body SignUpDTO signUpDTO);
-
+    //프로필 설정
     @Headers({"Content-Type: application/json"})
     @POST("/api/user/setMyProfile")
     Call<Boolean> setMyProfile(@Body ProfileDTO profileDTO);
-
+    //프로필 가져오기
     @Headers({"Content-Type: application/json"})
     @GET("/api/user/getUserProfile/{userId}")
     Call<ProfileDTO> getUserProfile(@Path(value="userId", encoded = true) String userId);
-
     @Headers({"Content-Type: application/json"})
     @GET("/api/user/getUserIndexByUserId/{userId}")
     Call<Long> getUserIndexByUserId(@Path(value="userId", encoded = true) String userId);
@@ -55,8 +55,6 @@ public interface RetrofitAPI {
     @Headers("Content-Type: application/json")
     @POST("/api/auth/login")
     Call<ApiResponseDTO> login(@Body SignInDTO signInDTO);
-
-
     @GET("/api/auth/tokenCheck")
     Call<Boolean> tokenCheck();
 
@@ -87,6 +85,15 @@ public interface RetrofitAPI {
     @Headers("Content-Type: application/json")
     @POST("/api/match/joinMatch")
     Call<Long> joinMatch(@Body MatchingDTO matchingDTO);
+    //오픈매치 삭제
+    @Headers("Content-Type: application/json")
+    @DELETE("/api/match/delete/{openMatchIdx}")
+    Call<Boolean> delete(@Path(value = "openMatchIdx", encoded = true) Long openMatchIdx);
+    //오픈매치 떠나기
+    @Headers("Content-Type: application/json")
+    @DELETE("/api/match/leaveMatch/{matchingIdx}")
+    Call<Boolean> leaveMatch(@Path(value = "matchingIdx", encoded = true) Long matchingIdx);
+
 
 
     //현재 오픈매치에 참여중인 모든 유저 프로필 정보 가져오기

@@ -43,9 +43,6 @@ public class MatchController {
     public boolean delete(@PathVariable Long openMatchIdx){
         return matchService.delete(openMatchIdx);
     }
-
-
-
     //매칭 참가, 사용자id와 오픈매치id를 가져와서 매칭db에 생성함
     @PostMapping("/joinMatch")
     public Long joinMatch(@RequestBody MatchingDTO matchingDTO){
