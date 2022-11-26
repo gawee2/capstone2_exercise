@@ -34,6 +34,7 @@ import com.skydoves.expandablelayout.ExpandableLayout;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -57,10 +58,19 @@ public class FilteringDialog extends BottomSheetDialogFragment{
             "가까운 날짜순", "요일 선택", "특정 날짜 선택",
             "참여 가능만"
     };
+
+    private String[] disStr = {"가까운 거리순", "100m 이내", "500m 이내","1km 이내","3km 이내","3km 초과"};
+    private String[] dayStr = {"가까운 날짜순", "요일 선택", "특정 날짜 선택"};
+    private String[] joinStr = {"참여가능만"};
+
     private String[] favDayStr = {
             "월요일", "화요일", "수요일", "목요일", "금요일", "토요일", "일요일"
     };
     private HashMap<String, Integer> chipMap = new HashMap<>();
+    private boolean isClickedDis = false;
+    private boolean isClickedDay = false;
+    private boolean isClickedPer = false;
+    private String lastDis = null, lastDay = null, lastPer = null;
 
 
     public OpenMatchFilter openMatchFilter;
@@ -269,8 +279,66 @@ public class FilteringDialog extends BottomSheetDialogFragment{
         chip.setText(chipText);
         chip.setCheckable(true);
         chip.setId(chipMap.get(chipText));
+        chip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d("칩칩", chip.getText().toString() + "눌림");
+                checkClickedType(chip.getText().toString());
+            }
+        });
 
         return chip;
+    }
+
+    private void checkClickedType(String string){
+
+        if(Arrays.asList(disStr).contains(string)){
+            Log.d("칩칩", "거리 관련");
+            if(lastDis != null){
+                if(!string.equals(lastDis)){
+                    lastDis = string;
+                    return;
+                }else {
+                    isClickedDis = !isClickedDis;
+                }
+            }else {
+                lastDis = string;
+                isClickedDis = !isClickedDis;
+            }
+
+
+        }else if(Arrays.asList(dayStr).contains(string)){
+            Log.d("칩칩", "날짜 관련");
+            if(lastDay != null){
+                if(!string.equals(lastDay)){
+                    lastDay = string;
+                    return;
+                }else {
+                    isClickedDay = !isClickedDay;
+                }
+            }else {
+                lastDay = string;
+                isClickedDay = !isClickedDay;
+            }
+
+
+        }else if(string.equals("참여 가능만")){
+            Log.d("칩칩", "인원 관련");
+            if(lastPer != null){
+                if(!string.equals(lastPer)){
+                    lastPer = string;
+                    return;
+                }else {
+                    isClickedPer = !isClickedPer;
+                }
+            }else {
+                lastPer = string;
+                isClickedPer = !isClickedPer;
+            }
+
+
+        }
+
     }
 
     //적용하기 눌렀을때
@@ -281,6 +349,18 @@ public class FilteringDialog extends BottomSheetDialogFragment{
             switch (view.getId()){
                 case R.id.btnFilterApply:
                     Log.d("필터", "필터 적용하기");
+
+
+                    //누른게 취소될 경우 디폴트 값으로 적용되도록 함
+                    if(!isClickedDay){
+                        filterTypeDay = Status.FilterTypeDay.DAY_DEFAULT;
+                    }
+                    if(!isClickedPer){
+                        filterTypeJoin = Status.FilterTypeJoin.JOIN_DEFAULT;
+                    }
+                    if(!isClickedDis){
+                        filterTypeDistance = Status.FilterTypeDistance.DISTANCE_DEFAULT;
+                    }
 
                     //원래 OpenMatchActivity로 값 넘김
                     openMatchFilter.setFilter(filterTypeJoin, filterTypeDistance, filterTypeDay,

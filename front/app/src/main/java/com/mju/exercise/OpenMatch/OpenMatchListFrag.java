@@ -133,7 +133,9 @@ public class OpenMatchListFrag extends Fragment implements OpenMatchFilter{
                           LocalDateTime localDateTime) {
 
         if(filterTypeJoin == Status.FilterTypeJoin.JOIN_DEFAULT && filterTypeDay == Status.FilterTypeDay.DAY_DEFAULT && filterTypeDistance == Status.FilterTypeDistance.DISTANCE_DEFAULT){
-            //모두 디폴트면 별도로 아무것도 하지 않음
+            //모두 디폴트면 기존 리스트 그대로 보여줌
+            openMatchAdapter = new OpenMatchAdapter(getContext(), openMatches);
+            customListView.setAdapter(openMatchAdapter);
         }else {
             //무언가 필터링 할 게 있으면 새로 리스트 만들고 어댑터에 연결
             ArrayList<OpenMatchDTO> newOpenMatches = new ArrayList<>();

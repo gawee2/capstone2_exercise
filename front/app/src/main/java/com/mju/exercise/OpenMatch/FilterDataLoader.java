@@ -134,8 +134,14 @@ public class FilterDataLoader {
                 //운동장소가 선택된 것들만 거리 비교함
                 if(tmpLat != null && tmpLng != null){
                     int dis = computeDistance(myLat, myLng, tmpLat, tmpLng);
-                    if(dis < standardDistance){
-                        dataLoadedListener.dataLoaded(openMatchDTO);
+                    if(standardDistance == 10000){
+                        if(dis > 3000 && dis <10000){
+                            dataLoadedListener.dataLoaded(openMatchDTO);
+                        }
+                    }else {
+                        if(dis < standardDistance){
+                            dataLoadedListener.dataLoaded(openMatchDTO);
+                        }
                     }
                 }
             }
