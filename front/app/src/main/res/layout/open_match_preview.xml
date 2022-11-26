@@ -23,7 +23,8 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 >
-                <TextView
+                <ImageView
+                    android:layout_margin="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
@@ -36,13 +37,14 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical"
                 android:gravity="center_vertical"
+                android:layout_marginTop="5dp"
                 >
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/omSubject"
                     android:textStyle="bold"
-                    android:textSize="15dp"
+                    android:textSize="20dp"
                     />
                 <TextView
                     android:layout_width="wrap_content"
@@ -60,6 +62,7 @@
                     android:layout_gravity="right"
                     android:id="@+id/omDistanceToMe"
                     android:text="나와의 거리: "
+                    android:layout_marginRight="20dp"
                     />
 
             </LinearLayout>
