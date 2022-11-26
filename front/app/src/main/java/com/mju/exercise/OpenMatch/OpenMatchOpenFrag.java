@@ -252,14 +252,14 @@ public class OpenMatchOpenFrag extends Fragment {
 
     private void createOpenMatch(){
 
-        LocalDateTime nowTime = null;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            LocalDateTime tmp = LocalDateTime.now(Clock.systemDefaultZone());
-            nowTime = LocalDateTime.of(tmp.getYear(), tmp.getMonth(), tmp.getDayOfMonth(), tmp.getHour(), tmp.getMinute());
-
-//            nowTime = LocalDateTime.now(Clock.systemDefaultZone());
-        }
-        Log.d("날짜", nowTime.toString());
+//        LocalDateTime nowTime = null;
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            LocalDateTime tmp = LocalDateTime.now(Clock.systemDefaultZone());
+//            nowTime = LocalDateTime.of(tmp.getYear(), tmp.getMonth(), tmp.getDayOfMonth(), tmp.getHour(), tmp.getMinute());
+//
+////            nowTime = LocalDateTime.now(Clock.systemDefaultZone());
+//        }
+//        Log.d("날짜", nowTime.toString());
 
         OpenMatchDTO openMatchDTO = new OpenMatchDTO();
         openMatchDTO.setSubject(edtSubject.getText().toString());

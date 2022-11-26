@@ -222,6 +222,10 @@ public class OpenMatchAdapter extends ArrayAdapter implements AdapterView.OnItem
 
                     viewHolder.tvPersonnel.setText(String.valueOf("현재 인원:" + String.valueOf(cnt) + "/" + openMatchDTO.getPersonnel()));
 
+                    //임시로 추가
+                    if(openMatchDTO.getPersonnel() != null){
+
+
 
                     //모집인원 수가 다 채워진 오픈매치는 disabled 함
                     if(cnt >= openMatchDTO.getPersonnel()){
@@ -279,6 +283,8 @@ public class OpenMatchAdapter extends ArrayAdapter implements AdapterView.OnItem
                     viewHolder.smallProfileAdapter = new SmallProfileAdapter(getContext(), viewHolder.profileDTOs);
                     viewHolder.customListView.setAdapter(viewHolder.smallProfileAdapter);
                     viewHolder.customListView.setLayoutManager(new LinearLayoutManager(mContext, RecyclerView.HORIZONTAL, false));
+
+                    }
 
                 }else {
                     viewHolder.tvPersonnel.setText(String.valueOf("현재 인원:" + "로딩 오류/" + openMatchDTO.getPersonnel()));
