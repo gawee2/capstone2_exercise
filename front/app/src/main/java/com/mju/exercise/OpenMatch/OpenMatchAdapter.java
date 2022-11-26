@@ -141,6 +141,13 @@ public class OpenMatchAdapter extends ArrayAdapter implements AdapterView.OnItem
                 getContext().startActivity(intent);
             }
         });
+
+        //로그인 안한 유저는 참여하지 못하도록
+        if(preferenceUtil.getString("userId").equals("") || preferenceUtil.getString("userId") == null){
+            viewHolder.isCanJoin = false;
+            viewHolder.btnDetailJoin.setText("로그인 필요");
+            viewHolder.btnDetailJoin.setEnabled(false);
+        }
         viewHolder.btnDetailJoin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -181,6 +188,8 @@ public class OpenMatchAdapter extends ArrayAdapter implements AdapterView.OnItem
                     int cnt = response.body().size();
 
                     viewHolder.tvPersonnel.setText(String.valueOf("현재 인원:" + String.valueOf(cnt) + "/" + openMatchDTO.getPersonnel()));
+
+
 
                     //모집인원 수가 다 채워진 오픈매치는 disabled 함
                     if(cnt >= openMatchDTO.getPersonnel()){

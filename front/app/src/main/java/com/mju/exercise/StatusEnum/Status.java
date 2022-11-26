@@ -25,9 +25,7 @@ public class Status {
 
     public static enum DistanceDiff{
         DEFAULT,
-        M50,
         M100,
-        M300,
         M500,
         M1KM,
         M3KM,
