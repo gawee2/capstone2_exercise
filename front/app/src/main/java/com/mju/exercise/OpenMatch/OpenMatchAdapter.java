@@ -10,6 +10,7 @@ import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -63,7 +64,7 @@ public class OpenMatchAdapter extends ArrayAdapter implements AdapterView.OnItem
     class ViewHolder{
         public TextView tvSubect;
         public TextView tvArticle;
-        public TextView tvSportType;
+        public ImageView tvSportType;
         public TextView tvPersonnel;
         public TextView tvPlayDateTime;
         public TextView tvDistanceToMe;
@@ -110,7 +111,7 @@ public class OpenMatchAdapter extends ArrayAdapter implements AdapterView.OnItem
 
         //프리뷰 부분
         viewHolder.tvSubect = (TextView) convertView.findViewById(R.id.omSubject);
-        viewHolder.tvSportType = (TextView) convertView.findViewById(R.id.omSportType);
+        viewHolder.tvSportType = (ImageView) convertView.findViewById(R.id.omSportType);
         viewHolder.tvPersonnel = (TextView) convertView.findViewById(R.id.omPersonnel);
         viewHolder.tvPlayDateTime = (TextView) convertView.findViewById(R.id.omPlayDateTime);
         viewHolder.tvDistanceToMe = (TextView) convertView.findViewById(R.id.omDistanceToMe);
@@ -182,7 +183,9 @@ public class OpenMatchAdapter extends ArrayAdapter implements AdapterView.OnItem
         });
 
         viewHolder.tvSubect.setText(openMatchDTO.getSubject());
-        viewHolder.tvSportType.setText(openMatchDTO.getSportType());
+        //운동종류에 따라서 다른 이미지 아이콘 적용
+        iconReflect(viewHolder, openMatchDTO.getSportType());
+//        viewHolder.tvSportType.setText(openMatchDTO.getSportType());
         //해당 오픈 매치에 유저 얼마나 있는지 확인용
         retrofitUtil.getRetrofitAPI().getJoinedUserProfiles(openMatchDTO.getId()).enqueue(new Callback<List<ProfileDTO>>() {
             @Override
@@ -248,6 +251,23 @@ public class OpenMatchAdapter extends ArrayAdapter implements AdapterView.OnItem
         viewHolder.customListView = (RecyclerView) convertView.findViewById(R.id.detailProfileList);
 
         return convertView;
+
+    }
+
+    private void iconReflect(ViewHolder viewHolder, String type){
+        if(type.equals("축구")){
+            viewHolder.tvSportType.setImageResource(R.drawable.ic_football);
+        }else if(type.equals("풋살")) {
+            viewHolder.tvSportType.setImageResource(R.drawable.ic_futsal);
+        }else if(type.equals("농구")){
+            viewHolder.tvSportType.setImageResource(R.drawable.ic_basketball);
+        }else if(type.equals("야구")){
+            viewHolder.tvSportType.setImageResource(R.drawable.ic_baseball);
+        }else if(type.equals("배드민턴")){
+            viewHolder.tvSportType.setImageResource(R.drawable.ic_badminton);
+        }else if(type.equals("사이클")){
+            viewHolder.tvSportType.setImageResource(R.drawable.ic_cycle);
+        }
 
     }
 
