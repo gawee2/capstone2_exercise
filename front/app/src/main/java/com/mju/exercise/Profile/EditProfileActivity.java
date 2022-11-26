@@ -97,7 +97,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
         //넘어온 인텐트가 있으면 해당 내용으로 수정란 채워놓음
         Intent intent = getIntent();
-        if(intent != null){
+        if(intent.getSerializableExtra("profile") != null){
             beforeProfile = (ProfileDTO) intent.getSerializableExtra("profile");
             loadBeforeProfile();
         }

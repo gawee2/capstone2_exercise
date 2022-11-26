@@ -25,6 +25,7 @@ import com.mju.exercise.R;
 import com.mju.exercise.StatusEnum.Status;
 import com.skydoves.expandablelayout.ExpandableLayout;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class FilteringDialog extends BottomSheetDialogFragment{
@@ -37,6 +38,8 @@ public class FilteringDialog extends BottomSheetDialogFragment{
     private Status.FilterTypeDistance filterTypeDistance = Status.FilterTypeDistance.DISTANCE_DEFAULT;
     private Status.DistanceDiff mDiff = Status.DistanceDiff.DEFAULT;
     private Status.FavDayType mFavDay = Status.FavDayType.DEFAULT;
+    private LocalDateTime mPickDay;
+
     public OpenMatchFilter openMatchFilter;
 
     @Nullable
@@ -133,8 +136,13 @@ public class FilteringDialog extends BottomSheetDialogFragment{
             switch (view.getId()){
                 case R.id.btnFilterApply:
 
+                    filterTypeJoin = Status.FilterTypeJoin.JOIN_CAN;
+                    Log.d("필터", "필터 적용하기");
+
                     //원래 OpenMatchActivity로 값 넘김
-                    openMatchFilter.setFilter(filterTypeJoin, filterTypeDistance, filterTypeDay);
+                    openMatchFilter.setFilter(filterTypeJoin, filterTypeDistance, filterTypeDay,
+                            mDiff, mFavDay, mPickDay);
+
 
                     dismiss();
                     break;

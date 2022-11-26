@@ -2,9 +2,11 @@ package com.mju.exercise.HttpRequest;
 
 import android.content.Context;
 
+import com.mju.exercise.Domain.OpenMatchDTO;
 import com.mju.exercise.Preference.PreferenceUtil;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
@@ -80,6 +82,5 @@ public class RetrofitUtil {
         String str = this.BASE_URL;
         return str.substring(0, str.length() - 1);
     }
-
 
 }
