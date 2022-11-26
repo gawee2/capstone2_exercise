@@ -3,6 +3,7 @@ package com.mju.exercise.Profile;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -131,17 +132,20 @@ public class UserInfoActivity extends AppCompatActivity {
         String url = retrofitUtil.getBASE_URL_NONE_SLASH() + path;
         Log.d("이미지로드", url);
         if(path != null && !path.equals("")){
-            Glide.with(this).load(url).circleCrop().into(mImgProfile);
+            Glide.with(mContext).load(url).circleCrop().into(mImgProfile);
             mImgProfile.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     LayoutInflater inflater = getLayoutInflater();
                     View dialogLayout = inflater.inflate(R.layout.dialog_profile_image, null);
                     ImageView imageView = (ImageView) dialogLayout.findViewById(R.id.imgBigProfile);
-                    Glide.with(getApplicationContext()).load(url).into(imageView);
+                    Log.d("프로필확대", url);
+                    Glide.with(mContext).load(url).into(imageView);
                     new AlertDialog.Builder(mContext)
+                            .setTitle("프로필 이미지")
                             .setView(dialogLayout)
                             .show();
+
                 }
             });
         }
@@ -230,11 +234,6 @@ public class UserInfoActivity extends AppCompatActivity {
                     preferenceUtil.setString("refreshIdx", "");
                     preferenceUtil.setString("userId", "");
                     finish();
-                    break;
-
-                case R.id.imgProfile:
-
-
                     break;
             }
 

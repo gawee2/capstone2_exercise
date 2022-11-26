@@ -1,6 +1,7 @@
 package com.mju.exercise;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.PointF;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -23,6 +24,10 @@ import com.naver.maps.map.UiSettings;
 import com.naver.maps.map.overlay.Marker;
 import com.naver.maps.map.overlay.Overlay;
 import com.naver.maps.map.util.FusedLocationSource;
+import com.naver.maps.map.util.MarkerIcons;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class PopupMapActivity extends AppCompatActivity implements NaverMap.OnMapClickListener, Overlay.OnClickListener, OnMapReadyCallback, NaverMap.OnCameraChangeListener, NaverMap.OnCameraIdleListener {
 
@@ -90,6 +95,8 @@ public class PopupMapActivity extends AppCompatActivity implements NaverMap.OnMa
         }
     };
 
+    private List<Marker> markerList = new ArrayList<>();
+
     @Override
     public void onMapReady(@NonNull NaverMap naverMap) {
         this.naverMap = naverMap;
@@ -103,14 +110,23 @@ public class PopupMapActivity extends AppCompatActivity implements NaverMap.OnMa
             naverMap.setOnMapClickListener(new NaverMap.OnMapClickListener() {
                 @Override
                 public void onMapClick(@NonNull PointF pointF, @NonNull LatLng latLng) {
+                    //만약 기존에 찍힌 마커가 있다면 삭제해버림
+                    //운동장소 한곳만 선택되는것처럼 보이도록
+                    if(markerList.size() > 0){
+                        Marker marker = markerList.remove(markerList.size() - 1);
+                        marker.setMap(null);
+                    }
+
                     Marker marker = new Marker();
                     marker.setPosition(latLng);
+                    //마커 크기, 색상 설정
+                    marker.setIcon(MarkerIcons.BLACK);
+                    marker.setIconTintColor(Color.RED);
                     marker.setMap(naverMap);
+                    markerList.add(marker);
 
                     lat = latLng.latitude;
                     lng = latLng.longitude;
-
-                    Toast.makeText(getApplicationContext(), latLng.toString(), Toast.LENGTH_SHORT).show();
                 }
             });
         }else {

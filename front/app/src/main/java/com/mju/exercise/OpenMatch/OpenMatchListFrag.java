@@ -188,6 +188,8 @@ public class OpenMatchListFrag extends Fragment implements OpenMatchFilter{
 
     public void distanceInner(FilterDataLoader filterDataLoader, Status.DistanceDiff diff){
 
+        filterDataLoader.getDataDisDiff(diff);
+
     }
 
     public void distanceSort(FilterDataLoader filterDataLoader){
