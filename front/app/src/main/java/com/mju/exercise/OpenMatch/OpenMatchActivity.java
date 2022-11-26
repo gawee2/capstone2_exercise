@@ -34,6 +34,7 @@ import com.mju.exercise.Sign.SignInActivity;
 import com.mju.exercise.StatusEnum.Status;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 
 public class OpenMatchActivity extends AppCompatActivity {
 
@@ -57,6 +58,8 @@ public class OpenMatchActivity extends AppCompatActivity {
     private Status.DistanceDiff mDiff = Status.DistanceDiff.DEFAULT;
     private Status.FavDayType mFavDay = Status.FavDayType.DEFAULT;
 
+    private OpenMatchListFrag openMatchListFrag;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,9 +69,13 @@ public class OpenMatchActivity extends AppCompatActivity {
         sportType = intent.getIntExtra("sport", 0);
         Log.d("인텐트체크", String.valueOf(intent.getIntExtra("sport", 0)));
 
+        openMatchListFrag = OpenMatchListFrag.newInstance(sportType);
+
         init();
         checkGPS();
         bottomNavigationView.setSelectedItemId(R.id.open_match_list);
+
+
     }
 
 
@@ -102,20 +109,12 @@ public class OpenMatchActivity extends AppCompatActivity {
                     filteringDialog.show(getSupportFragmentManager(), "filtering");
                     filteringDialog.setDialogResult(new OpenMatchFilter() {
                         @Override
-                        public void setFilter(Status.FilterTypeJoin filterTypeJoin, Status.FilterTypeDistance filterTypeDistance, Status.FilterTypeDay filterTypeDay) {
+                        public void setFilter(Status.FilterTypeJoin filterTypeJoin, Status.FilterTypeDistance filterTypeDistance, Status.FilterTypeDay filterTypeDay, Status.DistanceDiff distanceDiff, Status.FavDayType favDayType, LocalDateTime localDateTime) {
                             mFilterTypeDay = filterTypeDay;
                             mFilterTypeDistance = filterTypeDistance;
                             mFilterTypeJoin = filterTypeJoin;
-                        }
-
-                        @Override
-                        public void setDistanceDifference(Status.DistanceDiff diff) {
-                            mDiff = diff;
-                        }
-
-                        @Override
-                        public void setFavDay(Status.FavDayType favDayType) {
-                            mFavDay = favDayType;
+                            Log.d("필터", "setFilter");
+                            openMatchListFrag.setFilter(filterTypeJoin, filterTypeDistance, filterTypeDay, distanceDiff, favDayType, localDateTime);
                         }
                     });
 
@@ -155,7 +154,7 @@ public class OpenMatchActivity extends AppCompatActivity {
             fragmentTransaction = fragmentManager.beginTransaction();
             switch (item.getItemId()){
                 case R.id.open_match_list:{
-                    OpenMatchListFrag openMatchListFrag = OpenMatchListFrag.newInstance(sportType);
+//                    OpenMatchListFrag openMatchListFrag = OpenMatchListFrag.newInstance(sportType);
                     fragmentTransaction.replace(R.id.host_fragment, openMatchListFrag)
                             .commit();
                     return true;

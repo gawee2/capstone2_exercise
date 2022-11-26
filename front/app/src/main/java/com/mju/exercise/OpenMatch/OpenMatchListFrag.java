@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import com.mju.exercise.HttpRequest.RetrofitUtil;
 import com.mju.exercise.R;
 import com.mju.exercise.StatusEnum.Status;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +30,7 @@ import retrofit2.Response;
  * Use the {@link OpenMatchListFrag#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class OpenMatchListFrag extends Fragment {
+public class OpenMatchListFrag extends Fragment implements OpenMatchFilter{
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -124,4 +126,77 @@ public class OpenMatchListFrag extends Fragment {
     }
 
 
+    @Override
+    public void setFilter(Status.FilterTypeJoin filterTypeJoin, Status.FilterTypeDistance filterTypeDistance,
+                          Status.FilterTypeDay filterTypeDay, Status.DistanceDiff distanceDiff,
+                          Status.FavDayType favDayType,
+                          LocalDateTime localDateTime) {
+
+        if(filterTypeJoin == Status.FilterTypeJoin.JOIN_DEFAULT && filterTypeDay == Status.FilterTypeDay.DAY_DEFAULT && filterTypeDistance == Status.FilterTypeDistance.DISTANCE_DEFAULT){
+            //모두 디폴트면 기존 리스트 그대로 보여줌
+            openMatchAdapter = new OpenMatchAdapter(getContext(), openMatches);
+            customListView.setAdapter(openMatchAdapter);
+        }else {
+            //무언가 필터링 할 게 있으면 새로 리스트 만들고 어댑터에 연결
+            ArrayList<OpenMatchDTO> newOpenMatches = new ArrayList<>();
+            openMatchAdapter = new OpenMatchAdapter(getContext(), newOpenMatches);
+            customListView.setAdapter(openMatchAdapter);
+
+            FilterDataLoader filterDataLoader = new FilterDataLoader(getContext(), openMatches);
+            filterDataLoader.setDataListener(new FilterDataLoader.DataLoadedListener() {
+                @Override
+                public void dataLoaded(OpenMatchDTO openMatchDTO) {
+                    newOpenMatches.add(openMatchDTO);
+                    openMatchAdapter.notifyDataSetChanged();
+                }
+            });
+
+
+
+            //참가 가능 여부로 필터링
+            if(filterTypeJoin == Status.FilterTypeJoin.JOIN_CAN){
+                canJoin(filterDataLoader);
+            }
+
+            //거리로 필터링
+            if(filterTypeDistance == Status.FilterTypeDistance.DISTANCE_DIFFERENCE){
+                distanceInner(filterDataLoader, distanceDiff);
+            }else if(filterTypeDistance == Status.FilterTypeDistance.DISTANCE_NEAR){
+                distanceSort(filterDataLoader);
+            }
+
+            //날짜로 필터링
+            if(filterTypeDay == Status.FilterTypeDay.DAY_FAVDAY){
+                dayFav(filterDataLoader, favDayType);
+            }else if(filterTypeDay == Status.FilterTypeDay.DAY_NEAR){
+                daySort(filterDataLoader);
+            }else if(filterTypeDay == Status.FilterTypeDay.DAY_PICK){
+                dayPick(filterDataLoader, localDateTime);
+            }
+
+        }
+
+    }
+
+    public void dayFav(FilterDataLoader filterDataLoader, Status.FavDayType favDayType){
+        filterDataLoader.getDataFavDay(favDayType);
+    }
+    public void dayPick(FilterDataLoader filterDataLoader, LocalDateTime localDateTime){
+        filterDataLoader.getDataPickDay(localDateTime);
+    }
+    public void daySort(FilterDataLoader filterDataLoader){
+    }
+
+
+    public void distanceInner(FilterDataLoader filterDataLoader, Status.DistanceDiff diff){
+        filterDataLoader.getDataDisDiff(diff);
+    }
+
+    public void distanceSort(FilterDataLoader filterDataLoader){
+
+    }
+
+    public void canJoin(FilterDataLoader filterDataLoader){
+        filterDataLoader.getDataCanJoin();
+    }
 }

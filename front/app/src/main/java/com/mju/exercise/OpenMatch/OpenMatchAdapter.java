@@ -37,10 +37,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class OpenMatchAdapter extends ArrayAdapter implements AdapterView.OnItemClickListener, Filtering {
+public class OpenMatchAdapter extends ArrayAdapter implements AdapterView.OnItemClickListener{
 
     private Context mContext;
-    private List list;
+    private ArrayList<OpenMatchDTO> list;
     RetrofitUtil retrofitUtil;
     PreferenceUtil preferenceUtil;
 
@@ -122,6 +122,13 @@ public class OpenMatchAdapter extends ArrayAdapter implements AdapterView.OnItem
         //데이터 하나 뽑은 후
         final OpenMatchDTO openMatchDTO = (OpenMatchDTO) list.get(position);
 
+
+
+        //내가 만든것인지 체크
+        if(preferenceUtil.getString("userId").equals(openMatchDTO.getOpenUserId())){
+            viewHolder.isMadeMe = true;
+        }
+
         viewHolder.btnDetailOnMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -134,6 +141,13 @@ public class OpenMatchAdapter extends ArrayAdapter implements AdapterView.OnItem
                 getContext().startActivity(intent);
             }
         });
+
+        //로그인 안한 유저는 참여하지 못하도록
+        if(preferenceUtil.getString("userId").equals("") || preferenceUtil.getString("userId") == null){
+            viewHolder.isCanJoin = false;
+            viewHolder.btnDetailJoin.setText("로그인 필요");
+            viewHolder.btnDetailJoin.setEnabled(false);
+        }
         viewHolder.btnDetailJoin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -175,8 +189,11 @@ public class OpenMatchAdapter extends ArrayAdapter implements AdapterView.OnItem
 
                     viewHolder.tvPersonnel.setText(String.valueOf("현재 인원:" + String.valueOf(cnt) + "/" + openMatchDTO.getPersonnel()));
 
+
+
                     //모집인원 수가 다 채워진 오픈매치는 disabled 함
                     if(cnt >= openMatchDTO.getPersonnel()){
+                        viewHolder.isCanJoin = false;
                         viewHolder.btnDetailJoin.setText("참여 불가");
                         viewHolder.btnDetailJoin.setEnabled(false);
                     }
@@ -229,6 +246,7 @@ public class OpenMatchAdapter extends ArrayAdapter implements AdapterView.OnItem
         viewHolder.customListView = (ListView) convertView.findViewById(R.id.detailProfileList);
 
 
+
         return convertView;
 
     }
@@ -269,45 +287,6 @@ public class OpenMatchAdapter extends ArrayAdapter implements AdapterView.OnItem
 
             }
         });
-
-    }
-
-    @Override
-    public void filterJoin(Status.FilterTypeJoin filterTypeJoin) {
-        //디폴트 값이면 필터 적용 안함
-        if(filterTypeJoin == Status.FilterTypeJoin.JOIN_DEFAULT){
-            return;
-        }else if(filterTypeJoin == Status.FilterTypeJoin.JOIN_CAN){
-            List<OpenMatchDTO> newOpenMatches = new ArrayList<>();
-
-        }
-
-    }
-
-    @Override
-    public void filterDistance(Status.FilterTypeDistance filterTypeDistance) {
-
-
-    }
-
-    @Override
-    public void filterDay(Status.FilterTypeDay filterTypeDay) {
-        switch (filterTypeDay){
-            case DAY_DEFAULT:
-                break;
-            case DAY_NEAR:
-                sortOpenMatchesByNear();
-                break;
-            case DAY_FAVDAY:
-                break;
-            case DAY_PICK:
-                break;
-        }
-
-    }
-
-    //가까운 거리순으로 정렬
-    public void sortOpenMatchesByNear(){
 
     }
 
