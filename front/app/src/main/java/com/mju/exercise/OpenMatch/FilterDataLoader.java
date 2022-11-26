@@ -1,6 +1,7 @@
 package com.mju.exercise.OpenMatch;
 
 import android.content.Context;
+import android.os.Build;
 import android.telecom.Call;
 import android.util.Log;
 
@@ -11,9 +12,12 @@ import com.mju.exercise.HttpRequest.RetrofitUtil;
 import com.mju.exercise.Preference.PreferenceUtil;
 import com.mju.exercise.StatusEnum.Status;
 
+import java.time.DayOfWeek;
 import java.time.LocalDateTime;
+import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.security.auth.callback.Callback;
 
@@ -32,16 +36,69 @@ public class FilterDataLoader {
         preferenceUtil = PreferenceUtil.getInstance(context);
     }
 
-    //특정요일만 뽑기
-    public void getDataFavDay(){
+    //특정일자 딱 골라서 뽑기
+    public void getDataPickDay(LocalDateTime pickDay){
         list.stream().filter(openMatchDTO -> {
 
             LocalDateTime localDateTime = openMatchDTO.getPlayDateTime();
-
-            dataLoadedListener.dataLoaded(openMatchDTO);
-
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                if(pickDay.isEqual(localDateTime)){
+                    dataLoadedListener.dataLoaded(openMatchDTO);
+                }
+            }
             return false;
         });
+    }
+
+    //특정요일만 뽑기
+    public void getDataFavDay(Status.FavDayType favDayType){
+
+        String tmp = null;
+        switch (favDayType){
+            case MON:
+                tmp = "월요일";
+                break;
+            case TUE:
+                tmp = "화요일";
+                break;
+            case WED:
+                tmp = "수요일";
+                break;
+            case THU:
+                tmp = "목요일";
+                break;
+            case FRI:
+                tmp = "금요일";
+                break;
+            case SAT:
+                tmp = "토요일";
+                break;
+            case SUN:
+                tmp = "일요일";
+                break;
+        }
+
+        String finalTmp = tmp;
+        list.stream().filter(openMatchDTO -> {
+
+            LocalDateTime localDateTime = openMatchDTO.getPlayDateTime();
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                DayOfWeek dayOfWeek = localDateTime.getDayOfWeek();
+
+                if(convertDayOfWeek(dayOfWeek).equals(finalTmp)){
+                    dataLoadedListener.dataLoaded(openMatchDTO);
+                }
+
+            }
+            return false;
+        });
+    }
+
+    private String convertDayOfWeek(DayOfWeek dayOfWeek){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            return dayOfWeek.getDisplayName(TextStyle.FULL, Locale.KOREA);
+        }
+        return null;
     }
 
     //거리에 따른 데이터 뽑기

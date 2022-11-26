@@ -177,19 +177,17 @@ public class OpenMatchListFrag extends Fragment implements OpenMatchFilter{
     }
 
     public void dayFav(FilterDataLoader filterDataLoader, Status.FavDayType favDayType){
-
+        filterDataLoader.getDataFavDay(favDayType);
     }
     public void dayPick(FilterDataLoader filterDataLoader, LocalDateTime localDateTime){
-
+        filterDataLoader.getDataPickDay(localDateTime);
     }
     public void daySort(FilterDataLoader filterDataLoader){
     }
 
 
     public void distanceInner(FilterDataLoader filterDataLoader, Status.DistanceDiff diff){
-
         filterDataLoader.getDataDisDiff(diff);
-
     }
 
     public void distanceSort(FilterDataLoader filterDataLoader){
