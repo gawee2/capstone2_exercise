@@ -129,11 +129,11 @@ public class MemberController {
     public ApiResponse uploadsProfileImg(@RequestParam(name="image") MultipartFile image) throws IOException {
 
         String fileName = UUID.randomUUID().toString();
-//        String absolutePath = new File("/home/ec2-user/downloads/img").getAbsolutePath()
-//                + "/" + fileName + ".jpg";
-
-        String absolutePath = new File("/Users/duskite/Downloads/img").getAbsolutePath()
+        String absolutePath = new File("/home/ec2-user/downloads/img").getAbsolutePath()
                 + "/" + fileName + ".jpg";
+
+//        String absolutePath = new File("/Users/duskite/Downloads/img").getAbsolutePath()
+//                + "/" + fileName + ".jpg";
 
         System.out.println(absolutePath);
 
