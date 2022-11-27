@@ -33,12 +33,16 @@ public class FilterDataLoader {
     RetrofitUtil retrofitUtil;
     PreferenceUtil preferenceUtil;
 
+    private int cnt;
+
+    //원본 리스트는 건드리지 않음. 다른 필터 했을때 바로 갖고 있는 데이터로 적용하도록
     public FilterDataLoader(Context context, ArrayList<OpenMatchDTO> list){
         this.list = (ArrayList<OpenMatchDTO>) list.clone();
         this.mContext = context;
         retrofitUtil = RetrofitUtil.getInstance();
         preferenceUtil = PreferenceUtil.getInstance(context);
     }
+
 
     //특정일자 딱 골라서 뽑기
     public void getDataPickDay(LocalDateTime pickDay){
@@ -258,28 +262,34 @@ public class FilterDataLoader {
 
     //참여가능 오픈매치만 뽑기
     public void getDataCanJoin(){
-            for(OpenMatchDTO openMatchDTO: list){
-                int totalUser = openMatchDTO.getPersonnel();
-                retrofitUtil.getRetrofitAPI().getJoinedUserProfiles(openMatchDTO.getId()).enqueue(new retrofit2.Callback<List<ProfileDTO>>() {
-                    @Override
-                    public void onResponse(retrofit2.Call<List<ProfileDTO>> call, retrofit2.Response<List<ProfileDTO>> response) {
-                        if(response.isSuccessful()){
-                            int nowUser = response.body().size();
-                            Log.d("필터", "총 유저: " + String.valueOf(totalUser) + " 현재 유저: " + String.valueOf(nowUser));
-                            if(totalUser > nowUser){
-                                Log.d("필터", "참가가능한거 있음");
-                                dataLoadedListener.dataLoaded(openMatchDTO);
-                            }
+        cnt = 1;
+        for(OpenMatchDTO openMatchDTO: list){
+            int totalUser = openMatchDTO.getPersonnel();
+            retrofitUtil.getRetrofitAPI().getJoinedUserProfiles(openMatchDTO.getId()).enqueue(new retrofit2.Callback<List<ProfileDTO>>() {
+                @Override
+                public void onResponse(retrofit2.Call<List<ProfileDTO>> call, retrofit2.Response<List<ProfileDTO>> response) {
+                    if(response.isSuccessful()){
+                        int nowUser = response.body().size();
+                        Log.d("필터순차", "총 유저: " + String.valueOf(totalUser) + " 현재 유저: " + String.valueOf(nowUser));
+                        if(totalUser > nowUser){
+                            Log.d("필터순차", "참가가능한거 있음");
+                            dataLoadedListener.dataLoaded(openMatchDTO);
                         }
                     }
-
-                    @Override
-                    public void onFailure(retrofit2.Call<List<ProfileDTO>> call, Throwable t) {
-
+                    if(cnt >= list.size()){
+                        dataLoadedListener.dataLoadComplete();
                     }
-                });
-            }
+
+                    cnt += 1;
+                }
+
+                @Override
+                public void onFailure(retrofit2.Call<List<ProfileDTO>> call, Throwable t) {
+
+                }
+            });
         }
+    }
 
 
 
@@ -289,5 +299,6 @@ public class FilterDataLoader {
 
     public interface DataLoadedListener {
         void dataLoaded(OpenMatchDTO openMatchDTO);
+        void dataLoadComplete();
     }
 }

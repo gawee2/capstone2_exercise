@@ -152,9 +152,12 @@ public class OpenMatchListFrag extends Fragment implements OpenMatchFilter{
                     newOpenMatches.add(openMatchDTO);
                     openMatchAdapter.notifyDataSetChanged();
                 }
+
+                @Override
+                public void dataLoadComplete() {
+
+                }
             });
-
-
 
             //참가 가능 여부로 필터링
             if(filterTypeJoin == Status.FilterTypeJoin.JOIN_CAN){
@@ -167,7 +170,6 @@ public class OpenMatchListFrag extends Fragment implements OpenMatchFilter{
             }else if(filterTypeDistance == Status.FilterTypeDistance.DISTANCE_NEAR){
                 distanceSort(filterDataLoader);
             }
-
             //날짜로 필터링
             if(filterTypeDay == Status.FilterTypeDay.DAY_FAVDAY){
                 dayFav(filterDataLoader, favDayType);
@@ -176,10 +178,11 @@ public class OpenMatchListFrag extends Fragment implements OpenMatchFilter{
             }else if(filterTypeDay == Status.FilterTypeDay.DAY_PICK){
                 dayPick(filterDataLoader, localDateTime);
             }
-
         }
 
     }
+
+
 
     public void dayFav(FilterDataLoader filterDataLoader, Status.FavDayType favDayType){
         filterDataLoader.getDataFavDay(favDayType);
