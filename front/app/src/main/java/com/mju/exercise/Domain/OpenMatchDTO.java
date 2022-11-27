@@ -15,7 +15,7 @@ public class OpenMatchDTO {
     @SerializedName("openTime")
     private String openTime;
     @SerializedName("openMatchPw")
-    private String openMatchPw;
+    private Integer openMatchPw;
 
     @SerializedName("subject")
     private String subject;
@@ -63,11 +63,11 @@ public class OpenMatchDTO {
         return subject;
     }
 
-    public void setOpenMatchPw(String openMatchPw) {
+    public void setOpenMatchPw(Integer openMatchPw) {
         this.openMatchPw = openMatchPw;
     }
 
-    public String getOpenMatchPw() {
+    public Integer getOpenMatchPw() {
         return openMatchPw;
     }
 

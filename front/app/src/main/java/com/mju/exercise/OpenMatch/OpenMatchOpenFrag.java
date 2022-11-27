@@ -95,6 +95,7 @@ public class OpenMatchOpenFrag extends Fragment {
 
         edtSubject = view.findViewById(R.id.edtSubject);
         edtArticle = view.findViewById(R.id.edtArticle);
+        edtOpenMatchPw = view.findViewById(R.id.edtOpenMatchPw);
 
         btnCreate.setOnClickListener(setOnClickListener);
 
@@ -287,8 +288,9 @@ public class OpenMatchOpenFrag extends Fragment {
         tvDay.setText("날짜");
         tvRegion.setText("장소");
         tvTime.setText("시간");
-        edtSubject.setText("");
-        edtArticle.setText("");
+        edtSubject.setText(null);
+        edtArticle.setText(null);
+        edtOpenMatchPw.setText(null);
     }
 
     private void createOpenMatch(){
@@ -304,7 +306,9 @@ public class OpenMatchOpenFrag extends Fragment {
         openMatchDTO.setSubject(edtSubject.getText().toString());
         openMatchDTO.setArticle(edtArticle.getText().toString());
         openMatchDTO.setOpenUserId(preferenceUtil.getString("userId"));
-        openMatchDTO.setOpenMatchPw(null);
+        if(edtOpenMatchPw.getText().toString() != null || !edtOpenMatchPw.getText().toString().equals("")){
+            openMatchDTO.setOpenMatchPw(Integer.parseInt(edtOpenMatchPw.getText().toString()));
+        }
 
         //날짜 전송
         openMatchDTO.setOpenTime(nowTime.toString());
@@ -333,14 +337,11 @@ public class OpenMatchOpenFrag extends Fragment {
             openMatchDTO.setPersonnel(personnel);
         }
 
-
-
         retrofitUtil.getRetrofitAPI().openMatch(openMatchDTO).enqueue(new Callback<OpenMatchDTO>() {
             @Override
             public void onResponse(Call<OpenMatchDTO> call, Response<OpenMatchDTO> response) {
 
                 if(response.isSuccessful()){
-                    Toast.makeText(getContext(), "생성중", Toast.LENGTH_SHORT).show();
 
                     OpenMatchDTO newOpenMatch = response.body();
 
