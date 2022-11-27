@@ -75,7 +75,7 @@ public class OpenMatchAdapter extends ArrayAdapter implements AdapterView.OnItem
 
         public Double myLat, myLng;
         public Double mapLat, mapLng;
-        public int distanceToMe;
+        public Double distanceToMe;
 
         //스몰 프로필 부분
         public ArrayList<ProfileDTO> profileDTOs;
@@ -363,7 +363,7 @@ public class OpenMatchAdapter extends ArrayAdapter implements AdapterView.OnItem
                 viewHolder.mapLng = openMatchDTO.getLng();
 
                 viewHolder.distanceToMe = computeDistance(viewHolder.myLat, viewHolder.myLng, viewHolder.mapLat, viewHolder.mapLng);
-                viewHolder.tvDistanceToMe.setText("나와의 거리: " + String.valueOf(convertMtoKM(viewHolder.distanceToMe)) + "km    ");
+                viewHolder.tvDistanceToMe.setText("나와의 거리: " + String.format("%.1f", convertMtoKM(viewHolder.distanceToMe)) + "km    ");
             }
         }else {
             viewHolder.btnDetailOnMap.setEnabled(true);
@@ -431,7 +431,7 @@ public class OpenMatchAdapter extends ArrayAdapter implements AdapterView.OnItem
 
     }
 
-    private int computeDistance(Double myLat, Double myLng, Double mapLat, Double mapLng){
+    private Double computeDistance(Double myLat, Double myLng, Double mapLat, Double mapLng){
 
         Double R = 6372.8 * 1000;
 
@@ -440,10 +440,10 @@ public class OpenMatchAdapter extends ArrayAdapter implements AdapterView.OnItem
         Double a = Math.pow(Math.sin(dLat / 2), 2) + Math.pow(Math.sin(dLng / 2), 2) * Math.cos(Math.toRadians(myLat)) * Math.cos(Math.toRadians(mapLat));
         Double c = 2 * Math.asin(Math.sqrt(a));
 
-        return (int) (R * c);
+        return (Double) (R * c);
     }
 
-    private double convertMtoKM(int distance){
+    private double convertMtoKM(Double distance){
         double result = 0.0;
         result = distance / 1000;
 
