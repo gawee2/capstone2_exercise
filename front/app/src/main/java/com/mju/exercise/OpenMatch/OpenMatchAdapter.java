@@ -1,6 +1,7 @@
 package com.mju.exercise.OpenMatch;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,6 +21,7 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.mju.exercise.Domain.MatchingDTO;
 import com.mju.exercise.Domain.OpenMatchDTO;
 import com.mju.exercise.Domain.ProfileDTO;
@@ -156,54 +158,70 @@ public class OpenMatchAdapter extends ArrayAdapter implements AdapterView.OnItem
             viewHolder.btnDetailClick.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    //참여 처리
-                    MatchingDTO matchingDTO = new MatchingDTO();
-                    matchingDTO.setOpenMatchId(openMatchDTO.getId());
-                    Long userIdx = Long.valueOf(preferenceUtil.getString("userIdx"));
-                    // -1이면 조회되지 않는 유저임(없는 유저). 참가로직 안돌도록
-                    if(userIdx == -1l || userIdx == null){
-                        Toast.makeText(mContext, "참가 실패", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    matchingDTO.setUserIndex(userIdx);
-                    retrofitUtil.getRetrofitAPI().getUserProfile(preferenceUtil.getString("userId")).enqueue(new Callback<ProfileDTO>() {
-                        @Override
-                        public void onResponse(Call<ProfileDTO> call, Response<ProfileDTO> response) {
-                            if(response.isSuccessful()){
-                                if(response.body() != null){
-                                    Log.d("프로필제한", "프로필이 있는 유저");
-                                    retrofitUtil.getRetrofitAPI().joinMatch(matchingDTO).enqueue(new Callback<Long>() {
-                                        @Override
-                                        public void onResponse(Call<Long> call, Response<Long> response) {
-                                            if(response.isSuccessful()){
-                                                if(response.body() == -1l){
-                                                    Toast.makeText(mContext, "이미 참여한 오픈매치", Toast.LENGTH_SHORT).show();
-                                                }else {
-                                                    Toast.makeText(mContext, "참여 완료", Toast.LENGTH_SHORT).show();
-                                                }
 
+                    new MaterialAlertDialogBuilder(getContext())
+                            .setTitle("오픈매치 참여").setMessage("참여를 원하시면 참여하기 버튼을 눌러주세요.")
+                            .setNegativeButton("닫기", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+
+                                }
+                            })
+                            .setPositiveButton("참여하기", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+
+                                    //참여 처리
+                                    MatchingDTO matchingDTO = new MatchingDTO();
+                                    matchingDTO.setOpenMatchId(openMatchDTO.getId());
+                                    Long userIdx = Long.valueOf(preferenceUtil.getString("userIdx"));
+                                    // -1이면 조회되지 않는 유저임(없는 유저). 참가로직 안돌도록
+                                    if(userIdx == -1l || userIdx == null){
+                                        Toast.makeText(mContext, "참가 실패", Toast.LENGTH_SHORT).show();
+                                        return;
+                                    }
+                                    matchingDTO.setUserIndex(userIdx);
+                                    retrofitUtil.getRetrofitAPI().getUserProfile(preferenceUtil.getString("userId")).enqueue(new Callback<ProfileDTO>() {
+                                        @Override
+                                        public void onResponse(Call<ProfileDTO> call, Response<ProfileDTO> response) {
+                                            if(response.isSuccessful()){
+                                                if(response.body() != null){
+                                                    Log.d("프로필제한", "프로필이 있는 유저");
+                                                    retrofitUtil.getRetrofitAPI().joinMatch(matchingDTO).enqueue(new Callback<Long>() {
+                                                        @Override
+                                                        public void onResponse(Call<Long> call, Response<Long> response) {
+                                                            if(response.isSuccessful()){
+                                                                if(response.body() == -1l){
+                                                                    Toast.makeText(mContext, "이미 참여한 오픈매치", Toast.LENGTH_SHORT).show();
+                                                                }else {
+                                                                    Toast.makeText(mContext, "참여 완료", Toast.LENGTH_SHORT).show();
+                                                                }
+
+                                                            }else {
+                                                                Toast.makeText(mContext, "응답 없음", Toast.LENGTH_SHORT).show();
+                                                            }
+                                                        }
+
+                                                        @Override
+                                                        public void onFailure(Call<Long> call, Throwable t) {
+
+                                                        }
+                                                    });
+                                                }
                                             }else {
-                                                Toast.makeText(mContext, "응답 없음", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(mContext, "프로필 생성 후 이용가능합니다.", Toast.LENGTH_SHORT).show();
+                                                Log.d("프로필제한", "프로필이 없는 유저");
                                             }
                                         }
 
                                         @Override
-                                        public void onFailure(Call<Long> call, Throwable t) {
+                                        public void onFailure(Call<ProfileDTO> call, Throwable t) {
 
                                         }
                                     });
+
                                 }
-                            }else {
-                                Toast.makeText(mContext, "프로필 생성 후 이용가능합니다.", Toast.LENGTH_SHORT).show();
-                                Log.d("프로필제한", "프로필이 없는 유저");
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Call<ProfileDTO> call, Throwable t) {
-
-                        }
-                    });
+                            }).show();
 
                 }
             });
@@ -240,9 +258,24 @@ public class OpenMatchAdapter extends ArrayAdapter implements AdapterView.OnItem
                                         @Override
                                         public void onClick(View view) {
 
-                                            //나가기 기능 제공
-                                            //오픈매치 인덱스와, 유저인덱스를 가지고 나가기 처리
-                                            leaveMatching(openMatchDTO.getId(), Long.valueOf(preferenceUtil.getString("userIdx")));
+                                            new MaterialAlertDialogBuilder(getContext())
+                                                    .setTitle("오픈매치 떠나기").setMessage("정말 떠나시겠습니까?")
+                                                    .setNegativeButton("닫기", new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                                                        }
+                                                    })
+                                                    .setPositiveButton("떠나기", new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                                            //나가기 기능 제공
+                                                            //오픈매치 인덱스와, 유저인덱스를 가지고 나가기 처리
+                                                            leaveMatching(openMatchDTO.getId(), Long.valueOf(preferenceUtil.getString("userIdx")));
+
+                                                        }
+                                                    }).show();
+
 
                                         }
                                     });
@@ -256,24 +289,41 @@ public class OpenMatchAdapter extends ArrayAdapter implements AdapterView.OnItem
                                 viewHolder.btnDetailClick.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
-                                        //삭제처리
-                                        retrofitUtil.getRetrofitAPI().delete(openMatchDTO.getId()).enqueue(new Callback<Boolean>() {
-                                            @Override
-                                            public void onResponse(Call<Boolean> call, Response<Boolean> response) {
-                                                if(response.isSuccessful()){
-                                                    if(response.body()){
-                                                        Toast.makeText(mContext, "삭제완료", Toast.LENGTH_SHORT).show();
-                                                    }else {
-                                                        Toast.makeText(mContext, "오류로 삭제 실패", Toast.LENGTH_SHORT).show();
+
+                                        new MaterialAlertDialogBuilder(getContext())
+                                                .setTitle("오픈매치 삭제").setMessage("정말 삭제하시겠습니까?")
+                                                .setNegativeButton("닫기", new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialogInterface, int i) {
+
                                                     }
-                                                }
-                                            }
+                                                })
+                                                .setPositiveButton("삭제", new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                                        //삭제처리
+                                                        retrofitUtil.getRetrofitAPI().delete(openMatchDTO.getId()).enqueue(new Callback<Boolean>() {
+                                                            @Override
+                                                            public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                                                                if(response.isSuccessful()){
+                                                                    if(response.body()){
+                                                                        Toast.makeText(mContext, "삭제완료", Toast.LENGTH_SHORT).show();
+                                                                    }else {
+                                                                        Toast.makeText(mContext, "오류로 삭제 실패", Toast.LENGTH_SHORT).show();
+                                                                    }
+                                                                }
+                                                            }
 
-                                            @Override
-                                            public void onFailure(Call<Boolean> call, Throwable t) {
+                                                            @Override
+                                                            public void onFailure(Call<Boolean> call, Throwable t) {
 
-                                            }
-                                        });
+                                                            }
+                                                        });
+
+                                                    }
+                                                }).show();
+
+
                                     }
                                 });
                             }

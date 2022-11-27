@@ -28,6 +28,7 @@ import com.bumptech.glide.Glide;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 import com.mju.exercise.Domain.MatchingDTO;
 import com.mju.exercise.Domain.OpenMatchDTO;
@@ -163,12 +164,39 @@ public class OpenMatchOpenFrag extends Fragment {
         return tmp;
     }
 
+    //필수 값 체크
+    private boolean emptyCheck(){
+        if(edtSubject.getText().toString() == null || sportType == null || personnel == null){
+            new MaterialAlertDialogBuilder(getContext())
+                    .setTitle("생성불가").setMessage("오픈매치 이름, 종목, 인원 수는 필수값입니다.")
+                    .show();
+            return false;
+        }
+        return true;
+    }
+
     private View.OnClickListener setOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             switch (view.getId()){
                 case R.id.btnCreate:
-                    createOpenMatch();
+                    new MaterialAlertDialogBuilder(getContext())
+                            .setTitle("오픈매치 생성").setMessage("입력한 내용으로 오픈매치를 생성하시겠습니까?")
+                            .setNegativeButton("닫기", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+
+                                }
+                            })
+                            .setPositiveButton("생성하기", new DialogInterface.OnClickListener() {
+
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    if(emptyCheck()){
+                                        createOpenMatch();
+                                    }
+                                }
+                            }).show();
                     break;
 
 
@@ -272,10 +300,17 @@ public class OpenMatchOpenFrag extends Fragment {
         //날짜 전송
         openMatchDTO.setOpenTime(nowTime.toString());
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            LocalDateTime playDateTime = LocalDateTime.of(year, month, day, hour, min, 0);
-            Log.d("날짜", playDateTime.toString());
-            playDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"));
-            openMatchDTO.setPlayTime(playDateTime.toString());
+            //날짜가 있을때
+            if(month > 0){
+                LocalDateTime playDateTime = LocalDateTime.of(year, month, day, hour, min, 0);
+                Log.d("날짜", playDateTime.toString());
+                playDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"));
+                openMatchDTO.setPlayTime(playDateTime.toString());
+            }else {
+                //날짜가 없을때
+                openMatchDTO.setPlayTime("");
+            }
+
         }
 
         if(lat != null && lng != null){
