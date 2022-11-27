@@ -23,7 +23,7 @@ public class OpenMatchDTO {
     private String subject;
     private String article;
 
-    private String openMatchPw;
+    private Integer openMatchPw;
 
     private String sportType;
     private Integer personnel; //인원
@@ -65,11 +65,11 @@ public class OpenMatchDTO {
         this.subject = subject;
     }
 
-    public String getOpenMatchPw() {
+    public Integer getOpenMatchPw() {
         return openMatchPw;
     }
 
-    public void setOpenMatchPw(String openMatchPw) {
+    public void setOpenMatchPw(Integer openMatchPw) {
         this.openMatchPw = openMatchPw;
     }
 
