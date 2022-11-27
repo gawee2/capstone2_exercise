@@ -9,19 +9,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.mju.exercise.Domain.OpenMatchDTO;
-import com.mju.exercise.Domain.ProfileDTO;
 import com.mju.exercise.HttpRequest.RetrofitUtil;
 import com.mju.exercise.R;
 import com.mju.exercise.StatusEnum.Status;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import retrofit2.Call;
@@ -152,12 +147,14 @@ public class OpenMatchListFrag extends Fragment implements OpenMatchFilter{
                     newOpenMatches.add(openMatchDTO);
                     openMatchAdapter.notifyDataSetChanged();
                 }
+
                 @Override
-                public void dataLoadComplete() {
-//                    //비동기로 처리되는 join부분 때문에 만들어 놓음
-//                    openMatchAdapter = new OpenMatchAdapter(getContext(), newOpenMatches);
-//                    customListView.setAdapter(openMatchAdapter);
-//                    openMatchAdapter.notifyDataSetChanged();
+                public void dataLoadComplete(ArrayList<OpenMatchDTO> list) {
+                    //최종적으로 참여가능 여부 체크후 튀어 나오는 데이터임
+                    //참여가능 체크가 비동기라 맨 뒤로 뺐음
+                    openMatchAdapter = new OpenMatchAdapter(getContext(), list);
+                    customListView.setAdapter(openMatchAdapter);
+                    openMatchAdapter.notifyDataSetChanged();
 
                 }
             });

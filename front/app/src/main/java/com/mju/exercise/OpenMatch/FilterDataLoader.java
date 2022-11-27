@@ -269,6 +269,7 @@ public class FilterDataLoader {
 
     //참여가능 오픈매치만 뽑기
     public void getDataCanJoin(){
+        ArrayList<OpenMatchDTO> tmpList = new ArrayList<>();
         cnt = 1;
         for(OpenMatchDTO openMatchDTO: list){
             int totalUser = openMatchDTO.getPersonnel();
@@ -280,11 +281,12 @@ public class FilterDataLoader {
                         Log.d("필터순차", "총 유저: " + String.valueOf(totalUser) + " 현재 유저: " + String.valueOf(nowUser));
                         if(totalUser > nowUser){
                             Log.d("필터순차", "참가가능한거 있음");
-                            dataLoadedListener.dataLoaded(openMatchDTO);
+//                            dataLoadedListener.dataLoaded(openMatchDTO);
+                            tmpList.add(openMatchDTO);
                         }
                     }
                     if(cnt >= list.size()){
-                        dataLoadedListener.dataLoadComplete();
+                        dataLoadedListener.dataLoadComplete(tmpList);
                     }
 
                     cnt += 1;
@@ -306,6 +308,6 @@ public class FilterDataLoader {
 
     public interface DataLoadedListener {
         void dataLoaded(OpenMatchDTO openMatchDTO);
-        void dataLoadComplete();
+        void dataLoadComplete(ArrayList<OpenMatchDTO> list);
     }
 }
