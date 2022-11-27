@@ -177,21 +177,21 @@ public class FilterDataLoader {
                 tmp = "일요일";
                 break;
         }
-
         String finalTmp = tmp;
-        list.stream().filter(openMatchDTO -> {
-
+        for(OpenMatchDTO openMatchDTO: list){
             String strLocalDateTime = openMatchDTO.getPlayDateTime();
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                LocalDateTime localDateTime = LocalDateTime.parse(strLocalDateTime);
-                DayOfWeek dayOfWeek = localDateTime.getDayOfWeek();
+            if(strLocalDateTime != null){
+                LocalDateTime localDateTime = null;
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                    localDateTime = LocalDateTime.parse(strLocalDateTime);
+                    DayOfWeek dayOfWeek = localDateTime.getDayOfWeek();
 
-                if(convertDayOfWeek(dayOfWeek).equals(finalTmp)){
-                    dataLoadedListener.dataLoaded(openMatchDTO);
+                    if(convertDayOfWeek(dayOfWeek).equals(finalTmp)){
+                        dataLoadedListener.dataLoaded(openMatchDTO);
+                    }
                 }
             }
-            return false;
-        });
+        }
     }
 
     private String convertDayOfWeek(DayOfWeek dayOfWeek){
