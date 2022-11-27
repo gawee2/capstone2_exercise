@@ -108,10 +108,26 @@ public class FilterDataLoader {
             public int compare(OpenMatchDTO openMatchDTO, OpenMatchDTO t1) {
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    LocalDateTime l1 = LocalDateTime.parse(openMatchDTO.getPlayDateTime());
-                    LocalDateTime l2 = LocalDateTime.parse(t1.getPlayDateTime());
+                    try{
+                        String s1 = openMatchDTO.getPlayDateTime();
+                        String s2 = t1.getPlayDateTime();
+                        if(s1 != null && s2 != null){
+                            //둘 다 값이 있을때
+                            LocalDateTime l1 = LocalDateTime.parse(s1);
+                            LocalDateTime l2 = LocalDateTime.parse(s2);
 
-                    return l1.compareTo(l2);
+                            return l1.compareTo(l2);
+                        }else if(s1 != null && s2 == null){
+                            return -1;
+                        }else if(s1 == null && s2 != null){
+                            return 1;
+                        }else{
+                            //둘 다 미정일때
+                            return 0;
+                        }
+                    }catch (NullPointerException e){
+                        //날짜 미정도 처리 했는데 혹시 몰라서 남겨 놓음
+                    }
                 }
                 return 0;
             }
