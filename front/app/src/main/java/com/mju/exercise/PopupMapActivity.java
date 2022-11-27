@@ -1,8 +1,12 @@
 package com.mju.exercise;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PointF;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -21,13 +25,16 @@ import com.naver.maps.map.MapView;
 import com.naver.maps.map.NaverMap;
 import com.naver.maps.map.OnMapReadyCallback;
 import com.naver.maps.map.UiSettings;
+import com.naver.maps.map.overlay.InfoWindow;
 import com.naver.maps.map.overlay.Marker;
 import com.naver.maps.map.overlay.Overlay;
 import com.naver.maps.map.util.FusedLocationSource;
 import com.naver.maps.map.util.MarkerIcons;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class PopupMapActivity extends AppCompatActivity implements NaverMap.OnMapClickListener, Overlay.OnClickListener, OnMapReadyCallback, NaverMap.OnCameraChangeListener, NaverMap.OnCameraIdleListener {
 
@@ -35,6 +42,7 @@ public class PopupMapActivity extends AppCompatActivity implements NaverMap.OnMa
     private static NaverMap naverMap;
     private static final int ACCESS_LOCATION_PERMISSION_REQUEST_CODE = 100;
     private FusedLocationSource locationSource;
+    private InfoWindow infoWindow;
 
     //액티비티 리턴용 위경도 값
     private Double lat;
@@ -104,6 +112,7 @@ public class PopupMapActivity extends AppCompatActivity implements NaverMap.OnMa
         naverMap.setLocationSource(locationSource);
         UiSettings uiSettings = naverMap.getUiSettings();
         uiSettings.setLocationButtonEnabled(true);
+        infoWindow = new InfoWindow();
 
         if(isMake){
             //사용자가 해당 위치 클릭시 마커 생성하고 위경도 값 담음
@@ -134,14 +143,59 @@ public class PopupMapActivity extends AppCompatActivity implements NaverMap.OnMa
             Marker marker = new Marker();
             marker.setPosition(latLng);
             marker.setMap(naverMap);
+            String address = getAddress(latLng);
+
+            //클립보드에 주소 복사 지원
+            ClipboardManager clipboardManager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+
+            infoWindow.setAdapter(new InfoWindow.DefaultTextAdapter(getApplicationContext()) {
+                @NonNull
+                @Override
+                public CharSequence getText(@NonNull InfoWindow infoWindow) {
+                    return address;
+                }
+            });
+            infoWindow.setZIndex(10);
+            infoWindow.setPosition(latLng);
+            infoWindow.open(marker);
+            infoWindow.setOnClickListener(new Overlay.OnClickListener() {
+                @Override
+                public boolean onClick(@NonNull Overlay overlay) {
+                    ClipData clipData = ClipData.newPlainText("주소", address);
+                    clipboardManager.setPrimaryClip(clipData);
+                    Toast.makeText(getApplicationContext(), "주소 클립보드에 복사됨", Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+            });
 
             CameraUpdate cameraUpdate = CameraUpdate.scrollAndZoomTo(
                     latLng, 15)
                     .animate(CameraAnimation.Fly, 1500);
             naverMap.moveCamera(cameraUpdate);
+
         }
 
 
+    }
+
+    //위경도 값으로 주소 가져옴
+    public String getAddress(LatLng latLng) {
+        String nowAddress = "위치 확인 실패";
+        List<Address> addresses;
+        Geocoder geocoder = new Geocoder(getApplicationContext(), Locale.KOREA);
+        try{
+            if(geocoder != null){
+                addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
+                if(addresses != null && addresses.size() > 0){
+                    String currentLocationAddress = addresses.get(0).getAddressLine(0).toString();
+                    nowAddress = currentLocationAddress;
+                }
+            }
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+
+        return nowAddress;
     }
 
     @Override
