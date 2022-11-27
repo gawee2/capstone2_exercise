@@ -225,56 +225,54 @@ public class OpenMatchAdapter extends ArrayAdapter implements AdapterView.OnItem
                     //임시로 추가
                     if(openMatchDTO.getPersonnel() != null){
 
-
-
-                    //모집인원 수가 다 채워진 오픈매치는 disabled 함
-                    if(cnt >= openMatchDTO.getPersonnel()){
-                        viewHolder.isCanJoin = false;
-                        viewHolder.btnDetailClick.setText("참여 불가");
-                        viewHolder.btnDetailClick.setEnabled(false);
-                    }
-                        //이미 참여한 오픈 매치는 나가기 버튼을 제공
-                        for(ProfileDTO profileDTO: response.body()){
-                            if(profileDTO.getUserID().equals(preferenceUtil.getString("userId"))){
+                        //모집인원 수가 다 채워진 오픈매치는 disabled 함
+                        if(cnt >= openMatchDTO.getPersonnel()){
+                            viewHolder.isCanJoin = false;
+                            viewHolder.btnDetailClick.setText("참여 불가");
+                            viewHolder.btnDetailClick.setEnabled(false);
+                        }
+                            //이미 참여한 오픈 매치는 나가기 버튼을 제공
+                            for(ProfileDTO profileDTO: response.body()){
+                                if(profileDTO.getUserID().equals(preferenceUtil.getString("userId"))){
+                                    viewHolder.btnDetailClick.setEnabled(true);
+                                    viewHolder.btnDetailClick.setText("나가기");
+                                    viewHolder.btnDetailClick.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            //나가기 기능 제공
+                                        }
+                                    });
+                                    break;
+                                }
+                            }
+                            if(openMatchDTO.getOpenUserId().equals(preferenceUtil.getString("userId"))){
                                 viewHolder.btnDetailClick.setEnabled(true);
-                                viewHolder.btnDetailClick.setText("나가기");
+                                //내가 만든 오픈매치는 삭제하기 버튼이 뜨도록
+                                viewHolder.btnDetailClick.setText("삭제 하기");
                                 viewHolder.btnDetailClick.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
-                                        //나가기 기능 제공
-                                    }
-                                });
-                                break;
-                            }
-                        }
-                        if(openMatchDTO.getOpenUserId().equals(preferenceUtil.getString("userId"))){
-                            viewHolder.btnDetailClick.setEnabled(true);
-                            //내가 만든 오픈매치는 삭제하기 버튼이 뜨도록
-                            viewHolder.btnDetailClick.setText("삭제 하기");
-                            viewHolder.btnDetailClick.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    //삭제처리
-                                    retrofitUtil.getRetrofitAPI().delete(openMatchDTO.getId()).enqueue(new Callback<Boolean>() {
-                                        @Override
-                                        public void onResponse(Call<Boolean> call, Response<Boolean> response) {
-                                            if(response.isSuccessful()){
-                                                if(response.body()){
-                                                    Toast.makeText(mContext, "삭제완료", Toast.LENGTH_SHORT).show();
-                                                }else {
-                                                    Toast.makeText(mContext, "오류로 삭제 실패", Toast.LENGTH_SHORT).show();
+                                        //삭제처리
+                                        retrofitUtil.getRetrofitAPI().delete(openMatchDTO.getId()).enqueue(new Callback<Boolean>() {
+                                            @Override
+                                            public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                                                if(response.isSuccessful()){
+                                                    if(response.body()){
+                                                        Toast.makeText(mContext, "삭제완료", Toast.LENGTH_SHORT).show();
+                                                    }else {
+                                                        Toast.makeText(mContext, "오류로 삭제 실패", Toast.LENGTH_SHORT).show();
+                                                    }
                                                 }
                                             }
-                                        }
 
-                                        @Override
-                                        public void onFailure(Call<Boolean> call, Throwable t) {
+                                            @Override
+                                            public void onFailure(Call<Boolean> call, Throwable t) {
 
-                                        }
-                                    });
-                                }
-                            });
-                        }
+                                            }
+                                        });
+                                    }
+                                });
+                            }
 
 
 

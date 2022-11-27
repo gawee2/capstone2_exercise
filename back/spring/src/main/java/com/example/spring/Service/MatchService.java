@@ -140,9 +140,13 @@ public class MatchService {
             Iterator userIndexIter = userIndexList.listIterator();
             while (userIndexIter.hasNext()){
                 Long userIndex = (Long) userIndexIter.next();
-                Optional<Profile> profile = memberRepository.findProfileById(userIndex);
-                if(profile.isPresent()){
-                    profiles.add(profile.get());
+                //유저인덱스로 유저 찾고, 유저가 있으면
+                Optional<Member> member = memberRepository.findById(userIndex);
+                if(member.isPresent()){
+                    Optional<Profile> profile = memberRepository.findProfileByUserId(member.get().getUserId());
+                    if(profile.isPresent()){
+                        profiles.add(profile.get());
+                    }
                 }
             }
 
