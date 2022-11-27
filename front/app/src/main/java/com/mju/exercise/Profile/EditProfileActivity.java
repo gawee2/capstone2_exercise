@@ -350,6 +350,8 @@ public class EditProfileActivity extends AppCompatActivity {
 
                     //사진 없을때
                 } else {
+                    //따로 선택한 사진 없으면 기존 사진 그대로 적용
+                    profileDTO.setImage(beforeProfile.getImage());
                     sendProfileData(profileDTO);
                 }
 
