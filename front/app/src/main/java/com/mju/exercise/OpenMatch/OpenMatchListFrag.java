@@ -152,17 +152,15 @@ public class OpenMatchListFrag extends Fragment implements OpenMatchFilter{
                     newOpenMatches.add(openMatchDTO);
                     openMatchAdapter.notifyDataSetChanged();
                 }
-
                 @Override
                 public void dataLoadComplete() {
+//                    //비동기로 처리되는 join부분 때문에 만들어 놓음
+//                    openMatchAdapter = new OpenMatchAdapter(getContext(), newOpenMatches);
+//                    customListView.setAdapter(openMatchAdapter);
+//                    openMatchAdapter.notifyDataSetChanged();
 
                 }
             });
-
-            //참가 가능 여부로 필터링
-            if(filterTypeJoin == Status.FilterTypeJoin.JOIN_CAN){
-                canJoin(filterDataLoader);
-            }
 
             //거리로 필터링
             if(filterTypeDistance == Status.FilterTypeDistance.DISTANCE_DIFFERENCE){
@@ -176,7 +174,15 @@ public class OpenMatchListFrag extends Fragment implements OpenMatchFilter{
             }else if(filterTypeDay == Status.FilterTypeDay.DAY_NEAR){
                 daySort(filterDataLoader);
             }else if(filterTypeDay == Status.FilterTypeDay.DAY_PICK){
+                Log.d("필터특정날짜", "특정날짜 고름");
                 dayPick(filterDataLoader, localDateTime);
+            }
+
+
+            //비동기로 처리되는 애임
+            //참가 가능 여부로 필터링
+            if(filterTypeJoin == Status.FilterTypeJoin.JOIN_CAN){
+                canJoin(filterDataLoader);
             }
         }
 

@@ -13,6 +13,7 @@ import com.mju.exercise.Preference.PreferenceUtil;
 import com.mju.exercise.StatusEnum.Status;
 
 import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
@@ -46,17 +47,23 @@ public class FilterDataLoader {
 
     //특정일자 딱 골라서 뽑기
     public void getDataPickDay(LocalDateTime pickDay){
-        list.stream().filter(openMatchDTO -> {
-
+        Log.d("필터특정날짜", "getDataPickDay");
+        for(OpenMatchDTO openMatchDTO: list){
             String strLocalDateTime = openMatchDTO.getPlayDateTime();
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                LocalDateTime localDateTime = LocalDateTime.parse(strLocalDateTime);
-                if(pickDay.isEqual(localDateTime)){
-                    dataLoadedListener.dataLoaded(openMatchDTO);
+            if(strLocalDateTime != null){
+                LocalDateTime localDateTime = null;
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                    localDateTime = LocalDateTime.parse(strLocalDateTime);
+                    LocalDate tmp1 = pickDay.toLocalDate();
+                    LocalDate tmp2 = localDateTime.toLocalDate();
+                    Log.d("필터특정날짜", tmp1.toString() + " : " + tmp2.toString());
+
+                    if(tmp1.isEqual(tmp2)){
+                        dataLoadedListener.dataLoaded(openMatchDTO);
+                    }
                 }
             }
-            return false;
-        });
+        }
     }
 
     //가까운 거리순으로 뽑기
