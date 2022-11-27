@@ -95,6 +95,12 @@ public class OpenMatchListFrag extends Fragment implements OpenMatchFilter{
                 if(response.isSuccessful()){
                     openMatches = (ArrayList<OpenMatchDTO>) response.body();
                     openMatchAdapter = new OpenMatchAdapter(getContext(), openMatches);
+                    openMatchAdapter.setRootViewListener(new OpenMatchAdapter.RootViewListener() {
+                        @Override
+                        public void rootViewNotify() {
+                            openMatchAdapter.notifyDataSetChanged();
+                        }
+                    });
                     customListView.setAdapter(openMatchAdapter);
                 }
             }
@@ -135,6 +141,12 @@ public class OpenMatchListFrag extends Fragment implements OpenMatchFilter{
         if(filterTypeJoin == Status.FilterTypeJoin.JOIN_DEFAULT && filterTypeDay == Status.FilterTypeDay.DAY_DEFAULT && filterTypeDistance == Status.FilterTypeDistance.DISTANCE_DEFAULT){
             //모두 디폴트면 기존 리스트 그대로 보여줌
             openMatchAdapter = new OpenMatchAdapter(getContext(), openMatches);
+            openMatchAdapter.setRootViewListener(new OpenMatchAdapter.RootViewListener() {
+                @Override
+                public void rootViewNotify() {
+                    openMatchAdapter.notifyDataSetChanged();
+                }
+            });
             customListView.setAdapter(openMatchAdapter);
         }else {
             ArrayList<OpenMatchDTO> newOpenMatches = (ArrayList<OpenMatchDTO>) openMatches.clone();
@@ -188,6 +200,12 @@ public class OpenMatchListFrag extends Fragment implements OpenMatchFilter{
             public void dataLoadComplete(ArrayList<OpenMatchDTO> list) {
                 tmpList = (ArrayList<OpenMatchDTO>) list.clone();
                 openMatchAdapter = new OpenMatchAdapter(getContext(), list);
+                openMatchAdapter.setRootViewListener(new OpenMatchAdapter.RootViewListener() {
+                    @Override
+                    public void rootViewNotify() {
+                        openMatchAdapter.notifyDataSetChanged();
+                    }
+                });
                 customListView.setAdapter(openMatchAdapter);
                 openMatchAdapter.notifyDataSetChanged();
             }
@@ -201,6 +219,12 @@ public class OpenMatchListFrag extends Fragment implements OpenMatchFilter{
             public void dataLoadComplete(ArrayList<OpenMatchDTO> list) {
                 tmpList = (ArrayList<OpenMatchDTO>) list.clone();
                 openMatchAdapter = new OpenMatchAdapter(getContext(), list);
+                openMatchAdapter.setRootViewListener(new OpenMatchAdapter.RootViewListener() {
+                    @Override
+                    public void rootViewNotify() {
+                        openMatchAdapter.notifyDataSetChanged();
+                    }
+                });
                 customListView.setAdapter(openMatchAdapter);
                 openMatchAdapter.notifyDataSetChanged();
             }
@@ -214,6 +238,12 @@ public class OpenMatchListFrag extends Fragment implements OpenMatchFilter{
             public void dataLoadComplete(ArrayList<OpenMatchDTO> list) {
                 tmpList = (ArrayList<OpenMatchDTO>) list.clone();
                 openMatchAdapter = new OpenMatchAdapter(getContext(), list);
+                openMatchAdapter.setRootViewListener(new OpenMatchAdapter.RootViewListener() {
+                    @Override
+                    public void rootViewNotify() {
+                        openMatchAdapter.notifyDataSetChanged();
+                    }
+                });
                 customListView.setAdapter(openMatchAdapter);
                 openMatchAdapter.notifyDataSetChanged();
             }
@@ -229,6 +259,12 @@ public class OpenMatchListFrag extends Fragment implements OpenMatchFilter{
             public void dataLoadComplete(ArrayList<OpenMatchDTO> list) {
                 tmpList = (ArrayList<OpenMatchDTO>) list.clone();
                 openMatchAdapter = new OpenMatchAdapter(getContext(), list);
+                openMatchAdapter.setRootViewListener(new OpenMatchAdapter.RootViewListener() {
+                    @Override
+                    public void rootViewNotify() {
+                        openMatchAdapter.notifyDataSetChanged();
+                    }
+                });
                 customListView.setAdapter(openMatchAdapter);
                 openMatchAdapter.notifyDataSetChanged();
             }
@@ -243,6 +279,12 @@ public class OpenMatchListFrag extends Fragment implements OpenMatchFilter{
             public void dataLoadComplete(ArrayList<OpenMatchDTO> list) {
                 tmpList = (ArrayList<OpenMatchDTO>) list.clone();
                 openMatchAdapter = new OpenMatchAdapter(getContext(), list);
+                openMatchAdapter.setRootViewListener(new OpenMatchAdapter.RootViewListener() {
+                    @Override
+                    public void rootViewNotify() {
+                        openMatchAdapter.notifyDataSetChanged();
+                    }
+                });
                 customListView.setAdapter(openMatchAdapter);
                 openMatchAdapter.notifyDataSetChanged();
             }
@@ -257,6 +299,12 @@ public class OpenMatchListFrag extends Fragment implements OpenMatchFilter{
             public void dataLoadComplete(ArrayList<OpenMatchDTO> list) {
                 tmpList = (ArrayList<OpenMatchDTO>) list.clone();
                 openMatchAdapter = new OpenMatchAdapter(getContext(), list);
+                openMatchAdapter.setRootViewListener(new OpenMatchAdapter.RootViewListener() {
+                    @Override
+                    public void rootViewNotify() {
+                        openMatchAdapter.notifyDataSetChanged();
+                    }
+                });
                 customListView.setAdapter(openMatchAdapter);
                 openMatchAdapter.notifyDataSetChanged();
             }
