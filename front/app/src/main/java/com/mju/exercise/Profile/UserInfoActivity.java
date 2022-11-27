@@ -136,19 +136,21 @@ public class UserInfoActivity extends AppCompatActivity {
             mImgProfile.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    LayoutInflater inflater = getLayoutInflater();
-                    View dialogLayout = inflater.inflate(R.layout.dialog_profile_image, null);
-                    ImageView imageView = (ImageView) dialogLayout.findViewById(R.id.imgBigProfile);
-                    Log.d("프로필확대", url);
-                    Glide.with(mContext).load(url).into(imageView);
-                    new AlertDialog.Builder(mContext)
-                            .setTitle("프로필 이미지")
-                            .setView(dialogLayout)
-                            .show();
-
+                    bigProfileImage(url);
                 }
             });
         }
+    }
+
+    private void bigProfileImage(String url){
+        LayoutInflater inflater = getLayoutInflater();
+        final View dialogLayout = inflater.inflate(R.layout.dialog_profile_image, null);
+        final ImageView imageView = (ImageView) dialogLayout.findViewById(R.id.imgBigProfile);
+        final AlertDialog dialog = new AlertDialog.Builder(mContext).create();
+
+        Glide.with(mContext).load(url).into(imageView);
+        dialog.setView(dialogLayout);
+        dialog.show();
     }
 
     //프로필 화면에 띄우기, 서버에서 가져온것 반영

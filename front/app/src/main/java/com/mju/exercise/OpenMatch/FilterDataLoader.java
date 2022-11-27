@@ -13,6 +13,7 @@ import com.mju.exercise.Preference.PreferenceUtil;
 import com.mju.exercise.StatusEnum.Status;
 
 import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
@@ -28,88 +29,117 @@ import javax.security.auth.callback.Callback;
 public class FilterDataLoader {
 
     private Context mContext;
-    private ArrayList<OpenMatchDTO> list;
     private DataLoadedListener dataLoadedListener;
     RetrofitUtil retrofitUtil;
     PreferenceUtil preferenceUtil;
 
-    public FilterDataLoader(Context context, ArrayList<OpenMatchDTO> list){
-        this.list = (ArrayList<OpenMatchDTO>) list.clone();
+    private int cnt;
+
+    //원본 리스트는 건드리지 않음. 다른 필터 했을때 바로 갖고 있는 데이터로 적용하도록
+    public FilterDataLoader(Context context){
         this.mContext = context;
         retrofitUtil = RetrofitUtil.getInstance();
         preferenceUtil = PreferenceUtil.getInstance(context);
     }
 
-    //특정일자 딱 골라서 뽑기
-    public void getDataPickDay(LocalDateTime pickDay){
-        list.stream().filter(openMatchDTO -> {
 
+    //특정일자 딱 골라서 뽑기
+    public void getDataPickDay(ArrayList<OpenMatchDTO> list, LocalDateTime pickDay){
+        ArrayList<OpenMatchDTO> tmpList = new ArrayList<>();
+        Log.d("필터특정날짜", "getDataPickDay");
+        for(OpenMatchDTO openMatchDTO: list){
             String strLocalDateTime = openMatchDTO.getPlayDateTime();
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                LocalDateTime localDateTime = LocalDateTime.parse(strLocalDateTime);
-                if(pickDay.isEqual(localDateTime)){
-                    dataLoadedListener.dataLoaded(openMatchDTO);
+            if(strLocalDateTime != null){
+                LocalDateTime localDateTime = null;
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                    localDateTime = LocalDateTime.parse(strLocalDateTime);
+                    LocalDate tmp1 = pickDay.toLocalDate();
+                    LocalDate tmp2 = localDateTime.toLocalDate();
+                    Log.d("필터특정날짜", tmp1.toString() + " : " + tmp2.toString());
+
+                    if(tmp1.isEqual(tmp2)){
+                        tmpList.add(openMatchDTO);
+                    }
                 }
             }
-            return false;
-        });
+        }
+        dataLoadedListener.dataLoadComplete(tmpList);
     }
 
     //가까운 거리순으로 뽑기
-    public void getDataDistanceSort(){
+    public void getDataDistanceSort(ArrayList<OpenMatchDTO> list){
+        ArrayList<OpenMatchDTO> tmpList = new ArrayList<>();
         Double myLat = Double.valueOf(preferenceUtil.getString("lat"));
         Double myLng = Double.valueOf(preferenceUtil.getString("lng"));
 
-        ArrayList<Integer> distacnceList = new ArrayList<>();
-        HashMap<Integer, OpenMatchDTO> map = new HashMap<>();
+        ArrayList<Double> distacnceList = new ArrayList<>();
+        HashMap<Double, OpenMatchDTO> map = new HashMap<>();
 
         if(myLat !=null && myLng != null) {
+
+            Double unde = 100000000.0;
             //우선 각각의 오픈 매치와 나의 거리를 쭉 계산함
             for (OpenMatchDTO openMatchDTO : list) {
-                int distanceToMe = 0;
-
+                Double distanceToMe = 0.0;
                 Double tmpLat = openMatchDTO.getLat();
                 Double tmpLng = openMatchDTO.getLng();
 
                 //운동장소가 선택된 것들만 거리 비교함
-                if(tmpLat != null && tmpLng != null) {
+                if((tmpLat != null && tmpLng != null)) {
                     distanceToMe = computeDistance(myLat, myLng, tmpLat, tmpLng);
+                    distacnceList.add(distanceToMe);
+                    map.put(distanceToMe, openMatchDTO);
+                }else {
+                    //운동장소 미정인 애들은 뒤로 미루려고
+                    unde += 1;
+                    distacnceList.add(unde);
+                    map.put(unde, openMatchDTO);
                 }
-                distacnceList.add(distanceToMe);
-
-                //거리에 따라서 오픈매치 해시맵에 넣어놓고
-                //거리 돌면서 해시맵값 뽑아서 최종 정렬
-                //같은 해시맵을 덮어쓰는 문제가 있을 수 있음
-                map.put(distanceToMe, openMatchDTO);
             }
             //거리를 담고 있는 리스트를 정렬함. 가까운게 앞에 옴
-            Collections.sort(distacnceList, new Comparator<Integer>() {
+            Collections.sort(distacnceList, new Comparator<Double>() {
                 @Override
-                public int compare(Integer integer, Integer t1) {
-                    return integer.compareTo(t1);
+                public int compare(Double t0, Double t1) {
+                    return t0.compareTo(t1);
                 }
             });
 
             //최종정렬
-            for(Integer integer: distacnceList){
-                dataLoadedListener.dataLoaded(map.get(integer));
+            for(Double dd: distacnceList){
+                tmpList.add(map.get(dd));
             }
-
-
         }
+        dataLoadedListener.dataLoadComplete(tmpList);
     }
     //가까운 날짜순으로 뽑기
-    public void getDataDaySort(){
+    public void getDataDaySort(ArrayList<OpenMatchDTO> list){
+        ArrayList<OpenMatchDTO> tmpList = new ArrayList<>();
         //정렬하고
         Collections.sort(list, new Comparator<OpenMatchDTO>() {
             @Override
             public int compare(OpenMatchDTO openMatchDTO, OpenMatchDTO t1) {
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    LocalDateTime l1 = LocalDateTime.parse(openMatchDTO.getPlayDateTime());
-                    LocalDateTime l2 = LocalDateTime.parse(t1.getPlayDateTime());
+                    try{
+                        String s1 = openMatchDTO.getPlayDateTime();
+                        String s2 = t1.getPlayDateTime();
+                        if(s1 != null && s2 != null){
+                            //둘 다 값이 있을때
+                            LocalDateTime l1 = LocalDateTime.parse(s1);
+                            LocalDateTime l2 = LocalDateTime.parse(s2);
 
-                    return l1.compareTo(l2);
+                            return l1.compareTo(l2);
+                        }else if(s1 != null && s2 == null){
+                            return -1;
+                        }else if(s1 == null && s2 != null){
+                            return 1;
+                        }else{
+                            //둘 다 미정일때
+                            return 0;
+                        }
+                    }catch (NullPointerException e){
+                        //날짜 미정도 처리 했는데 혹시 몰라서 남겨 놓음
+                    }
                 }
                 return 0;
             }
@@ -117,13 +147,14 @@ public class FilterDataLoader {
 
         //데이터 보내주기
         for(OpenMatchDTO openMatchDTO: list){
-            dataLoadedListener.dataLoaded(openMatchDTO);
+            tmpList.add(openMatchDTO);
         }
+        dataLoadedListener.dataLoadComplete(tmpList);
     }
 
     //특정요일만 뽑기
-    public void getDataFavDay(Status.FavDayType favDayType){
-
+    public void getDataFavDay(ArrayList<OpenMatchDTO> list, Status.FavDayType favDayType){
+        ArrayList<OpenMatchDTO> tmpList = new ArrayList<>();
         String tmp = null;
         switch (favDayType){
             case MON:
@@ -148,21 +179,22 @@ public class FilterDataLoader {
                 tmp = "일요일";
                 break;
         }
-
         String finalTmp = tmp;
-        list.stream().filter(openMatchDTO -> {
-
+        for(OpenMatchDTO openMatchDTO: list){
             String strLocalDateTime = openMatchDTO.getPlayDateTime();
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                LocalDateTime localDateTime = LocalDateTime.parse(strLocalDateTime);
-                DayOfWeek dayOfWeek = localDateTime.getDayOfWeek();
+            if(strLocalDateTime != null){
+                LocalDateTime localDateTime = null;
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                    localDateTime = LocalDateTime.parse(strLocalDateTime);
+                    DayOfWeek dayOfWeek = localDateTime.getDayOfWeek();
 
-                if(convertDayOfWeek(dayOfWeek).equals(finalTmp)){
-                    dataLoadedListener.dataLoaded(openMatchDTO);
+                    if(convertDayOfWeek(dayOfWeek).equals(finalTmp)){
+                        tmpList.add(openMatchDTO);
+                    }
                 }
             }
-            return false;
-        });
+        }
+        dataLoadedListener.dataLoadComplete(tmpList);
     }
 
     private String convertDayOfWeek(DayOfWeek dayOfWeek){
@@ -173,8 +205,9 @@ public class FilterDataLoader {
     }
 
     //거리에 따른 데이터 뽑기
-    public void getDataDisDiff(Status.DistanceDiff distanceDiff){
+    public void getDataDisDiff(ArrayList<OpenMatchDTO> list, Status.DistanceDiff distanceDiff){
 
+        ArrayList<OpenMatchDTO> tmpList = new ArrayList<>();
         Double myLat = Double.valueOf(preferenceUtil.getString("lat"));
         Double myLng = Double.valueOf(preferenceUtil.getString("lng"));
         int standardDistance = 0;
@@ -204,22 +237,23 @@ public class FilterDataLoader {
 
                 //운동장소가 선택된 것들만 거리 비교함
                 if(tmpLat != null && tmpLng != null){
-                    int dis = computeDistance(myLat, myLng, tmpLat, tmpLng);
+                    Double dis = computeDistance(myLat, myLng, tmpLat, tmpLng);
                     if(standardDistance == 10000){
                         if(dis > 3000 && dis <10000){
-                            dataLoadedListener.dataLoaded(openMatchDTO);
+                            tmpList.add(openMatchDTO);
                         }
                     }else {
                         if(dis < standardDistance){
-                            dataLoadedListener.dataLoaded(openMatchDTO);
+                            tmpList.add(openMatchDTO);
                         }
                     }
                 }
             }
         }
+        dataLoadedListener.dataLoadComplete(tmpList);
     }
 
-    private int computeDistance(Double myLat, Double myLng, Double mapLat, Double mapLng){
+    private Double computeDistance(Double myLat, Double myLng, Double mapLat, Double mapLng){
 
         Double R = 6372.8 * 1000;
 
@@ -228,7 +262,7 @@ public class FilterDataLoader {
         Double a = Math.pow(Math.sin(dLat / 2), 2) + Math.pow(Math.sin(dLng / 2), 2) * Math.cos(Math.toRadians(myLat)) * Math.cos(Math.toRadians(mapLat));
         Double c = 2 * Math.asin(Math.sqrt(a));
 
-        return (int) (R * c);
+        return (Double) (R * c);
     }
 
     private double convertMtoKM(int distance){
@@ -239,29 +273,36 @@ public class FilterDataLoader {
     }
 
     //참여가능 오픈매치만 뽑기
-    public void getDataCanJoin(){
-            for(OpenMatchDTO openMatchDTO: list){
-                int totalUser = openMatchDTO.getPersonnel();
-                retrofitUtil.getRetrofitAPI().getJoinedUserProfiles(openMatchDTO.getId()).enqueue(new retrofit2.Callback<List<ProfileDTO>>() {
-                    @Override
-                    public void onResponse(retrofit2.Call<List<ProfileDTO>> call, retrofit2.Response<List<ProfileDTO>> response) {
-                        if(response.isSuccessful()){
-                            int nowUser = response.body().size();
-                            Log.d("필터", "총 유저: " + String.valueOf(totalUser) + " 현재 유저: " + String.valueOf(nowUser));
-                            if(totalUser > nowUser){
-                                Log.d("필터", "참가가능한거 있음");
-                                dataLoadedListener.dataLoaded(openMatchDTO);
-                            }
+    public void getDataCanJoin(ArrayList<OpenMatchDTO> list){
+        ArrayList<OpenMatchDTO> tmpList = new ArrayList<>();
+        cnt = 1;
+        for(OpenMatchDTO openMatchDTO: list){
+            int totalUser = openMatchDTO.getPersonnel();
+            retrofitUtil.getRetrofitAPI().getJoinedUserProfiles(openMatchDTO.getId()).enqueue(new retrofit2.Callback<List<ProfileDTO>>() {
+                @Override
+                public void onResponse(retrofit2.Call<List<ProfileDTO>> call, retrofit2.Response<List<ProfileDTO>> response) {
+                    if(response.isSuccessful()){
+                        int nowUser = response.body().size();
+                        Log.d("필터순차", "총 유저: " + String.valueOf(totalUser) + " 현재 유저: " + String.valueOf(nowUser));
+                        if(totalUser > nowUser){
+                            Log.d("필터순차", "참가가능한거 있음");
+                            tmpList.add(openMatchDTO);
                         }
                     }
-
-                    @Override
-                    public void onFailure(retrofit2.Call<List<ProfileDTO>> call, Throwable t) {
-
+                    if(cnt >= list.size()){
+                        dataLoadedListener.dataLoadComplete(tmpList);
                     }
-                });
-            }
+
+                    cnt += 1;
+                }
+
+                @Override
+                public void onFailure(retrofit2.Call<List<ProfileDTO>> call, Throwable t) {
+
+                }
+            });
         }
+    }
 
 
 
@@ -270,6 +311,6 @@ public class FilterDataLoader {
     }
 
     public interface DataLoadedListener {
-        void dataLoaded(OpenMatchDTO openMatchDTO);
+        void dataLoadComplete(ArrayList<OpenMatchDTO> list);
     }
 }
