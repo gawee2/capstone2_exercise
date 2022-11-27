@@ -239,7 +239,11 @@ public class OpenMatchAdapter extends ArrayAdapter implements AdapterView.OnItem
                                     viewHolder.btnDetailClick.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View view) {
+
                                             //나가기 기능 제공
+                                            //오픈매치 인덱스와, 유저인덱스를 가지고 나가기 처리
+                                            leaveMatching(openMatchDTO.getId(), Long.valueOf(preferenceUtil.getString("userIdx")));
+
                                         }
                                     });
                                     break;
@@ -273,8 +277,6 @@ public class OpenMatchAdapter extends ArrayAdapter implements AdapterView.OnItem
                                     }
                                 });
                             }
-
-
 
                     //오픈매치 스몰 프로필 부분
                     viewHolder.profileDTOs = (ArrayList<ProfileDTO>) response.body();
@@ -336,6 +338,30 @@ public class OpenMatchAdapter extends ArrayAdapter implements AdapterView.OnItem
 
         return convertView;
 
+    }
+
+    private void leaveMatching(Long openMatchIdx, Long userIdx){
+
+        MatchingDTO matchingDTO = new MatchingDTO();
+        matchingDTO.setOpenMatchId(openMatchIdx);
+        matchingDTO.setUserIndex(userIdx);
+
+        retrofitUtil.getRetrofitAPI().leaveMatch(matchingDTO).enqueue(new Callback<Boolean>() {
+            @Override
+            public void onResponse(Call<Boolean> call, Response<Boolean> response) {
+                if(response.isSuccessful()){
+                    if(response.body()){
+                        Toast.makeText(getContext(), "오픈매치를 떠났습니다.", Toast.LENGTH_SHORT).show();
+                    }else {
+                        Toast.makeText(getContext(), "오류 발생. 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+            @Override
+            public void onFailure(Call<Boolean> call, Throwable t) {
+
+            }
+        });
     }
 
     private void iconReflect(ViewHolder viewHolder, String type){
