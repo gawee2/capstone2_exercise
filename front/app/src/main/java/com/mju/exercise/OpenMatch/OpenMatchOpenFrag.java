@@ -168,7 +168,13 @@ public class OpenMatchOpenFrag extends Fragment {
     private boolean emptyCheck(){
         if(edtSubject.getText().toString() == null || sportType == null || personnel == null){
             new MaterialAlertDialogBuilder(getContext())
-                    .setTitle("생성불가").setMessage("오픈매치 이름, 종목, 인원 수는 필수값입니다.")
+                    .setTitle("필수 항목을 채워주세요.").setMessage("오픈매치 이름, 종목, 인원 수는 필수적으로 선택해야합니다.")
+                    .setPositiveButton("닫기", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                        }
+                    })
                     .show();
             return false;
         }
@@ -274,13 +280,15 @@ public class OpenMatchOpenFrag extends Fragment {
         }
     };
 
-    private boolean filedCheck(OpenMatchDTO openMatchDTO){
 
-        if(openMatchDTO.getSubject() != null && openMatchDTO.getPersonnel() != null && openMatchDTO.getSportType() != null){
-            return true;
-        }
-
-        return false;
+    //오픈 매치 생성 완료 후 채워져있던 필드를 비움
+    private void clearView(){
+        tvPersonnel.setText("인원");
+        tvDay.setText("날짜");
+        tvRegion.setText("장소");
+        tvTime.setText("시간");
+        edtSubject.setText("");
+        edtArticle.setText("");
     }
 
     private void createOpenMatch(){
@@ -326,20 +334,12 @@ public class OpenMatchOpenFrag extends Fragment {
 
 
 
-        //제목, 종목, 인원수 값 채워져 있는지 체크
-        // 날짜, 위치, 상세 내용은 미정상태로 둘 수 있음
-        if(!filedCheck(openMatchDTO)){
-            Toast.makeText(getContext(), "제목, 종목, 인원 수는 필수값입니다.", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-
         retrofitUtil.getRetrofitAPI().openMatch(openMatchDTO).enqueue(new Callback<OpenMatchDTO>() {
             @Override
             public void onResponse(Call<OpenMatchDTO> call, Response<OpenMatchDTO> response) {
 
                 if(response.isSuccessful()){
-                    Toast.makeText(getContext(), "생성완료", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "생성중", Toast.LENGTH_SHORT).show();
 
                     OpenMatchDTO newOpenMatch = response.body();
 
@@ -357,9 +357,26 @@ public class OpenMatchOpenFrag extends Fragment {
                         @Override
                         public void onResponse(Call<Long> call, Response<Long> response) {
                             if(response.isSuccessful()){
-                                Toast.makeText(getContext(), "참여 완료", Toast.LENGTH_SHORT).show();
+                                new MaterialAlertDialogBuilder(getContext())
+                                        .setTitle("생성 완료").setMessage("정상적으로 생성 완료되었습니다.")
+                                        .setPositiveButton("닫기", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                                            }
+                                        })
+                                        .show();
+                                clearView();
                             }else {
-                                Toast.makeText(getContext(), "응답 없음", Toast.LENGTH_SHORT).show();
+                                new MaterialAlertDialogBuilder(getContext())
+                                        .setTitle("오류 발생").setMessage("다시 시도해주세요.")
+                                        .setPositiveButton("닫기", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                                            }
+                                        })
+                                        .show();
                             }
                         }
 

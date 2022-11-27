@@ -48,6 +48,8 @@ public class OpenMatchAdapter extends ArrayAdapter implements AdapterView.OnItem
     private ArrayList<OpenMatchDTO> list;
     RetrofitUtil retrofitUtil;
     PreferenceUtil preferenceUtil;
+    private RootViewListener rootViewListener;
+
 
     public OpenMatchAdapter(@NonNull Context context, @NonNull ArrayList list) {
         super(context, 0, list);
@@ -56,6 +58,14 @@ public class OpenMatchAdapter extends ArrayAdapter implements AdapterView.OnItem
 
         retrofitUtil = RetrofitUtil.getInstance();
         preferenceUtil = PreferenceUtil.getInstance(context);
+    }
+
+    //루트 리스트뷰 데이터 변경되면 반영하기 위해
+    public void setRootViewListener(RootViewListener rootViewListener) {
+        this.rootViewListener = rootViewListener;
+    }
+    public interface RootViewListener{
+        void rootViewNotify();
     }
 
     @Override
@@ -154,6 +164,7 @@ public class OpenMatchAdapter extends ArrayAdapter implements AdapterView.OnItem
             viewHolder.btnDetailClick.setEnabled(false);
         }else{
             //오픈 매치에 참가할 수 있도록 하는 기능
+            viewHolder.btnDetailClick.setText("참여하기");
             viewHolder.btnDetailClick.setEnabled(true);
             viewHolder.btnDetailClick.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -196,6 +207,7 @@ public class OpenMatchAdapter extends ArrayAdapter implements AdapterView.OnItem
                                                                 }else {
                                                                     Toast.makeText(mContext, "참여 완료", Toast.LENGTH_SHORT).show();
                                                                 }
+                                                                notifyDataSetChanged();
 
                                                             }else {
                                                                 Toast.makeText(mContext, "응답 없음", Toast.LENGTH_SHORT).show();
@@ -273,6 +285,8 @@ public class OpenMatchAdapter extends ArrayAdapter implements AdapterView.OnItem
                                                             //오픈매치 인덱스와, 유저인덱스를 가지고 나가기 처리
                                                             leaveMatching(openMatchDTO.getId(), Long.valueOf(preferenceUtil.getString("userIdx")));
 
+                                                            notifyDataSetChanged();
+
                                                         }
                                                     }).show();
 
@@ -308,9 +322,13 @@ public class OpenMatchAdapter extends ArrayAdapter implements AdapterView.OnItem
                                                                 if(response.isSuccessful()){
                                                                     if(response.body()){
                                                                         Toast.makeText(mContext, "삭제완료", Toast.LENGTH_SHORT).show();
+
+                                                                        //현재 디테일을 포함하고 있는 리스트뷰에 알려줘야함
+                                                                        rootViewListener.rootViewNotify();
                                                                     }else {
                                                                         Toast.makeText(mContext, "오류로 삭제 실패", Toast.LENGTH_SHORT).show();
                                                                     }
+
                                                                 }
                                                             }
 
@@ -408,6 +426,7 @@ public class OpenMatchAdapter extends ArrayAdapter implements AdapterView.OnItem
                     }else {
                         Toast.makeText(getContext(), "오류 발생. 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
                     }
+                    notifyDataSetChanged();
                 }
             }
             @Override
