@@ -89,7 +89,8 @@ public class MemberController {
         if(requestUser.equals(willChangeUser)){
 
             //이미 동일한 닉네임 유저 있으면 프로필 생성 또는 업뎃 안됨
-            if(memberService.isExistNickname(profile.getNickname())){
+            //단 동일한 유저가 요청하는 경우에는 가능(닉네임 이외에 다른것만 변경하는 유저들)
+            if(memberService.isExistNickname(profile)){
                 return false;
             }
 
