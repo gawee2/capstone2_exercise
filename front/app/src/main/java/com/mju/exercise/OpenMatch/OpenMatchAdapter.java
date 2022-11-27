@@ -179,9 +179,6 @@ public class OpenMatchAdapter extends ArrayAdapter implements AdapterView.OnItem
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
 
-                                    Log.d("오픈매치비번", openMatchDTO.getOpenMatchPw().toString());
-                                    Log.d("오픈매치비번", "테스트");
-
                                     //비밀번호가 걸려있는 오픈 매치일 경우
                                     if(openMatchDTO.getOpenMatchPw() != null){
                                         EditText editText = new EditText(getContext());
@@ -191,61 +188,74 @@ public class OpenMatchAdapter extends ArrayAdapter implements AdapterView.OnItem
                                                 .setPositiveButton("확인", new DialogInterface.OnClickListener() {
                                                     @Override
                                                     public void onClick(DialogInterface dialogInterface, int i) {
-                                                        if(openMatchDTO.getOpenMatchPw() == Integer.parseInt(editText.getText().toString())){
-                                                            Toast.makeText(getContext(), "비밀번호 일치", Toast.LENGTH_SHORT).show();
+                                                        if(editText.getText().toString() != null && !editText.getText().toString().equals("")){
+                                                            if(openMatchDTO.getOpenMatchPw() == Integer.parseInt(editText.getText().toString())){
+                                                                Toast.makeText(getContext(), "비밀번호 일치", Toast.LENGTH_SHORT).show();
 
-                                                            //참여 처리
-                                                            MatchingDTO matchingDTO = new MatchingDTO();
-                                                            matchingDTO.setOpenMatchId(openMatchDTO.getId());
-                                                            Long userIdx = Long.valueOf(preferenceUtil.getString("userIdx"));
-                                                            // -1이면 조회되지 않는 유저임(없는 유저). 참가로직 안돌도록
-                                                            if(userIdx == -1l || userIdx == null){
-                                                                Toast.makeText(mContext, "참가 실패", Toast.LENGTH_SHORT).show();
-                                                                return;
-                                                            }
-                                                            matchingDTO.setUserIndex(userIdx);
-                                                            retrofitUtil.getRetrofitAPI().getUserProfile(preferenceUtil.getString("userId")).enqueue(new Callback<ProfileDTO>() {
-                                                                @Override
-                                                                public void onResponse(Call<ProfileDTO> call, Response<ProfileDTO> response) {
-                                                                    if(response.isSuccessful()){
-                                                                        if(response.body() != null){
-                                                                            Log.d("프로필제한", "프로필이 있는 유저");
-                                                                            retrofitUtil.getRetrofitAPI().joinMatch(matchingDTO).enqueue(new Callback<Long>() {
-                                                                                @Override
-                                                                                public void onResponse(Call<Long> call, Response<Long> response) {
-                                                                                    if(response.isSuccessful()){
-                                                                                        if(response.body() == -1l){
-                                                                                            Toast.makeText(mContext, "이미 참여한 오픈매치", Toast.LENGTH_SHORT).show();
+                                                                //참여 처리
+                                                                MatchingDTO matchingDTO = new MatchingDTO();
+                                                                matchingDTO.setOpenMatchId(openMatchDTO.getId());
+                                                                Long userIdx = Long.valueOf(preferenceUtil.getString("userIdx"));
+                                                                // -1이면 조회되지 않는 유저임(없는 유저). 참가로직 안돌도록
+                                                                if(userIdx == -1l || userIdx == null){
+                                                                    Toast.makeText(mContext, "참가 실패", Toast.LENGTH_SHORT).show();
+                                                                    return;
+                                                                }
+                                                                matchingDTO.setUserIndex(userIdx);
+                                                                retrofitUtil.getRetrofitAPI().getUserProfile(preferenceUtil.getString("userId")).enqueue(new Callback<ProfileDTO>() {
+                                                                    @Override
+                                                                    public void onResponse(Call<ProfileDTO> call, Response<ProfileDTO> response) {
+                                                                        if(response.isSuccessful()){
+                                                                            if(response.body() != null){
+                                                                                Log.d("프로필제한", "프로필이 있는 유저");
+                                                                                retrofitUtil.getRetrofitAPI().joinMatch(matchingDTO).enqueue(new Callback<Long>() {
+                                                                                    @Override
+                                                                                    public void onResponse(Call<Long> call, Response<Long> response) {
+                                                                                        if(response.isSuccessful()){
+                                                                                            if(response.body() == -1l){
+                                                                                                Toast.makeText(mContext, "이미 참여한 오픈매치", Toast.LENGTH_SHORT).show();
+                                                                                            }else {
+                                                                                                Toast.makeText(mContext, "참여 완료", Toast.LENGTH_SHORT).show();
+                                                                                            }
+                                                                                            notifyDataSetChanged();
+
                                                                                         }else {
-                                                                                            Toast.makeText(mContext, "참여 완료", Toast.LENGTH_SHORT).show();
+                                                                                            Toast.makeText(mContext, "응답 없음", Toast.LENGTH_SHORT).show();
                                                                                         }
-                                                                                        notifyDataSetChanged();
-
-                                                                                    }else {
-                                                                                        Toast.makeText(mContext, "응답 없음", Toast.LENGTH_SHORT).show();
                                                                                     }
-                                                                                }
 
-                                                                                @Override
-                                                                                public void onFailure(Call<Long> call, Throwable t) {
+                                                                                    @Override
+                                                                                    public void onFailure(Call<Long> call, Throwable t) {
 
-                                                                                }
-                                                                            });
+                                                                                    }
+                                                                                });
+                                                                            }
+                                                                        }else {
+                                                                            Toast.makeText(mContext, "프로필 생성 후 이용가능합니다.", Toast.LENGTH_SHORT).show();
+                                                                            Log.d("프로필제한", "프로필이 없는 유저");
                                                                         }
-                                                                    }else {
-                                                                        Toast.makeText(mContext, "프로필 생성 후 이용가능합니다.", Toast.LENGTH_SHORT).show();
-                                                                        Log.d("프로필제한", "프로필이 없는 유저");
                                                                     }
-                                                                }
 
-                                                                @Override
-                                                                public void onFailure(Call<ProfileDTO> call, Throwable t) {
+                                                                    @Override
+                                                                    public void onFailure(Call<ProfileDTO> call, Throwable t) {
 
-                                                                }
-                                                            });
+                                                                    }
+                                                                });
+                                                            }else {
+                                                                Toast.makeText(getContext(), "비밀번호 불일치", Toast.LENGTH_SHORT).show();
+                                                            }
                                                         }else {
-                                                            Toast.makeText(getContext(), "비밀번호 불일치", Toast.LENGTH_SHORT).show();
+                                                            new MaterialAlertDialogBuilder(getContext())
+                                                                    .setTitle("비공개 오픈매치").setMessage("비밀번호 입력후 참여 가능합니다.")
+                                                                    .setPositiveButton("닫기", new DialogInterface.OnClickListener() {
+                                                                        @Override
+                                                                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                                                                        }
+                                                                    }).show();
+
                                                         }
+
                                                     }
                                                 })
                                                 .show();
