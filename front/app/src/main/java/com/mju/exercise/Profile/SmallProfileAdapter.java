@@ -97,43 +97,4 @@ public class SmallProfileAdapter extends RecyclerView.Adapter<SmallProfileAdapte
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
     }
-//
-//    @NonNull
-//    @Override
-//    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-//        final ViewHolder viewHolder;
-//        if(convertView == null){
-//            LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-//            convertView = layoutInflater.inflate(R.layout.small_profile_item, parent, false);
-//        }
-//
-//        viewHolder = new ViewHolder();
-//
-//        viewHolder.tvSmallProfileNickname = (TextView) convertView.findViewById(R.id.tvSmallProfileNickname);
-//        viewHolder.imgSmallProfile = (ImageView) convertView.findViewById(R.id.imgSmallProfile);
-//
-//
-//        final ProfileDTO profileDTO = (ProfileDTO) list.get(position);
-//
-//        //닉네임
-//        viewHolder.tvSmallProfileNickname.setText(profileDTO.getNickname());
-//        //프로필 사진
-//        String path = profileDTO.getImage();
-//        String url = retrofitUtil.getBASE_URL_NONE_SLASH() + path;
-//        Log.d("이미지로드", url);
-//        if(path != null && !path.equals("")){
-//            Glide.with(mContext).load(url).circleCrop().into(viewHolder.imgSmallProfile);
-//        }
-//        viewHolder.imgSmallProfile.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent = new Intent(getContext(), UserInfoActivity.class);
-//                intent.putExtra("userId", profileDTO.getUserID());
-//                getContext().startActivity(intent);
-//            }
-//        });
-//
-//
-//        return convertView;
-//    }
 }
