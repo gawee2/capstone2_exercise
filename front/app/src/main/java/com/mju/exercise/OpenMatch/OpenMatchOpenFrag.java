@@ -306,7 +306,7 @@ public class OpenMatchOpenFrag extends Fragment {
         openMatchDTO.setSubject(edtSubject.getText().toString());
         openMatchDTO.setArticle(edtArticle.getText().toString());
         openMatchDTO.setOpenUserId(preferenceUtil.getString("userId"));
-        if(edtOpenMatchPw.getText().toString() != null || !edtOpenMatchPw.getText().toString().equals("")){
+        if(edtOpenMatchPw.getText().toString() != null && !edtOpenMatchPw.getText().toString().equals("")){
             openMatchDTO.setOpenMatchPw(Integer.parseInt(edtOpenMatchPw.getText().toString()));
         }
 
