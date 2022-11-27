@@ -29,7 +29,6 @@ import javax.security.auth.callback.Callback;
 public class FilterDataLoader {
 
     private Context mContext;
-    private ArrayList<OpenMatchDTO> list;
     private DataLoadedListener dataLoadedListener;
     RetrofitUtil retrofitUtil;
     PreferenceUtil preferenceUtil;
@@ -37,8 +36,7 @@ public class FilterDataLoader {
     private int cnt;
 
     //원본 리스트는 건드리지 않음. 다른 필터 했을때 바로 갖고 있는 데이터로 적용하도록
-    public FilterDataLoader(Context context, ArrayList<OpenMatchDTO> list){
-        this.list = (ArrayList<OpenMatchDTO>) list.clone();
+    public FilterDataLoader(Context context){
         this.mContext = context;
         retrofitUtil = RetrofitUtil.getInstance();
         preferenceUtil = PreferenceUtil.getInstance(context);
@@ -46,7 +44,8 @@ public class FilterDataLoader {
 
 
     //특정일자 딱 골라서 뽑기
-    public void getDataPickDay(LocalDateTime pickDay){
+    public void getDataPickDay(ArrayList<OpenMatchDTO> list, LocalDateTime pickDay){
+        ArrayList<OpenMatchDTO> tmpList = new ArrayList<>();
         Log.d("필터특정날짜", "getDataPickDay");
         for(OpenMatchDTO openMatchDTO: list){
             String strLocalDateTime = openMatchDTO.getPlayDateTime();
@@ -59,15 +58,17 @@ public class FilterDataLoader {
                     Log.d("필터특정날짜", tmp1.toString() + " : " + tmp2.toString());
 
                     if(tmp1.isEqual(tmp2)){
-                        dataLoadedListener.dataLoaded(openMatchDTO);
+                        tmpList.add(openMatchDTO);
                     }
                 }
             }
         }
+        dataLoadedListener.dataLoadComplete(tmpList);
     }
 
     //가까운 거리순으로 뽑기
-    public void getDataDistanceSort(){
+    public void getDataDistanceSort(ArrayList<OpenMatchDTO> list){
+        ArrayList<OpenMatchDTO> tmpList = new ArrayList<>();
         Double myLat = Double.valueOf(preferenceUtil.getString("lat"));
         Double myLng = Double.valueOf(preferenceUtil.getString("lng"));
 
@@ -105,14 +106,14 @@ public class FilterDataLoader {
 
             //최종정렬
             for(Double dd: distacnceList){
-                dataLoadedListener.dataLoaded(map.get(dd));
+                tmpList.add(map.get(dd));
             }
-
-
         }
+        dataLoadedListener.dataLoadComplete(tmpList);
     }
     //가까운 날짜순으로 뽑기
-    public void getDataDaySort(){
+    public void getDataDaySort(ArrayList<OpenMatchDTO> list){
+        ArrayList<OpenMatchDTO> tmpList = new ArrayList<>();
         //정렬하고
         Collections.sort(list, new Comparator<OpenMatchDTO>() {
             @Override
@@ -146,13 +147,14 @@ public class FilterDataLoader {
 
         //데이터 보내주기
         for(OpenMatchDTO openMatchDTO: list){
-            dataLoadedListener.dataLoaded(openMatchDTO);
+            tmpList.add(openMatchDTO);
         }
+        dataLoadedListener.dataLoadComplete(tmpList);
     }
 
     //특정요일만 뽑기
-    public void getDataFavDay(Status.FavDayType favDayType){
-
+    public void getDataFavDay(ArrayList<OpenMatchDTO> list, Status.FavDayType favDayType){
+        ArrayList<OpenMatchDTO> tmpList = new ArrayList<>();
         String tmp = null;
         switch (favDayType){
             case MON:
@@ -187,11 +189,12 @@ public class FilterDataLoader {
                     DayOfWeek dayOfWeek = localDateTime.getDayOfWeek();
 
                     if(convertDayOfWeek(dayOfWeek).equals(finalTmp)){
-                        dataLoadedListener.dataLoaded(openMatchDTO);
+                        tmpList.add(openMatchDTO);
                     }
                 }
             }
         }
+        dataLoadedListener.dataLoadComplete(tmpList);
     }
 
     private String convertDayOfWeek(DayOfWeek dayOfWeek){
@@ -202,8 +205,9 @@ public class FilterDataLoader {
     }
 
     //거리에 따른 데이터 뽑기
-    public void getDataDisDiff(Status.DistanceDiff distanceDiff){
+    public void getDataDisDiff(ArrayList<OpenMatchDTO> list, Status.DistanceDiff distanceDiff){
 
+        ArrayList<OpenMatchDTO> tmpList = new ArrayList<>();
         Double myLat = Double.valueOf(preferenceUtil.getString("lat"));
         Double myLng = Double.valueOf(preferenceUtil.getString("lng"));
         int standardDistance = 0;
@@ -236,16 +240,17 @@ public class FilterDataLoader {
                     Double dis = computeDistance(myLat, myLng, tmpLat, tmpLng);
                     if(standardDistance == 10000){
                         if(dis > 3000 && dis <10000){
-                            dataLoadedListener.dataLoaded(openMatchDTO);
+                            tmpList.add(openMatchDTO);
                         }
                     }else {
                         if(dis < standardDistance){
-                            dataLoadedListener.dataLoaded(openMatchDTO);
+                            tmpList.add(openMatchDTO);
                         }
                     }
                 }
             }
         }
+        dataLoadedListener.dataLoadComplete(tmpList);
     }
 
     private Double computeDistance(Double myLat, Double myLng, Double mapLat, Double mapLng){
@@ -268,7 +273,7 @@ public class FilterDataLoader {
     }
 
     //참여가능 오픈매치만 뽑기
-    public void getDataCanJoin(){
+    public void getDataCanJoin(ArrayList<OpenMatchDTO> list){
         ArrayList<OpenMatchDTO> tmpList = new ArrayList<>();
         cnt = 1;
         for(OpenMatchDTO openMatchDTO: list){
@@ -281,7 +286,6 @@ public class FilterDataLoader {
                         Log.d("필터순차", "총 유저: " + String.valueOf(totalUser) + " 현재 유저: " + String.valueOf(nowUser));
                         if(totalUser > nowUser){
                             Log.d("필터순차", "참가가능한거 있음");
-//                            dataLoadedListener.dataLoaded(openMatchDTO);
                             tmpList.add(openMatchDTO);
                         }
                     }
@@ -307,7 +311,6 @@ public class FilterDataLoader {
     }
 
     public interface DataLoadedListener {
-        void dataLoaded(OpenMatchDTO openMatchDTO);
         void dataLoadComplete(ArrayList<OpenMatchDTO> list);
     }
 }

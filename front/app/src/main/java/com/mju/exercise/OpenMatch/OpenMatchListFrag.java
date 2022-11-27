@@ -42,6 +42,8 @@ public class OpenMatchListFrag extends Fragment implements OpenMatchFilter{
     RetrofitUtil retrofitUtil;
     OpenMatchAdapter openMatchAdapter;
 
+    ArrayList<OpenMatchDTO> newOpenMatches;
+
     public OpenMatchListFrag() {
         // Required empty public constructor
     }
@@ -135,51 +137,28 @@ public class OpenMatchListFrag extends Fragment implements OpenMatchFilter{
             openMatchAdapter = new OpenMatchAdapter(getContext(), openMatches);
             customListView.setAdapter(openMatchAdapter);
         }else {
-            //무언가 필터링 할 게 있으면 새로 리스트 만들고 어댑터에 연결
-            ArrayList<OpenMatchDTO> newOpenMatches = new ArrayList<>();
-            openMatchAdapter = new OpenMatchAdapter(getContext(), newOpenMatches);
-            customListView.setAdapter(openMatchAdapter);
-
-            FilterDataLoader filterDataLoader = new FilterDataLoader(getContext(), openMatches);
-            filterDataLoader.setDataListener(new FilterDataLoader.DataLoadedListener() {
-                @Override
-                public void dataLoaded(OpenMatchDTO openMatchDTO) {
-                    newOpenMatches.add(openMatchDTO);
-                    openMatchAdapter.notifyDataSetChanged();
-                }
-
-                @Override
-                public void dataLoadComplete(ArrayList<OpenMatchDTO> list) {
-                    //최종적으로 참여가능 여부 체크후 튀어 나오는 데이터임
-                    //참여가능 체크가 비동기라 맨 뒤로 뺐음
-                    openMatchAdapter = new OpenMatchAdapter(getContext(), list);
-                    customListView.setAdapter(openMatchAdapter);
-                    openMatchAdapter.notifyDataSetChanged();
-
-                }
-            });
+            newOpenMatches = new ArrayList<>();
 
             //거리로 필터링
             if(filterTypeDistance == Status.FilterTypeDistance.DISTANCE_DIFFERENCE){
-                distanceInner(filterDataLoader, distanceDiff);
+                distanceInner(openMatches, distanceDiff);
             }else if(filterTypeDistance == Status.FilterTypeDistance.DISTANCE_NEAR){
-                distanceSort(filterDataLoader);
+                distanceSort(openMatches);
             }
             //날짜로 필터링
             if(filterTypeDay == Status.FilterTypeDay.DAY_FAVDAY){
-                dayFav(filterDataLoader, favDayType);
+                dayFav(openMatches, favDayType);
             }else if(filterTypeDay == Status.FilterTypeDay.DAY_NEAR){
-                daySort(filterDataLoader);
+                daySort(openMatches);
             }else if(filterTypeDay == Status.FilterTypeDay.DAY_PICK){
                 Log.d("필터특정날짜", "특정날짜 고름");
-                dayPick(filterDataLoader, localDateTime);
+                dayPick(openMatches, localDateTime);
             }
-
 
             //비동기로 처리되는 애임
             //참가 가능 여부로 필터링
             if(filterTypeJoin == Status.FilterTypeJoin.JOIN_CAN){
-                canJoin(filterDataLoader);
+                canJoin(openMatches);
             }
         }
 
@@ -187,26 +166,80 @@ public class OpenMatchListFrag extends Fragment implements OpenMatchFilter{
 
 
 
-    public void dayFav(FilterDataLoader filterDataLoader, Status.FavDayType favDayType){
-        filterDataLoader.getDataFavDay(favDayType);
+    public void dayFav(ArrayList<OpenMatchDTO> pastList, Status.FavDayType favDayType){
+        FilterDataLoader filterDataLoader = new FilterDataLoader(getContext());
+        filterDataLoader.setDataListener(new FilterDataLoader.DataLoadedListener() {
+            @Override
+            public void dataLoadComplete(ArrayList<OpenMatchDTO> list) {
+                openMatchAdapter = new OpenMatchAdapter(getContext(), list);
+                customListView.setAdapter(openMatchAdapter);
+                openMatchAdapter.notifyDataSetChanged();
+            }
+        });
+        filterDataLoader.getDataFavDay(pastList, favDayType);
     }
-    public void dayPick(FilterDataLoader filterDataLoader, LocalDateTime localDateTime){
-        filterDataLoader.getDataPickDay(localDateTime);
+    public void dayPick(ArrayList<OpenMatchDTO> pastList, LocalDateTime localDateTime){
+        FilterDataLoader filterDataLoader = new FilterDataLoader(getContext());
+        filterDataLoader.setDataListener(new FilterDataLoader.DataLoadedListener() {
+            @Override
+            public void dataLoadComplete(ArrayList<OpenMatchDTO> list) {
+                openMatchAdapter = new OpenMatchAdapter(getContext(), list);
+                customListView.setAdapter(openMatchAdapter);
+                openMatchAdapter.notifyDataSetChanged();
+            }
+        });
+        filterDataLoader.getDataPickDay(pastList, localDateTime);
     }
-    public void daySort(FilterDataLoader filterDataLoader){
-        filterDataLoader.getDataDaySort();
+    public void daySort(ArrayList<OpenMatchDTO> pastList){
+        FilterDataLoader filterDataLoader = new FilterDataLoader(getContext());
+        filterDataLoader.setDataListener(new FilterDataLoader.DataLoadedListener() {
+            @Override
+            public void dataLoadComplete(ArrayList<OpenMatchDTO> list) {
+                openMatchAdapter = new OpenMatchAdapter(getContext(), list);
+                customListView.setAdapter(openMatchAdapter);
+                openMatchAdapter.notifyDataSetChanged();
+            }
+        });
+        filterDataLoader.getDataDaySort(pastList);
     }
 
 
-    public void distanceInner(FilterDataLoader filterDataLoader, Status.DistanceDiff diff){
-        filterDataLoader.getDataDisDiff(diff);
+    public void distanceInner(ArrayList<OpenMatchDTO> pastList, Status.DistanceDiff diff){
+        FilterDataLoader filterDataLoader = new FilterDataLoader(getContext());
+        filterDataLoader.setDataListener(new FilterDataLoader.DataLoadedListener() {
+            @Override
+            public void dataLoadComplete(ArrayList<OpenMatchDTO> list) {
+                openMatchAdapter = new OpenMatchAdapter(getContext(), list);
+                customListView.setAdapter(openMatchAdapter);
+                openMatchAdapter.notifyDataSetChanged();
+            }
+        });
+        filterDataLoader.getDataDisDiff(pastList, diff);
     }
 
-    public void distanceSort(FilterDataLoader filterDataLoader){
-        filterDataLoader.getDataDistanceSort();
+    public void distanceSort(ArrayList<OpenMatchDTO> pastList){
+        FilterDataLoader filterDataLoader = new FilterDataLoader(getContext());
+        filterDataLoader.setDataListener(new FilterDataLoader.DataLoadedListener() {
+            @Override
+            public void dataLoadComplete(ArrayList<OpenMatchDTO> list) {
+                openMatchAdapter = new OpenMatchAdapter(getContext(), list);
+                customListView.setAdapter(openMatchAdapter);
+                openMatchAdapter.notifyDataSetChanged();
+            }
+        });
+        filterDataLoader.getDataDistanceSort(pastList);
     }
 
-    public void canJoin(FilterDataLoader filterDataLoader){
-        filterDataLoader.getDataCanJoin();
+    public void canJoin(ArrayList<OpenMatchDTO> pastList){
+        FilterDataLoader filterDataLoader = new FilterDataLoader(getContext());
+        filterDataLoader.setDataListener(new FilterDataLoader.DataLoadedListener() {
+            @Override
+            public void dataLoadComplete(ArrayList<OpenMatchDTO> list) {
+                openMatchAdapter = new OpenMatchAdapter(getContext(), list);
+                customListView.setAdapter(openMatchAdapter);
+                openMatchAdapter.notifyDataSetChanged();
+            }
+        });
+        filterDataLoader.getDataCanJoin(pastList);
     }
 }
