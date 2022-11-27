@@ -60,39 +60,41 @@ public class FilterDataLoader {
         Double myLat = Double.valueOf(preferenceUtil.getString("lat"));
         Double myLng = Double.valueOf(preferenceUtil.getString("lng"));
 
-        ArrayList<Integer> distacnceList = new ArrayList<>();
-        HashMap<Integer, OpenMatchDTO> map = new HashMap<>();
+        ArrayList<Double> distacnceList = new ArrayList<>();
+        HashMap<Double, OpenMatchDTO> map = new HashMap<>();
 
         if(myLat !=null && myLng != null) {
+
+            Double unde = 100000000.0;
             //우선 각각의 오픈 매치와 나의 거리를 쭉 계산함
             for (OpenMatchDTO openMatchDTO : list) {
-                int distanceToMe = 0;
-
+                Double distanceToMe = 0.0;
                 Double tmpLat = openMatchDTO.getLat();
                 Double tmpLng = openMatchDTO.getLng();
 
                 //운동장소가 선택된 것들만 거리 비교함
-                if(tmpLat != null && tmpLng != null) {
+                if((tmpLat != null && tmpLng != null)) {
                     distanceToMe = computeDistance(myLat, myLng, tmpLat, tmpLng);
+                    distacnceList.add(distanceToMe);
+                    map.put(distanceToMe, openMatchDTO);
+                }else {
+                    //운동장소 미정인 애들은 뒤로 미루려고
+                    unde += 1;
+                    distacnceList.add(unde);
+                    map.put(unde, openMatchDTO);
                 }
-                distacnceList.add(distanceToMe);
-
-                //거리에 따라서 오픈매치 해시맵에 넣어놓고
-                //거리 돌면서 해시맵값 뽑아서 최종 정렬
-                //같은 해시맵을 덮어쓰는 문제가 있을 수 있음
-                map.put(distanceToMe, openMatchDTO);
             }
             //거리를 담고 있는 리스트를 정렬함. 가까운게 앞에 옴
-            Collections.sort(distacnceList, new Comparator<Integer>() {
+            Collections.sort(distacnceList, new Comparator<Double>() {
                 @Override
-                public int compare(Integer integer, Integer t1) {
-                    return integer.compareTo(t1);
+                public int compare(Double t0, Double t1) {
+                    return t0.compareTo(t1);
                 }
             });
 
             //최종정렬
-            for(Integer integer: distacnceList){
-                dataLoadedListener.dataLoaded(map.get(integer));
+            for(Double dd: distacnceList){
+                dataLoadedListener.dataLoaded(map.get(dd));
             }
 
 
@@ -204,7 +206,7 @@ public class FilterDataLoader {
 
                 //운동장소가 선택된 것들만 거리 비교함
                 if(tmpLat != null && tmpLng != null){
-                    int dis = computeDistance(myLat, myLng, tmpLat, tmpLng);
+                    Double dis = computeDistance(myLat, myLng, tmpLat, tmpLng);
                     if(standardDistance == 10000){
                         if(dis > 3000 && dis <10000){
                             dataLoadedListener.dataLoaded(openMatchDTO);
@@ -219,7 +221,7 @@ public class FilterDataLoader {
         }
     }
 
-    private int computeDistance(Double myLat, Double myLng, Double mapLat, Double mapLng){
+    private Double computeDistance(Double myLat, Double myLng, Double mapLat, Double mapLng){
 
         Double R = 6372.8 * 1000;
 
@@ -228,7 +230,7 @@ public class FilterDataLoader {
         Double a = Math.pow(Math.sin(dLat / 2), 2) + Math.pow(Math.sin(dLng / 2), 2) * Math.cos(Math.toRadians(myLat)) * Math.cos(Math.toRadians(mapLat));
         Double c = 2 * Math.asin(Math.sqrt(a));
 
-        return (int) (R * c);
+        return (Double) (R * c);
     }
 
     private double convertMtoKM(int distance){
