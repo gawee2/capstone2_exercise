@@ -42,7 +42,7 @@ public class OpenMatchListFrag extends Fragment implements OpenMatchFilter{
     RetrofitUtil retrofitUtil;
     OpenMatchAdapter openMatchAdapter;
 
-    ArrayList<OpenMatchDTO> newOpenMatches;
+    ArrayList<OpenMatchDTO> tmpList = new ArrayList<>();
 
     public OpenMatchListFrag() {
         // Required empty public constructor
@@ -137,28 +137,43 @@ public class OpenMatchListFrag extends Fragment implements OpenMatchFilter{
             openMatchAdapter = new OpenMatchAdapter(getContext(), openMatches);
             customListView.setAdapter(openMatchAdapter);
         }else {
-            newOpenMatches = new ArrayList<>();
+            ArrayList<OpenMatchDTO> newOpenMatches = (ArrayList<OpenMatchDTO>) openMatches.clone();
+            if(filterTypeDistance != Status.FilterTypeDistance.DISTANCE_DEFAULT){
 
-            //거리로 필터링
-            if(filterTypeDistance == Status.FilterTypeDistance.DISTANCE_DIFFERENCE){
-                distanceInner(openMatches, distanceDiff);
-            }else if(filterTypeDistance == Status.FilterTypeDistance.DISTANCE_NEAR){
-                distanceSort(openMatches);
+                //거리로 필터링
+                if(filterTypeDistance == Status.FilterTypeDistance.DISTANCE_DIFFERENCE){
+                    distanceInner(newOpenMatches, distanceDiff);
+                }else if(filterTypeDistance == Status.FilterTypeDistance.DISTANCE_NEAR){
+                    distanceSort(newOpenMatches);
+                }
+
+                //무언가 처리하면 임시값을 tmpList에 담아뒀다가 반영함
+                newOpenMatches = (ArrayList<OpenMatchDTO>) tmpList.clone();
+                tmpList.clear();
             }
-            //날짜로 필터링
-            if(filterTypeDay == Status.FilterTypeDay.DAY_FAVDAY){
-                dayFav(openMatches, favDayType);
-            }else if(filterTypeDay == Status.FilterTypeDay.DAY_NEAR){
-                daySort(openMatches);
-            }else if(filterTypeDay == Status.FilterTypeDay.DAY_PICK){
-                Log.d("필터특정날짜", "특정날짜 고름");
-                dayPick(openMatches, localDateTime);
+            //거리 관련 필터링 한 거 없으면 기존 데이터 그대로 이용함
+            if(filterTypeDay != Status.FilterTypeDay.DAY_DEFAULT){
+                //날짜로 필터링
+                if(filterTypeDay == Status.FilterTypeDay.DAY_FAVDAY){
+                    dayFav(newOpenMatches, favDayType);
+                }else if(filterTypeDay == Status.FilterTypeDay.DAY_NEAR){
+                    daySort(newOpenMatches);
+                }else if(filterTypeDay == Status.FilterTypeDay.DAY_PICK){
+                    Log.d("필터특정날짜", "특정날짜 고름");
+                    dayPick(newOpenMatches, localDateTime);
+                }
+
+                //무언가 처리하면 임시값을 tmpList에 담아뒀다가 반영함
+                newOpenMatches = (ArrayList<OpenMatchDTO>) tmpList.clone();
+                tmpList.clear();
             }
 
             //비동기로 처리되는 애임
             //참가 가능 여부로 필터링
             if(filterTypeJoin == Status.FilterTypeJoin.JOIN_CAN){
-                canJoin(openMatches);
+                canJoin(newOpenMatches);
+                newOpenMatches = (ArrayList<OpenMatchDTO>) tmpList.clone();
+                tmpList.clear();
             }
         }
 
@@ -171,6 +186,7 @@ public class OpenMatchListFrag extends Fragment implements OpenMatchFilter{
         filterDataLoader.setDataListener(new FilterDataLoader.DataLoadedListener() {
             @Override
             public void dataLoadComplete(ArrayList<OpenMatchDTO> list) {
+                tmpList = (ArrayList<OpenMatchDTO>) list.clone();
                 openMatchAdapter = new OpenMatchAdapter(getContext(), list);
                 customListView.setAdapter(openMatchAdapter);
                 openMatchAdapter.notifyDataSetChanged();
@@ -183,6 +199,7 @@ public class OpenMatchListFrag extends Fragment implements OpenMatchFilter{
         filterDataLoader.setDataListener(new FilterDataLoader.DataLoadedListener() {
             @Override
             public void dataLoadComplete(ArrayList<OpenMatchDTO> list) {
+                tmpList = (ArrayList<OpenMatchDTO>) list.clone();
                 openMatchAdapter = new OpenMatchAdapter(getContext(), list);
                 customListView.setAdapter(openMatchAdapter);
                 openMatchAdapter.notifyDataSetChanged();
@@ -195,6 +212,7 @@ public class OpenMatchListFrag extends Fragment implements OpenMatchFilter{
         filterDataLoader.setDataListener(new FilterDataLoader.DataLoadedListener() {
             @Override
             public void dataLoadComplete(ArrayList<OpenMatchDTO> list) {
+                tmpList = (ArrayList<OpenMatchDTO>) list.clone();
                 openMatchAdapter = new OpenMatchAdapter(getContext(), list);
                 customListView.setAdapter(openMatchAdapter);
                 openMatchAdapter.notifyDataSetChanged();
@@ -209,6 +227,7 @@ public class OpenMatchListFrag extends Fragment implements OpenMatchFilter{
         filterDataLoader.setDataListener(new FilterDataLoader.DataLoadedListener() {
             @Override
             public void dataLoadComplete(ArrayList<OpenMatchDTO> list) {
+                tmpList = (ArrayList<OpenMatchDTO>) list.clone();
                 openMatchAdapter = new OpenMatchAdapter(getContext(), list);
                 customListView.setAdapter(openMatchAdapter);
                 openMatchAdapter.notifyDataSetChanged();
@@ -222,6 +241,7 @@ public class OpenMatchListFrag extends Fragment implements OpenMatchFilter{
         filterDataLoader.setDataListener(new FilterDataLoader.DataLoadedListener() {
             @Override
             public void dataLoadComplete(ArrayList<OpenMatchDTO> list) {
+                tmpList = (ArrayList<OpenMatchDTO>) list.clone();
                 openMatchAdapter = new OpenMatchAdapter(getContext(), list);
                 customListView.setAdapter(openMatchAdapter);
                 openMatchAdapter.notifyDataSetChanged();
@@ -235,6 +255,7 @@ public class OpenMatchListFrag extends Fragment implements OpenMatchFilter{
         filterDataLoader.setDataListener(new FilterDataLoader.DataLoadedListener() {
             @Override
             public void dataLoadComplete(ArrayList<OpenMatchDTO> list) {
+                tmpList = (ArrayList<OpenMatchDTO>) list.clone();
                 openMatchAdapter = new OpenMatchAdapter(getContext(), list);
                 customListView.setAdapter(openMatchAdapter);
                 openMatchAdapter.notifyDataSetChanged();
