@@ -38,6 +38,7 @@ public class JpaMatchRepository implements MatchRepository{
         tmp.setSportType(openMatchDTO.getSportType());
         tmp.setPlayTime(openMatchDTO.getPlayDateTime());
         tmp.setPersonnel(openMatchDTO.getPersonnel());
+        tmp.setOpenMatchPw(openMatchDTO.getOpenMatchPw());
 
         em.flush();
 

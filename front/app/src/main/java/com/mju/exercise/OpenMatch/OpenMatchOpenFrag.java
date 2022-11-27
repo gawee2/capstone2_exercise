@@ -54,7 +54,7 @@ import retrofit2.Response;
 public class OpenMatchOpenFrag extends Fragment {
 
     Button btnCreate, btnDatePickOpen, btnPersonnelPickOpen, btnMapPickOpen, btnTimePickOpen;
-    TextInputEditText edtSubject, edtArticle;
+    TextInputEditText edtSubject, edtArticle, edtOpenMatchPw;
 
     //api관련
     PreferenceUtil preferenceUtil;
@@ -304,6 +304,7 @@ public class OpenMatchOpenFrag extends Fragment {
         openMatchDTO.setSubject(edtSubject.getText().toString());
         openMatchDTO.setArticle(edtArticle.getText().toString());
         openMatchDTO.setOpenUserId(preferenceUtil.getString("userId"));
+        openMatchDTO.setOpenMatchPw(null);
 
         //날짜 전송
         openMatchDTO.setOpenTime(nowTime.toString());
