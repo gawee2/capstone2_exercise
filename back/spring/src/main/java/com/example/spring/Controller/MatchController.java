@@ -58,9 +58,9 @@ public class MatchController {
         return matchService.joinMatch(matchingDTO);
     }
     //매칭 탈퇴, 매칭 떠나기
-    @DeleteMapping("/leaveMatch/{matchingIdx}")
-    public boolean leaveMatch(@PathVariable Long matchingIdx){
-        return matchService.leaveMatch(matchingIdx);
+    @PostMapping("/leaveMatch")
+    public boolean leaveMatch(@RequestBody MatchingDTO matchingDTO){
+        return matchService.leaveMatch(matchingDTO);
     }
 
 

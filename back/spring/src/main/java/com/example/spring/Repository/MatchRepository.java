@@ -23,5 +23,6 @@ public interface MatchRepository {
 
     boolean delete(OpenMatchDTO openMatchDTO);
     boolean deleteMatching(MatchingDTO matchingDTO);
+    List<MatchingDTO> isExistMatching(MatchingDTO matchingDTO);
 
 }

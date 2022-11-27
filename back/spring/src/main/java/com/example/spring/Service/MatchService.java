@@ -116,11 +116,12 @@ public class MatchService {
         }
     }
 
-    //매칭 취소
-    public boolean leaveMatch(Long id){
-        Optional<MatchingDTO> optionalMatchingDTO = matchRepository.findMatchingById(id);
-        if(optionalMatchingDTO.isPresent()) {
-            return matchRepository.deleteMatching(optionalMatchingDTO.get());
+    //오픈매치 떠나기
+    public boolean leaveMatch(MatchingDTO matchingDTO){
+        List<MatchingDTO> matchingDTOS = matchRepository.isExistMatching(matchingDTO);
+        if(!matchingDTOS.isEmpty()){
+            MatchingDTO leaveMatching = matchingDTOS.get(0);
+            return matchRepository.deleteMatching(leaveMatching);
         }
         return false;
     }

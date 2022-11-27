@@ -66,8 +66,7 @@ public class FilterDataLoader {
         if(myLat !=null && myLng != null) {
             //우선 각각의 오픈 매치와 나의 거리를 쭉 계산함
             for (OpenMatchDTO openMatchDTO : list) {
-                //미정인 애들 뒤로 보내려고
-                int distanceToMe = 10000;
+                int distanceToMe = 0;
 
                 Double tmpLat = openMatchDTO.getLat();
                 Double tmpLng = openMatchDTO.getLng();
@@ -80,8 +79,10 @@ public class FilterDataLoader {
 
                 //거리에 따라서 오픈매치 해시맵에 넣어놓고
                 //거리 돌면서 해시맵값 뽑아서 최종 정렬
+                //같은 해시맵을 덮어쓰는 문제가 있을 수 있음
                 map.put(distanceToMe, openMatchDTO);
             }
+            //거리를 담고 있는 리스트를 정렬함. 가까운게 앞에 옴
             Collections.sort(distacnceList, new Comparator<Integer>() {
                 @Override
                 public int compare(Integer integer, Integer t1) {
@@ -99,16 +100,25 @@ public class FilterDataLoader {
     }
     //가까운 날짜순으로 뽑기
     public void getDataDaySort(){
+        //정렬하고
         Collections.sort(list, new Comparator<OpenMatchDTO>() {
             @Override
             public int compare(OpenMatchDTO openMatchDTO, OpenMatchDTO t1) {
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    return openMatchDTO.getPlayDateTime().compareTo(t1.getPlayDateTime());
+                    LocalDateTime l1 = LocalDateTime.parse(openMatchDTO.getPlayDateTime());
+                    LocalDateTime l2 = LocalDateTime.parse(t1.getPlayDateTime());
+
+                    return l1.compareTo(l2);
                 }
                 return 0;
             }
         });
+
+        //데이터 보내주기
+        for(OpenMatchDTO openMatchDTO: list){
+            dataLoadedListener.dataLoaded(openMatchDTO);
+        }
     }
 
     //특정요일만 뽑기

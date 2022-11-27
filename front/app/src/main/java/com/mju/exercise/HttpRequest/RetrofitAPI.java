@@ -90,9 +90,12 @@ public interface RetrofitAPI {
     @DELETE("/api/match/delete/{openMatchIdx}")
     Call<Boolean> delete(@Path(value = "openMatchIdx", encoded = true) Long openMatchIdx);
     //오픈매치 떠나기
+//    @Headers("Content-Type: application/json")
+//    @DELETE("/api/match/leaveMatch/{matchingIdx}")
+//    Call<Boolean> leaveMatch(@Path(value = "matchingIdx", encoded = true) Long matchingIdx);
     @Headers("Content-Type: application/json")
-    @DELETE("/api/match/leaveMatch/{matchingIdx}")
-    Call<Boolean> leaveMatch(@Path(value = "matchingIdx", encoded = true) Long matchingIdx);
+    @POST("/api/match/joinMatch")
+    Call<Boolean> leaveMatch(@Body MatchingDTO matchingDTO);
 
 
 

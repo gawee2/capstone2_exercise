@@ -119,5 +119,12 @@ public class JpaMatchRepository implements MatchRepository{
         }
     }
 
+    public List<MatchingDTO> isExistMatching(MatchingDTO matchingDTO){
+        return em.createQuery("select m from MatchingDTO m where m.userIndex=:userIndex and m.openMatchId=:openMatchId ", MatchingDTO.class)
+                .setParameter("userIndex", matchingDTO.getUserIndex())
+                .setParameter("openMatchId", matchingDTO.getOpenMatchId())
+                .getResultList();
+    }
+
 
 }
