@@ -22,7 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:boxBackgroundColor="@color/white"
-            android:hint="가입시 입력한 ID 또는 e-mail을 입력해주세요.">
+            android:hint="가입시 입력한 ID를 입력해주세요.">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edtId"

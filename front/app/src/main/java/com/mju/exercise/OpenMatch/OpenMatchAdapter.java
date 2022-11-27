@@ -396,11 +396,14 @@ public class OpenMatchAdapter extends ArrayAdapter implements AdapterView.OnItem
         matchingDTO.setOpenMatchId(openMatchIdx);
         matchingDTO.setUserIndex(userIdx);
 
+        Log.d("매치떠나기", "midx: " + openMatchIdx + ", uidx: " + userIdx);
+
         retrofitUtil.getRetrofitAPI().leaveMatch(matchingDTO).enqueue(new Callback<Boolean>() {
             @Override
             public void onResponse(Call<Boolean> call, Response<Boolean> response) {
                 if(response.isSuccessful()){
                     if(response.body()){
+                        Log.d("매치떠나기", "응답 받음");
                         Toast.makeText(getContext(), "오픈매치를 떠났습니다.", Toast.LENGTH_SHORT).show();
                     }else {
                         Toast.makeText(getContext(), "오류 발생. 다시 시도해주세요.", Toast.LENGTH_SHORT).show();

@@ -60,6 +60,8 @@ public class MatchController {
     //매칭 탈퇴, 매칭 떠나기
     @PostMapping("/leaveMatch")
     public boolean leaveMatch(@RequestBody MatchingDTO matchingDTO){
+        System.out.println(matchingDTO.getOpenMatchId().toString() + ", " + matchingDTO.getUserIndex().toString());
+
         return matchService.leaveMatch(matchingDTO);
     }
 

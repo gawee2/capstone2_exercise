@@ -293,7 +293,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
                     } else {
                         Log.d("프로필", "응답 false");
-                        Toast.makeText(getApplicationContext(), "프로필 업데이트 실패!!!!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "프로필 업데이트 실패하였습니다. 닉네임 중복", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -351,7 +351,9 @@ public class EditProfileActivity extends AppCompatActivity {
                     //사진 없을때
                 } else {
                     //따로 선택한 사진 없으면 기존 사진 그대로 적용
-                    profileDTO.setImage(beforeProfile.getImage());
+                    if(beforeProfile != null){
+                        profileDTO.setImage(beforeProfile.getImage());
+                    }
                     sendProfileData(profileDTO);
                 }
 
