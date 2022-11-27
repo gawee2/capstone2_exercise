@@ -57,6 +57,10 @@ public interface RetrofitAPI {
     Call<ApiResponseDTO> login(@Body SignInDTO signInDTO);
     @GET("/api/auth/tokenCheck")
     Call<Boolean> tokenCheck();
+    //비밀번호 변경
+    @Headers("Content-Type: application/json")
+    @POST("/api/user/changePw/{userId}/{newPw}")
+    Call<Boolean> changePw(@Path(value = "userId", encoded = true) String userId, @Path(value = "newPw", encoded = true) String newPw);
 
 
     //오픈매치 가져오기 종목별
@@ -90,11 +94,8 @@ public interface RetrofitAPI {
     @DELETE("/api/match/delete/{openMatchIdx}")
     Call<Boolean> delete(@Path(value = "openMatchIdx", encoded = true) Long openMatchIdx);
     //오픈매치 떠나기
-//    @Headers("Content-Type: application/json")
-//    @DELETE("/api/match/leaveMatch/{matchingIdx}")
-//    Call<Boolean> leaveMatch(@Path(value = "matchingIdx", encoded = true) Long matchingIdx);
     @Headers("Content-Type: application/json")
-    @POST("/api/match/joinMatch")
+    @POST("/api/match/leaveMatch")
     Call<Boolean> leaveMatch(@Body MatchingDTO matchingDTO);
 
 

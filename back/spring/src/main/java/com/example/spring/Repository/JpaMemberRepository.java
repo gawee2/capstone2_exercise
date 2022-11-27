@@ -42,6 +42,19 @@ public class JpaMemberRepository implements MemberRepository {
     }
 
     @Override
+    public boolean changePw(Long id, String newPw){
+
+        try{
+            Member member = em.find(Member.class, id);
+            member.setUserPw(newPw);
+            em.flush();
+        }catch (Exception e){
+            return false;
+        }
+        return true;
+    }
+
+    @Override
     public Profile setOrUpdateProfile(Profile profile, boolean exist) {
 
         if(exist){

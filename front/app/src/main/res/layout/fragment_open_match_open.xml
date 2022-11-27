@@ -12,33 +12,42 @@
         android:layout_weight="5"
         android:orientation="vertical"
         >
-        <com.google.android.material.textfield.TextInputLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:boxBackgroundColor="@color/white"
-            android:hint="오픈매치 이름">
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/edtSubject"
+            android:orientation="vertical"
+            android:layout_margin="10dp"
+            >
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                />
-        </com.google.android.material.textfield.TextInputLayout>
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:boxBackgroundColor="@color/white"
-            android:hint="소개">
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/edtArticle"
+                app:boxBackgroundColor="@color/white"
+                android:hint="오픈매치 이름">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtSubject"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    />
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                />
-        </com.google.android.material.textfield.TextInputLayout>
+                app:boxBackgroundColor="@color/white"
+                android:hint="소개">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtArticle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
 
         <com.google.android.material.chip.ChipGroup
             android:id="@+id/chipGroup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="10dp"
             >
 
             <!-- Chips can be declared here, or added dynamically. -->
@@ -85,7 +94,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_margin="10dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -187,14 +197,14 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
         <Button
             android:id="@+id/btnCreate"
             style="@style/Widget.Material3.Button.ElevatedButton"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="15dp"
+            android:layout_height="match_parent"
+            android:textSize="20dp"
             android:text="생성하기" />
     </LinearLayout>
 

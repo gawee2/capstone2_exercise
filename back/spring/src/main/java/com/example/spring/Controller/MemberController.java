@@ -60,6 +60,12 @@ public class MemberController {
         return memberService.delete(userIdx);
     }
 
+    //비밀번호 변경
+    @PostMapping("/changePw/{userId}/{newPw}")
+    public boolean changePw(@PathVariable String userId, @PathVariable String newPw){
+       return memberService.changePw(userId, newPw);
+    }
+
     //프로필 생성, 수정
     @PostMapping("/setMyProfile")
     public boolean setMyProfile(@RequestBody Profile profile,
@@ -81,6 +87,12 @@ public class MemberController {
         System.out.println("요청 유저: " + requestUser + ", 수정 유저: " + willChangeUser);
         //자기꺼만 바꿀수 있음
         if(requestUser.equals(willChangeUser)){
+
+            //이미 동일한 닉네임 유저 있으면 프로필 생성 또는 업뎃 안됨
+            if(memberService.isExistNickname(profile.getNickname())){
+                return false;
+            }
+
             memberService.setOrUpdateProfile(profile);
             System.out.println("프로필 업데이트 됨");
 

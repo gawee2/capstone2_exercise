@@ -74,6 +74,30 @@ public class MemberService {
         }
     }
 
+    public boolean changePw(String userId, String newPw){
+        Optional<Member> member = memberRepository.findByUserId(userId);
+        if(member.isPresent()){
+            String salt = member.get().getSalt();
+            String newPwHashed = hashingPw(newPw, salt);
+
+            return memberRepository.changePw(member.get().getId(), newPwHashed);
+
+        } else {
+            return false;
+        }
+    }
+
+    public boolean isExistNickname(String nickname){
+
+        //이미 동일한 닉네임의 유저가 있으면 프로필 생성 못함
+        Optional<Profile> optionalProfile = memberRepository.findProfileByNickname(nickname);
+        if(optionalProfile.isPresent()){
+            return true;
+        }else {
+            return false;
+        }
+    }
+
     public boolean isMember(Member member){
 
         try{

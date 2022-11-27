@@ -25,6 +25,7 @@ import com.google.android.gms.tasks.CancellationTokenSource;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.navigation.NavigationBarView;
 import com.mju.exercise.ChatActivity;
 import com.mju.exercise.Preference.PreferenceUtil;
@@ -126,7 +127,8 @@ public class OpenMatchActivity extends AppCompatActivity {
                         Intent intent = new Intent(getApplicationContext(), UserInfoActivity.class);
                         intent.putExtra("userId", preferenceUtil.getString("userId"));
                         startActivity(intent);
-                    }else{
+                    }else {
+
                         Toast.makeText(getApplicationContext(), "해당 기능은 로그인 후 이용 가능합니다.", Toast.LENGTH_SHORT).show();
                     }
 

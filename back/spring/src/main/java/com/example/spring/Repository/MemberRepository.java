@@ -20,4 +20,5 @@ public interface MemberRepository {
     Optional<Profile> findProfileById(Long id);
 
     boolean delete(Member member);
+    boolean changePw(Long id, String newPw);
 }
