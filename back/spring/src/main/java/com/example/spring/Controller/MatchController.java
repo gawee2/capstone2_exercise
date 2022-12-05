@@ -6,8 +6,6 @@ import com.example.spring.DTO.Member;
 import com.example.spring.DTO.OpenMatchDTO;
 import com.example.spring.DTO.Profile;
 import com.example.spring.Service.MatchService;
-import com.example.spring.Service.MemberService;
-import com.example.spring.auth.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,6 +29,15 @@ public class MatchController {
     @PostMapping("/openMatch")
     public OpenMatchDTO openMatch(@RequestBody OpenMatchDTO openMatchDTO){
 
+        System.out.println("날짜 openMatch 만드는 부분");
+        try {
+            System.out.println("날짜 받은거: " + openMatchDTO.getOpenTime().toString());
+            System.out.println("날짜 받은거: " + openMatchDTO.getPlayDateTime().toString());
+        }catch (NullPointerException e){
+
+        }
+
+
         return matchService.create(openMatchDTO);
     }
 
@@ -45,18 +52,17 @@ public class MatchController {
     public boolean delete(@PathVariable Long openMatchIdx){
         return matchService.delete(openMatchIdx);
     }
-
-
-
     //매칭 참가, 사용자id와 오픈매치id를 가져와서 매칭db에 생성함
     @PostMapping("/joinMatch")
     public Long joinMatch(@RequestBody MatchingDTO matchingDTO){
         return matchService.joinMatch(matchingDTO);
     }
     //매칭 탈퇴, 매칭 떠나기
-    @DeleteMapping("/leaveMatch/{matchingIdx}")
-    public boolean leaveMatch(@PathVariable Long matchingIdx){
-        return matchService.leaveMatch(matchingIdx);
+    @PostMapping("/leaveMatch")
+    public boolean leaveMatch(@RequestBody MatchingDTO matchingDTO){
+        System.out.println(matchingDTO.getOpenMatchId().toString() + ", " + matchingDTO.getUserIndex().toString());
+
+        return matchService.leaveMatch(matchingDTO);
     }
 
 

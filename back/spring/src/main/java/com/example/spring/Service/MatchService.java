@@ -83,6 +83,13 @@ public class MatchService {
 
     //매칭 참가
     public Long joinMatch(MatchingDTO matchingDTO){
+        //유저가 요청한 매칭이 이미 존재하는 매칭인지 확인하고,
+        //이미 존재할경우 매칭 생성하지 않음
+        List<MatchingDTO> matchingDTOList = matchRepository.isExistMatching(matchingDTO);
+        if(!matchingDTOList.isEmpty()){
+            return -1l;
+        }
+
         return matchRepository.saveMatchingInfo(matchingDTO);
     }
 
@@ -105,11 +112,12 @@ public class MatchService {
         }
     }
 
-    //매칭 취소
-    public boolean leaveMatch(Long id){
-        Optional<MatchingDTO> optionalMatchingDTO = matchRepository.findMatchingById(id);
-        if(optionalMatchingDTO.isPresent()) {
-            return matchRepository.deleteMatching(optionalMatchingDTO.get());
+    //오픈매치 떠나기
+    public boolean leaveMatch(MatchingDTO matchingDTO){
+        List<MatchingDTO> matchingDTOS = matchRepository.isExistMatching(matchingDTO);
+        if(!matchingDTOS.isEmpty()){
+            MatchingDTO leaveMatching = matchingDTOS.get(0);
+            return matchRepository.deleteMatching(leaveMatching);
         }
         return false;
     }
@@ -129,9 +137,13 @@ public class MatchService {
             Iterator userIndexIter = userIndexList.listIterator();
             while (userIndexIter.hasNext()){
                 Long userIndex = (Long) userIndexIter.next();
-                Optional<Profile> profile = memberRepository.findProfileById(userIndex);
-                if(profile.isPresent()){
-                    profiles.add(profile.get());
+                //유저인덱스로 유저 찾고, 유저가 있으면
+                Optional<Member> member = memberRepository.findById(userIndex);
+                if(member.isPresent()){
+                    Optional<Profile> profile = memberRepository.findProfileByUserId(member.get().getUserId());
+                    if(profile.isPresent()){
+                        profiles.add(profile.get());
+                    }
                 }
             }
 

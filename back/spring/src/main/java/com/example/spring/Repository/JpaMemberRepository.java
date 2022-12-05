@@ -42,6 +42,19 @@ public class JpaMemberRepository implements MemberRepository {
     }
 
     @Override
+    public boolean changePw(Long id, String newPw){
+
+        try{
+            Member member = em.find(Member.class, id);
+            member.setUserPw(newPw);
+            em.flush();
+        }catch (Exception e){
+            return false;
+        }
+        return true;
+    }
+
+    @Override
     public Profile setOrUpdateProfile(Profile profile, boolean exist) {
 
         if(exist){
@@ -49,6 +62,7 @@ public class JpaMemberRepository implements MemberRepository {
             updateProfile.setNickname(profile.getNickname());
             updateProfile.setIntroduce(profile.getIntroduce());
             updateProfile.setImage(profile.getImage());
+            updateProfile.setRegion(profile.getRegion());
 
             updateProfile.setFavMon(profile.isFavMon());
             updateProfile.setFavTue(profile.isFavTue());
