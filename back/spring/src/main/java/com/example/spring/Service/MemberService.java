@@ -74,48 +74,6 @@ public class MemberService {
         }
     }
 
-    public boolean changePw(String userId, String newPw){
-        Optional<Member> member = memberRepository.findByUserId(userId);
-        if(member.isPresent()){
-            String salt = member.get().getSalt();
-            String newPwHashed = hashingPw(newPw, salt);
-
-            return memberRepository.changePw(member.get().getId(), newPwHashed);
-
-        } else {
-            return false;
-        }
-    }
-
-    public boolean isExistNickname(Profile profile){
-
-        Optional<Profile> requestProfile = memberRepository.findProfileByUserId(profile.getUserId());
-        Optional<Profile> optionalProfile = memberRepository.findProfileByNickname(profile.getNickname());
-        //처음 생성하는 유저는 requestProfile이 조회되지 않음
-        //이미 있던 유저가 프로필 업데이트 하는 과정
-        if(requestProfile.isPresent()){
-            if(optionalProfile.isPresent()){
-                //이미 있는 닉네임이 내꺼인지 체크
-                if(requestProfile.get().getIdx() == optionalProfile.get().getIdx()){
-                    //내꺼면 그대로 닉네임 설정 가능하도록 함
-                    return false;
-                }
-                //내가 쓰던 닉네임이 아니면 못바꿈
-                return true;
-            }else {
-                return false;
-            }
-        }else {
-            //처음 생성하는 유저가 타는 부분
-            //그런데 이미 있는 닉네임이면 생성 불가
-            if(optionalProfile.isPresent()){
-                return true;
-            }else {
-                return false;
-            }
-        }
-    }
-
     public boolean isMember(Member member){
 
         try{

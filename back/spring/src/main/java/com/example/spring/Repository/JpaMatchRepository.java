@@ -38,7 +38,6 @@ public class JpaMatchRepository implements MatchRepository{
         tmp.setSportType(openMatchDTO.getSportType());
         tmp.setPlayTime(openMatchDTO.getPlayDateTime());
         tmp.setPersonnel(openMatchDTO.getPersonnel());
-        tmp.setOpenMatchPw(openMatchDTO.getOpenMatchPw());
 
         em.flush();
 
@@ -118,13 +117,6 @@ public class JpaMatchRepository implements MatchRepository{
             e.printStackTrace();
             return false;
         }
-    }
-
-    public List<MatchingDTO> isExistMatching(MatchingDTO matchingDTO){
-        return em.createQuery("select m from MatchingDTO m where m.userIndex=:userIndex and m.openMatchId=:openMatchId ", MatchingDTO.class)
-                .setParameter("userIndex", matchingDTO.getUserIndex())
-                .setParameter("openMatchId", matchingDTO.getOpenMatchId())
-                .getResultList();
     }
 
 

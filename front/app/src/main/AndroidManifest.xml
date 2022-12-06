@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-    <!-- 인터넷 권한 -->
+
+    <!-- 인터넷 권한-->
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> <!-- 위치 -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <!-- 위치-->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
@@ -14,17 +17,15 @@
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Exercise"
         android:usesCleartextTraffic="true"
+        android:requestLegacyExternalStorage="true"
         tools:targetApi="31">
-
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"
             android:value="ap6pnad7y6" />
-
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -33,26 +34,18 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
+
         </activity>
         <activity android:name=".Sign.SignInActivity" />
         <activity android:name=".Sign.SignUpActivity" />
         <activity android:name=".Sign.ForgetPwActivity" />
-        <activity android:name=".Profile.UserInfoActivity" />
-        <activity android:name=".Profile.EditProfileActivity" />
+        <activity android:name=".UserInfoActivity" />
+        <activity android:name=".EditProfileActivity" />
         <activity android:name=".Sign.ChangePwActivity" />
-        <activity android:name=".MapActivity" />
-        <activity android:name=".ChatActivity" />
-        <activity android:name=".Calendar.CalendarActivity" />
-        <activity android:name=".Calendar.MemoActivity" />
-        <activity android:name=".Calendar.MemofragmentActivity" />
-        <activity android:name=".OpenMatch.OpenMatchActivity" />
-        <activity android:name=".PopupMapActivity"/>
-
-
+        <activity android:name=".MapActivity"/>
     </application>
 
 </manifest>

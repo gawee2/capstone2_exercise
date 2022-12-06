@@ -298,6 +298,7 @@ public class MapActivity extends AppCompatActivity implements NaverMap.OnMapClic
                             if (parser.getName().equals("faciTel")) faciTel = true;
                             if (parser.getName().equals("ftypeNm")) ftypeNm = true;
 
+
                             break;
                         case XmlPullParser.TEXT:
                             //요소의 텍스트를 만났을때 반환값

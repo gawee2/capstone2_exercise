@@ -75,7 +75,6 @@ public class ForgetPwActivity extends AppCompatActivity {
                 if(edtAuthCode.getText().toString().equals(strAuthCode)) {
                     Log.d("인증코드", "일치");
                     Intent intent = new Intent(getApplicationContext(), ChangePwActivity.class);
-                    intent.putExtra("userId", edtId.getText().toString());
                     startActivity(intent);
                     finish();
                 }else{

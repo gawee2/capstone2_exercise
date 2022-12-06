@@ -12,7 +12,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.mju.exercise.Domain.ApiResponseDTO;
-import com.mju.exercise.Domain.ProfileDTO;
 import com.mju.exercise.Domain.SignInDTO;
 import com.mju.exercise.HttpRequest.RetrofitUtil;
 import com.mju.exercise.Preference.PreferenceUtil;
@@ -113,23 +112,6 @@ public class SignInActivity extends AppCompatActivity {
                                             preferenceUtil.setString("accessToken", resultBody.getString("accessToken"));
                                             preferenceUtil.setString("userId", edtId.getText().toString());
 
-                                            retrofitUtil.getRetrofitAPI().getUserIndexByUserId(preferenceUtil.getString("userId")).enqueue(new Callback<Long>() {
-                                                @Override
-                                                public void onResponse(Call<Long> call, Response<Long> response) {
-                                                    if(response.isSuccessful()){
-                                                        Long userIdx = response.body();
-                                                        preferenceUtil.setString("userIdx", userIdx.toString());
-                                                    }else {
-                                                        Toast.makeText(getApplicationContext(), "로그인 오류", Toast.LENGTH_SHORT).show();
-                                                    }
-                                                }
-
-                                                @Override
-                                                public void onFailure(Call<Long> call, Throwable t) {
-
-                                                }
-                                            });
-
                                             finish();
                                         } catch (NullPointerException e) {
                                             Log.d("로그인", "이미 토큰이 발급된 사용자");
@@ -143,6 +125,7 @@ public class SignInActivity extends AppCompatActivity {
                                     }
                                 }
 
+
                             }
 
                             @Override
@@ -150,6 +133,9 @@ public class SignInActivity extends AppCompatActivity {
 
                             }
                         });
+
+
+
 
                 }
 

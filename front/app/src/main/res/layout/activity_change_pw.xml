@@ -25,14 +25,17 @@
             android:orientation="vertical"
             android:layout_margin="10dp"
             >
-            <TextView
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/tvUserId"
-                android:text="유저 아이디"
-                android:gravity="center"
-                android:textSize="20dp"
-                />
+                app:boxBackgroundColor="@color/white"
+                android:hint="아이디를 입력해주세요.">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:enabled="false"
+                    />
+            </com.google.android.material.textfield.TextInputLayout>
             <View
                 android:layout_width="match_parent"
                 android:layout_height="10dp"
@@ -44,10 +47,9 @@
                 android:hint="새로운 비밀번호를 입력해주세요.">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edtNewPw"
+                    android:id="@+id/signUpPw"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:password="true"
                     />
             </com.google.android.material.textfield.TextInputLayout>
             <View
@@ -61,10 +63,9 @@
                 android:hint="비밀번호를 다시 한번 입력해주세요.">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edtNewPwCheck"
+                    android:id="@+id/signUpCheckPw"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:password="true"
                     />
             </com.google.android.material.textfield.TextInputLayout>
             <View
@@ -73,7 +74,7 @@
                 />
         </LinearLayout>
         <Button
-            android:id="@+id/btnChangePw"
+            android:id="@+id/btnSignUp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="변경 하기"

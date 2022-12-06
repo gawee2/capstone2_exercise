@@ -9,7 +9,6 @@ public class MapDTO {
     String faciPointY;
     String ftypeNm;
     String faciTel;
-    String faciHompage;
 
     public String getFaciAddr2() {
         return faciAddr2;
@@ -66,5 +65,4 @@ public class MapDTO {
     public void setFtypeNm(String ftypeNm) {
         this.ftypeNm = ftypeNm;
     }
-
 }

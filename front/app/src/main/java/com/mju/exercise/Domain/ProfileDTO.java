@@ -2,11 +2,9 @@ package com.mju.exercise.Domain;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.io.Serializable;
+public class ProfileDTO {
 
-public class ProfileDTO implements Serializable {
-
-    @SerializedName("idx")
+    @SerializedName("id")
     private Long idx;
 
     @SerializedName("userId")

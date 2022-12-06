@@ -48,7 +48,6 @@
                     android:id="@+id/signInPw"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:password="true"
                     />
 
             </com.google.android.material.textfield.TextInputLayout>

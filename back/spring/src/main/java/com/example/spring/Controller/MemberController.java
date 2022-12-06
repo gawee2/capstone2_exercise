@@ -19,7 +19,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -60,12 +59,6 @@ public class MemberController {
         return memberService.delete(userIdx);
     }
 
-    //비밀번호 변경
-    @PostMapping("/changePw/{userId}/{newPw}")
-    public boolean changePw(@PathVariable String userId, @PathVariable String newPw){
-       return memberService.changePw(userId, newPw);
-    }
-
     //프로필 생성, 수정
     @PostMapping("/setMyProfile")
     public boolean setMyProfile(@RequestBody Profile profile,
@@ -87,13 +80,6 @@ public class MemberController {
         System.out.println("요청 유저: " + requestUser + ", 수정 유저: " + willChangeUser);
         //자기꺼만 바꿀수 있음
         if(requestUser.equals(willChangeUser)){
-
-            //이미 동일한 닉네임 유저 있으면 프로필 생성 또는 업뎃 안됨
-            //단 동일한 유저가 요청하는 경우에는 가능(닉네임 이외에 다른것만 변경하는 유저들)
-            if(memberService.isExistNickname(profile)){
-                return false;
-            }
-
             memberService.setOrUpdateProfile(profile);
             System.out.println("프로필 업데이트 됨");
 
@@ -107,21 +93,6 @@ public class MemberController {
     @GetMapping("/getUserProfile/{userId}")
     public Profile getUserProfile(@PathVariable String userId){
         return memberService.findProfileByUserId(userId);
-    }
-
-    //유저 인덱스 조회
-    @GetMapping("/getUserIndexByUserId/{userId}")
-    public Long getUserIndexByUserId(@PathVariable String userId){
-
-        Long userIdx;
-
-        Optional<Member> member = memberService.findOne(userId);
-        if(member.isPresent()){
-            userIdx = member.get().getId();
-            return userIdx;
-        }else {
-            return -1l;
-        }
     }
 
 
