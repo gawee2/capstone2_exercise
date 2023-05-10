@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:orientation="vertical">
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="운동별로 매칭 시작하기"
+        android:layout_gravity="center"
+        android:fontFamily="@font/scdream7"
+        android:textSize="15dp"
+        android:layout_marginTop="50dp"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp">
+            <Button
+                android:text="축구"
+                android:textColor="@color/black"
+                android:fontFamily="@font/scdream7"
+                android:textSize="20dp"
+                android:background="#00ff0000"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:drawableTop="@drawable/main_football"
+                android:id="@+id/btnSoccer"
+                />
+            <Button
+                android:text="풋살"
+                android:textColor="@color/black"
+                android:fontFamily="@font/scdream7"
+                android:textSize="20dp"
+                android:background="#00ff0000"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:drawableTop="@drawable/main_football"
+                android:id="@+id/btnFutsal"
+                />
+            <Button
+                android:text="농구"
+                android:textColor="@color/black"
+                android:fontFamily="@font/scdream7"
+                android:textSize="20dp"
+                android:background="#00ff0000"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:drawableTop="@drawable/main_basketball"
+                android:id="@+id/btnBasketball"
+                />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="25dp">
+
+        <Button
+            android:id="@+id/btnBaseball"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#00ff0000"
+            android:drawableTop="@drawable/main_baseball"
+            android:fontFamily="@font/scdream7"
+            android:text="야구"
+            android:textColor="@color/black"
+            android:textSize="20dp" />
+        <Button
+            android:text="배드민턴"
+            android:textColor="@color/black"
+            android:fontFamily="@font/scdream7"
+            android:textSize="20dp"
+            android:background="#00ff0000"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:drawableTop="@drawable/main_badminton"
+            android:id="@+id/btnBadminton"
+            />
+        <Button
+            android:text="사이클"
+            android:textColor="@color/black"
+            android:fontFamily="@font/scdream7"
+            android:textSize="20dp"
+            android:background="#00ff0000"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:drawableTop="@drawable/cycling"
+            android:id="@+id/btnCycle"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="30dp">
+
+        <Button
+            android:id="@+id/btnMap"
+            android:layout_width="145dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:background="#00ff0000"
+            android:drawableTop="@drawable/main_map"
+            android:fontFamily="@font/scdream7"
+            android:text="주변 체육시설 확인"
+            android:textColor="@color/black"
+            android:textSize="20dp" />
+
+        <Button
+            android:id="@+id/btnChat"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1"
+            android:background="#00ff0000"
+            android:drawableTop="@drawable/main_cal"
+            android:fontFamily="@font/scdream7"
+            android:text="내 운동 기록"
+            android:textColor="@color/black"
+            android:textSize="20dp" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center|center_horizontal"
+        >
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnLoginOrUserInfo"
+            android:textSize="30dp"
+            android:drawableLeft="@drawable/loginxml"
+            android:fontFamily="@font/scdream7"
+            android:background="#00ff0000"
+            android:textColor="@color/black"
+            android:layout_margin="10dp"
+            />
+    </LinearLayout>
+
+
+
+
+</LinearLayout>
